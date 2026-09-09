@@ -1,0 +1,19 @@
+#Exlude general
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+lightning_logs/
+checkpoints/
+wandb/
+tmp/
+cache/
+figure_outputs/
+figure_scripts/**/outputs/
+
+#Exlude RData etc
+/.RData
+/.Rhistory
+/.Rproj.user
+
+#Exclude nextflow logs
+/.nextflow.log*
