@@ -9,6 +9,10 @@ The analyses described in `README.md` cover cytokine stimulation Parse data
 and IL7KO/FLT3KO single-cell multiome data, including mapping to a reference
 B cell development dataset.
 
+For the Bdev reference, use the existing `Bdev@meta.data$pt` field as
+pseudotime, as selected by the user. Preserve its values and missing entries
+when importing and using the reference.
+
 ## Default analysis: scWorkbench
 
 - Use scWorkbench as the default for analysis and create a scWorkbench bundle

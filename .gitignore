@@ -9,6 +9,7 @@ tmp/
 cache/
 figure_outputs/
 figure_scripts/**/outputs/
+*.log
 
 #Exlude RData etc
 /.RData
