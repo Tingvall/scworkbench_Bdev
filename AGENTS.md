@@ -44,10 +44,15 @@ For authorized outside analysis:
 - Verify cell/sample identifiers, metadata alignment, and relevant output
   checks. State assumptions and any validation that could not be performed.
 
+## Repository structure
+
+- `processing/`: numbered pipeline scripts, with numeric prefixes indicating
+  execution order (for example, `01_inspect_reference.R`).
+- `figure_scripts/`: final figure generation scripts.
+- `src/`: reusable code shared by pipeline and figure scripts.
+
 ## Repository practices
 
-- Use `processing/` for preprocessing and workflow scripts, `src/` for reusable
-  code, and `figure_scripts/` for figure generation.
 - Keep container images, large datasets, bundles, models, and generated outputs
   out of Git; check `.gitignore` when adding output locations.
 - Preserve sample metadata and record input provenance, analysis settings,
