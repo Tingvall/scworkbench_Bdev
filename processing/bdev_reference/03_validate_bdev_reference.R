@@ -1,5 +1,5 @@
 # Validate/finalize an existing reference without reimporting or refitting it.
-# Usage: Rscript --vanilla processing/03_validate_bdev_reference.R SOURCE BUNDLE REPORTS
+# Usage: Rscript --vanilla processing/bdev_reference/03_validate_bdev_reference.R SOURCE BUNDLE REPORTS
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 3L) stop("Usage: 03_validate_bdev_reference.R SOURCE BUNDLE REPORTS")
 source_path <- normalizePath(args[[1L]], mustWork = TRUE)
@@ -7,7 +7,7 @@ bundle_dir <- normalizePath(args[[2L]], mustWork = TRUE)
 report_dir <- normalizePath(args[[3L]], mustWork = TRUE)
 script_arg <- grep("^--file=", commandArgs(), value = TRUE)[1L]
 script_dir <- dirname(normalizePath(sub("^--file=", "", script_arg)))
-source(file.path(script_dir, "..", "src", "reference_validation.R"))
+source(file.path(script_dir, "..", "..", "src", "reference_validation.R"))
 suppressPackageStartupMessages({
   library(scworkbench)
   library(Seurat)

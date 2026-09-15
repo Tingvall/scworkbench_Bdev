@@ -1,0 +1,33 @@
+schema_version: 1
+bundle_id: bdev_integrated
+role: derived_integration
+status: planned
+
+bundle:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
+  reference: bdev_reference
+  parents:
+    - bdev_reference
+    - parse_cytokines
+    - scmulti_flt3ko_il7ko
+
+mutation_policy:
+  input_bundles: read_only
+  integration_output: bdev_integrated
+
+preflight_gate:
+  - all parent bundles have accepted status and matching fingerprints
+  - all parent bundles pass recipient validation
+  - source and sample identities are complete
+  - original cell identifiers are retained and collision handling is explicit
+  - required feature universes and genome builds are compatible
+  - Bdev reference space and promoted pseudotime inputs are explicit
+  - proposed retained integration outputs are reviewed before promotion
+
+reference_inputs:
+  default_umap: umap.atac
+  pseudotime_artifact_id: cell_vector_20260914_162517_7q4y8xbb
+
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/bdev_integrated
+workflow: processing/integration
+figures: figure_scripts/bdev_integrated

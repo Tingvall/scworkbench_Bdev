@@ -1,5 +1,5 @@
 # Read-only source inspection; does not create or modify a scWorkbench bundle.
-# Usage: Rscript --vanilla processing/01_inspect_bdev_reference.R SOURCE OUTPUT_DIR
+# Usage: Rscript --vanilla processing/bdev_reference/01_inspect_bdev_reference.R SOURCE OUTPUT_DIR
 # Run in the supplied scWorkbench image with SOURCE's directory mounted :ro.
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 2L) stop("Usage: 01_inspect_bdev_reference.R SOURCE OUTPUT_DIR")

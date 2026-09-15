@@ -1,0 +1,30 @@
+schema_version: 1
+bundle_id: parse_cytokines
+role: source_analysis
+status: planned
+
+source:
+  dataset_id: parse_cytokine_stimulation
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/parse_cytokine_stimulation/parse_cytokine_stimulation_tailmaker_pipeline_output
+  preprocessing: Trailmaker 1.6.3
+  reference_genome: GRCm39.113
+  selected_inputs: null
+  checksum_inventory: null
+
+bundle:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
+
+analysis_intent:
+  - process the Parse cytokine-stimulation dataset independently
+  - derive reviewed cytokine response gene sets
+  - evaluate selected gene sets along the Bdev reference pseudotime
+
+required_before_creation:
+  - inspect delivered matrices and sample metadata
+  - establish sample, replicate, and condition mappings
+  - verify cell identifiers and input checksums
+  - select supported scWorkbench ingestion and preprocessing operations
+
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/parse_cytokines
+workflow: processing/parse_cytokines
+figures: figure_scripts/parse_cytokines

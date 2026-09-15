@@ -1,0 +1,30 @@
+schema_version: 1
+bundle_id: scmulti_flt3ko_il7ko
+role: source_analysis
+status: planned
+
+source:
+  dataset_id: scmulti_flt3ko_il7ko
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko
+  selected_inputs: null
+  checksum_inventory: null
+  delivery_status: pending_inventory
+
+bundle:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
+
+analysis_intent:
+  - process RNA and ATAC modalities independently from Bdev
+  - preserve genotype, sample, replicate, and receptor-sorted population metadata
+  - prepare a validated query state for Bdev-reference mapping
+
+required_before_creation:
+  - inventory delivered Cell Ranger ARC or derived inputs
+  - establish genome build and fragment/index identities
+  - establish sample, genotype, replicate, and condition mappings
+  - verify paired-modality cell identifiers and input checksums
+  - select supported scWorkbench ingestion and preprocessing operations
+
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/scmulti_flt3ko_il7ko
+workflow: processing/scmulti_flt3ko_il7ko
+figures: figure_scripts/scmulti_flt3ko_il7ko

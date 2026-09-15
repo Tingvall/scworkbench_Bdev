@@ -1,5 +1,5 @@
 # Create the reference bundle through the installed scWorkbench public API.
-# Usage: Rscript --vanilla processing/02_create_bdev_reference.R SOURCE BUNDLE REPORTS
+# Usage: Rscript --vanilla processing/bdev_reference/02_create_bdev_reference.R SOURCE BUNDLE REPORTS
 # Bind the source read-only and the bundle's parent directory writable.
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 3L) stop("Usage: 02_create_bdev_reference.R SOURCE BUNDLE REPORTS")
@@ -10,7 +10,7 @@ if (file.exists(bundle_dir) || dir.exists(bundle_dir)) stop("Bundle destination 
 if (basename(bundle_dir) != "bdev_reference") stop("Expected bundle name bdev_reference")
 script_arg <- grep("^--file=", commandArgs(), value = TRUE)[1L]
 script_dir <- dirname(normalizePath(sub("^--file=", "", script_arg)))
-source(file.path(script_dir, "..", "src", "reference_validation.R"))
+source(file.path(script_dir, "..", "..", "src", "reference_validation.R"))
 options(width = 160, warn = 1)
 suppressPackageStartupMessages({
   library(scworkbench)

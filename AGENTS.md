@@ -50,10 +50,20 @@ For authorized outside analysis:
 
 ## Repository structure
 
-- `processing/`: numbered pipeline scripts, with numeric prefixes indicating
-  execution order (for example, `01_inspect_reference.R`).
-- `figure_scripts/`: final figure generation scripts.
+- `config/`: the central bundle registry and one project configuration per
+  source or derived bundle.
+- `processing/<bundle_id>/`: numbered dataset pipeline scripts, with numeric
+  prefixes indicating execution order within that workflow.
+- `processing/integration/`: the Bdev-centered integration pipeline. It reads
+  accepted parent bundles and writes only to the separate `bdev_integrated`
+  bundle.
+- `figure_scripts/<bundle_id>/`: final figure and report generation scripts.
 - `src/`: reusable code shared by pipeline and figure scripts.
+
+Keep `bdev_reference`, `parse_cytokines`, and `scmulti_flt3ko_il7ko`
+independently reproducible. Do not write integration results into these parent
+bundles. Record joint state in `bdev_integrated`, with `bdev_reference` as the
+explicit reference parent.
 
 ## Repository practices
 

@@ -1,0 +1,59 @@
+schema_version: 1
+bundle_id: bdev_reference
+role: reference
+status: accepted
+
+source:
+  dataset_id: scmulti_bdev
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_bdev/Bdev.Rdata
+  object: Bdev
+  format: rdata
+  sha256: c880abb2cd41a80a6a1af30f8065a71baee12101cb9bab3d7118d9719020b8f9
+
+bundle:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference
+  cells: 26723
+  matrices:
+    - RNA_counts
+    - ATAC_counts
+    - ATAC_data
+    - peaks_counts
+    - peaks_data
+    - SCT_counts
+    - SCT_data
+    - SCT_scale_data
+    - chromvar_data
+  metadata_columns: 68
+  spaces:
+    - pca
+    - lsi
+    - umap.atac
+    - umap.rna
+    - umap.wnn
+
+reference_state:
+  default_assay_for_umap: peaks
+  default_umap: umap.atac
+  pseudotime:
+    source_field: pt
+    artifact_id: cell_vector_20260914_162517_7q4y8xbb
+    defined_cells: 12642
+    missing_cells: 14081
+    authoritative_exact_values: metadata
+
+validation:
+  status: ok_with_warnings
+  bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
+  recipient_validation_fingerprint: d0547bf04bc928030c64629bf5149f2daf3b1f64e44a9ec99e3b1feb5d9e95c2
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_import/validation.json
+
+reports:
+  inspection: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_inspection/complete
+  import: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_import
+  dataset_report: figure_outputs/bdev_reference/bdev_reference_report.html
+
+processing:
+  inspect: processing/bdev_reference/01_inspect_bdev_reference.R
+  create: processing/bdev_reference/02_create_bdev_reference.R
+  validate: processing/bdev_reference/03_validate_bdev_reference.R
+  report: figure_scripts/bdev_reference/01_bdev_reference_report.Rmd

@@ -1,0 +1,48 @@
+schema_version: 1
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev
+image: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports
+work_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/work
+
+bundles:
+  bdev_reference:
+    role: reference
+    status: accepted
+    config: config/bdev_reference.yml
+    source_dataset: scmulti_bdev
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference
+    parents: []
+    accepted_state:
+      bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
+      recipient_validation_fingerprint: d0547bf04bc928030c64629bf5149f2daf3b1f64e44a9ec99e3b1feb5d9e95c2
+
+  parse_cytokines:
+    role: source_analysis
+    status: planned
+    config: config/parse_cytokines.yml
+    source_dataset: parse_cytokine_stimulation
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
+    parents: []
+    accepted_state: null
+
+  scmulti_flt3ko_il7ko:
+    role: source_analysis
+    status: planned
+    config: config/scmulti_flt3ko_il7ko.yml
+    source_dataset: scmulti_flt3ko_il7ko
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
+    parents: []
+    accepted_state: null
+
+  bdev_integrated:
+    role: derived_integration
+    status: planned
+    config: config/bdev_integrated.yml
+    source_dataset: null
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
+    reference: bdev_reference
+    parents:
+      - bdev_reference
+      - parse_cytokines
+      - scmulti_flt3ko_il7ko
+    accepted_state: null
