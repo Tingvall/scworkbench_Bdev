@@ -34,6 +34,27 @@ outside_bundle_preparation:
     stored_entries: 1422994774
     samples: 96
 
+proposed_sample_classification:
+  status: review_pending
+  generated: 2026-09-15
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/parse_cytokines_seurat_report.md
+  sample_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/sample_classification_proposed.tsv
+  condition_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/condition_classification_proposed.tsv
+  classes:
+    single:
+      conditions: 26
+      samples: 78
+    combination:
+      conditions: 5
+      samples: 15
+    control:
+      conditions: 1
+      samples: 3
+  notes:
+    - control is separate because it has no stimulus components
+    - Csf_1 and Csf_2 are single-stimulus labels despite their underscores
+    - source spellings remain unchanged pending nomenclature review
+
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
 
