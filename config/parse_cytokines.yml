@@ -1,5 +1,6 @@
 schema_version: 1
 bundle_id: parse_cytokines
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
 role: source_analysis
 status: planned
 
@@ -8,11 +9,33 @@ source:
   root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/parse_cytokine_stimulation/parse_cytokine_stimulation_tailmaker_pipeline_output
   preprocessing: Trailmaker 1.6.3
   reference_genome: GRCm39.113
-  selected_inputs: null
-  checksum_inventory: null
+  selected_inputs:
+    parse_output: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/parse_cytokine_stimulation/parse_cytokine_stimulation_tailmaker_pipeline_output/all-sample
+    matrix_set: DGE_unfiltered
+    count_matrix: DGE_unfiltered/count_matrix.mtx.gz
+    cell_metadata: DGE_unfiltered/cell_metadata.csv.gz
+    feature_metadata: DGE_unfiltered/all_genes.csv.gz
+  checksum_inventory: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/source_inventory.tsv
+
+outside_bundle_preparation:
+  status: complete
+  script: processing/parse_cytokines/01_readparsebio_unfiltered.R
+  runner: processing/parse_cytokines/run_01_readparsebio_unfiltered.sh
+  environment: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
+  output_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared
+  output_rds: parse_cytokines_unfiltered_seurat.rds
+  prepared_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_unfiltered_seurat.rds
+  output_sha256: 1d1fb52d1b372416819e1705b980c2bc9d1ad2c1fc1bf0c4bbdbc94954f17a0b
+  validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/validation.json
+  filtering: none
+  retained:
+    cells: 13413901
+    features: 78298
+    stored_entries: 1422994774
+    samples: 96
 
 bundle:
-  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
 
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently
@@ -20,11 +43,11 @@ analysis_intent:
   - evaluate selected gene sets along the Bdev reference pseudotime
 
 required_before_creation:
-  - inspect delivered matrices and sample metadata
+  - complete and validate the unfiltered ReadParseBio preparation
   - establish sample, replicate, and condition mappings
   - verify cell identifiers and input checksums
   - select supported scWorkbench ingestion and preprocessing operations
 
-reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/parse_cytokines
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports
 workflow: processing/parse_cytokines
 figures: figure_scripts/parse_cytokines

@@ -1,5 +1,6 @@
 schema_version: 1
 bundle_id: scmulti_flt3ko_il7ko
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
 role: source_analysis
 status: planned
 
@@ -11,7 +12,7 @@ source:
   delivery_status: pending_inventory
 
 bundle:
-  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/bundle
 
 analysis_intent:
   - process RNA and ATAC modalities independently from Bdev
@@ -25,6 +26,6 @@ required_before_creation:
   - verify paired-modality cell identifiers and input checksums
   - select supported scWorkbench ingestion and preprocessing operations
 
-reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/scmulti_flt3ko_il7ko
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports
 workflow: processing/scmulti_flt3ko_il7ko
 figures: figure_scripts/scmulti_flt3ko_il7ko

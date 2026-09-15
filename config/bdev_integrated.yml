@@ -1,10 +1,11 @@
 schema_version: 1
 bundle_id: bdev_integrated
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
 role: derived_integration
 status: planned
 
 bundle:
-  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/bundle
   reference: bdev_reference
   parents:
     - bdev_reference
@@ -28,6 +29,6 @@ reference_inputs:
   default_umap: umap.atac
   pseudotime_artifact_id: cell_vector_20260914_162517_7q4y8xbb
 
-reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports/bdev_integrated
+reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports
 workflow: processing/integration
 figures: figure_scripts/bdev_integrated

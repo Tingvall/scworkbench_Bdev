@@ -39,7 +39,13 @@ scWorkbench documentation supplied inside the project image.
 Large datasets, bundles, run workspaces, and validation evidence remain under
 `/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/`. New run-specific
 evidence should use
-`intermediate_objects/reports/<bundle_id>/<run_id>/`.
+`intermediate_objects/<bundle_id>/reports/<run_id>/`.
+
+Mirrored storage is dataset-centered directly under
+`intermediate_objects/<bundle_id>/`. Each dataset directory contains
+`prepared/`, `reports/`, and `work/`, plus `bundle/` after its scWorkbench
+bundle is created. Initialize missing dataset directories with
+`processing/00_initialize_storage_layout.sh`.
 
 ## Bdev reference bundle
 
@@ -48,9 +54,9 @@ The reference source is the `Bdev` Seurat/Signac object in
 Generated data remain in mirrored storage under
 `/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/`:
 
-- `bdev_reference/`: the scWorkbench bundle.
-- `bdev_reference_inspection/complete/`: the read-only source inventory.
-- `bdev_reference_import/`: source identity, import mappings, and validation reports.
+- `bdev_reference/bundle/`: the scWorkbench bundle.
+- `bdev_reference/prepared/inspection/complete/`: the read-only source inventory.
+- `bdev_reference/prepared/import/`: source identity, import mappings, and validation reports.
 
 `processing/bdev_reference/01_inspect_bdev_reference.R` inspects the original
 object. `processing/bdev_reference/02_create_bdev_reference.R` creates a new

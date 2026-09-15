@@ -1,8 +1,7 @@
 schema_version: 1
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev
 image: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
-reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/reports
-work_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/work
+intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects
 
 bundles:
   bdev_reference:
@@ -10,7 +9,7 @@ bundles:
     status: accepted
     config: config/bdev_reference.yml
     source_dataset: scmulti_bdev
-    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/bundle
     parents: []
     accepted_state:
       bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
@@ -21,7 +20,7 @@ bundles:
     status: planned
     config: config/parse_cytokines.yml
     source_dataset: parse_cytokine_stimulation
-    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
     parents: []
     accepted_state: null
 
@@ -30,7 +29,7 @@ bundles:
     status: planned
     config: config/scmulti_flt3ko_il7ko.yml
     source_dataset: scmulti_flt3ko_il7ko
-    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/bundle
     parents: []
     accepted_state: null
 
@@ -39,7 +38,7 @@ bundles:
     status: planned
     config: config/bdev_integrated.yml
     source_dataset: null
-    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/bundle
     reference: bdev_reference
     parents:
       - bdev_reference

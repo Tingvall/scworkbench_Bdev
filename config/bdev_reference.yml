@@ -1,5 +1,6 @@
 schema_version: 1
 bundle_id: bdev_reference
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference
 role: reference
 status: accepted
 
@@ -11,7 +12,7 @@ source:
   sha256: c880abb2cd41a80a6a1af30f8065a71baee12101cb9bab3d7118d9719020b8f9
 
 bundle:
-  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/bundle
   cells: 26723
   matrices:
     - RNA_counts
@@ -45,11 +46,11 @@ validation:
   status: ok_with_warnings
   bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
   recipient_validation_fingerprint: d0547bf04bc928030c64629bf5149f2daf3b1f64e44a9ec99e3b1feb5d9e95c2
-  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_import/validation.json
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/import/validation.json
 
 reports:
-  inspection: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_inspection/complete
-  import: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference_import
+  inspection: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/inspection/complete
+  import: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/import
   dataset_report: figure_outputs/bdev_reference/bdev_reference_report.html
 
 processing:
