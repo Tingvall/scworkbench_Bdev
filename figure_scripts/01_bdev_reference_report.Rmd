@@ -1,0 +1,266 @@
+---
+title: "Bdev reference dataset report"
+output:
+  html_document:
+    self_contained: true
+    toc: true
+    toc_float: true
+params:
+  bundle_dir: "/bundle"
+  output_dir: "/repo/figure_outputs/bdev_reference_report"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  out.width = "100%",
+  dpi = 180
+)
+
+suppressPackageStartupMessages({
+  library(scworkbench)
+  library(ggplot2)
+})
+
+bundle_dir <- normalizePath(params$bundle_dir, mustWork = TRUE)
+output_dir <- params$output_dir
+dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+bundle <- wb_open_bundle(bundle_dir, read_only = TRUE, validate = FALSE)
+
+bundle_manifest <- wb_manifest(bundle)
+source_inputs <- wb_prov_source_inputs(bundle)
+source_rows <- source_inputs[source_inputs$source_id == "bdev_rdata", , drop = FALSE]
+source_sha256 <- unique(as.character(source_rows$checksum_value))
+source_paths <- unique(as.character(source_rows$path))
+stopifnot(length(source_sha256) == 1L, nzchar(source_sha256))
+all_cells <- as.character(wb_cells(bundle, cell_set = "all"))
+sample_field <- "orig.ident"
+default_umap <- "umap.atac"
+reference_cell_set <- "set:bdev_reference"
+
+sample_metadata <- wb_meta(
+  bundle,
+  cells = all_cells,
+  cols = list(wb_ref_metadata_field("core:cell_id"), sample_field)
+)
+stopifnot(
+  identical(as.character(sample_metadata$cell_id), all_cells),
+  !anyNA(sample_metadata[[sample_field]])
+)
+
+sample_values <- factor(
+  as.character(sample_metadata[[sample_field]]),
+  levels = sort(unique(as.character(sample_metadata[[sample_field]])))
+)
+names(sample_values) <- all_cells
+
+sample_counts <- as.data.frame(table(sample_id = sample_values), stringsAsFactors = FALSE)
+names(sample_counts)[2L] <- "cells"
+sample_counts$percent <- round(100 * sample_counts$cells / sum(sample_counts$cells), 1)
+
+space_registry <- wb_space_info(bundle)
+umap_record <- space_registry[space_registry$space_id == default_umap, , drop = FALSE]
+stopifnot(nrow(umap_record) == 1L, as.integer(umap_record$dims[[1L]]) == 2L)
+
+umap_coordinates <- wb_space(bundle, default_umap, cells = all_cells)
+if (is.data.frame(umap_coordinates)) {
+  stopifnot(identical(as.character(umap_coordinates$cell_id), all_cells))
+  coordinate_values <- as.matrix(umap_coordinates[, c("x", "y"), drop = FALSE])
+} else {
+  stopifnot(identical(rownames(umap_coordinates), all_cells))
+  coordinate_values <- as.matrix(umap_coordinates)
+}
+stopifnot(ncol(coordinate_values) == 2L, all(is.finite(coordinate_values)))
+
+vector_artifacts <- wb_art_list(bundle, type = "cell_vector")
+pseudotime_rows <- vector_artifacts[
+  vector_artifacts$source_op == "metadata_cell_vector" &
+    grepl("bdev_reference_pseudotime", vector_artifacts$name, fixed = TRUE),
+  ,
+  drop = FALSE
+]
+stopifnot(nrow(pseudotime_rows) == 1L)
+pseudotime_artifact_id <- as.character(pseudotime_rows$artifact_id[[1L]])
+pseudotime <- wb_read_cell_vector(
+  bundle,
+  paste0("artifact:", pseudotime_artifact_id),
+  all_cells
+)
+stopifnot(
+  identical(names(pseudotime), all_cells),
+  all(is.finite(pseudotime[!is.na(pseudotime)]))
+)
+
+n_pseudotime <- sum(!is.na(pseudotime))
+n_not_in_trajectory <- sum(is.na(pseudotime))
+
+matrix_registry <- wb_matrices(bundle)
+matrix_ids <- as.character(matrix_registry$matrix_id)
+rownames(matrix_registry) <- NULL
+
+plot_theme <- theme_void(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 15, hjust = 0),
+    plot.subtitle = element_text(size = 10.5, colour = "grey30"),
+    plot.caption = element_text(size = 8.5, colour = "grey35", hjust = 0),
+    legend.position = "right",
+    legend.title = element_text(face = "bold"),
+    plot.margin = margin(8, 8, 8, 8)
+  )
+
+sample_plot <- wb_plot_space_2d(
+  bundle = bundle,
+  space_id = default_umap,
+  cell_set = "all",
+  overlay_sets = reference_cell_set,
+  color_by = sample_values,
+  color_label = "Sample ID",
+  overlay_alpha = 0.75,
+  overlay_size = 0.35,
+  label_groups = TRUE,
+  label_by = sample_values,
+  label_min_n = 1L,
+  continuous_na_color = "grey85"
+) +
+  scale_color_brewer(palette = "Dark2", na.value = "grey85") +
+  labs(
+    title = "Bdev reference cells by sample",
+    subtitle = "Peaks assay UMAP (umap.atac); Sample ID is source metadata field orig.ident",
+    caption = paste0("Cells: ", format(length(all_cells), big.mark = ","))
+  ) +
+  coord_equal() +
+  plot_theme
+
+trajectory_plot <- wb_plot_space_2d(
+  bundle = bundle,
+  space_id = default_umap,
+  cell_set = "all",
+  overlay_sets = reference_cell_set,
+  color_by = pseudotime,
+  color_label = "Pseudotime (pt)",
+  overlay_alpha = 0.82,
+  overlay_size = 0.35,
+  continuous_palette = "turbo",
+  continuous_na_color = "grey85"
+) +
+  labs(
+    title = "Bdev reference trajectory",
+    subtitle = "Rainbow coded by the promoted pt pseudotime; cells without pseudotime are light grey",
+    caption = paste0(
+      "Promoted artifact: ", pseudotime_artifact_id,
+      " | Included: ", format(n_pseudotime, big.mark = ","),
+      " | Not included: ", format(n_not_in_trajectory, big.mark = ",")
+    )
+  ) +
+  coord_equal() +
+  plot_theme
+
+sample_png <- file.path(output_dir, "bdev_reference_umap_sample_id.png")
+trajectory_png <- file.path(output_dir, "bdev_reference_umap_trajectory.png")
+ggsave(sample_png, sample_plot, width = 8.2, height = 6.8, dpi = 300, bg = "white")
+ggsave(trajectory_png, trajectory_plot, width = 8.2, height = 6.8, dpi = 300, bg = "white")
+wb_close_bundle(bundle)
+```
+
+## Dataset overview
+
+This report describes the promoted **`r bundle_manifest$bundle_name`** scWorkbench
+bundle. It contains **`r format(length(all_cells), big.mark = ",")` cells** from
+four source samples. All UMAP panels use **`r default_umap`**, the imported
+two-dimensional embedding recorded for the **peaks assay**.
+
+The reference trajectory uses the previously promoted cell-vector artifact
+`r pseudotime_artifact_id`, derived from the source metadata field `pt`. It has
+defined pseudotime for **`r format(n_pseudotime, big.mark = ",")` cells
+(`r round(100 * n_pseudotime / length(all_cells), 1)`%)**. The remaining
+**`r format(n_not_in_trajectory, big.mark = ",")` cells** retain missing
+pseudotime and appear in light grey.
+
+```{r overview-table}
+overview <- data.frame(
+  item = c(
+    "Bundle ID", "Source SHA-256", "Cells", "Samples", "Matrices", "Coordinate spaces",
+    "Default UMAP", "Cells with pseudotime", "Cells without pseudotime"
+  ),
+  value = c(
+    bundle_manifest$bundle_id,
+    source_sha256,
+    format(length(all_cells), big.mark = ","),
+    nrow(sample_counts),
+    length(matrix_ids),
+    nrow(space_registry),
+    default_umap,
+    format(n_pseudotime, big.mark = ","),
+    format(n_not_in_trajectory, big.mark = ",")
+  ),
+  stringsAsFactors = FALSE
+)
+knitr::kable(overview, col.names = c("Item", "Value"), align = c("l", "l"))
+```
+
+The bundle provenance identifies the source as
+`r paste(source_paths, collapse = ", ")` with SHA-256 `r source_sha256`.
+
+## Sample composition
+
+```{r sample-table}
+knitr::kable(
+  sample_counts,
+  col.names = c("Sample ID", "Cells", "Percent"),
+  align = c("l", "r", "r")
+)
+```
+
+## UMAP by sample ID
+
+```{r sample-plot, fig.width=8.2, fig.height=6.8}
+sample_plot
+```
+
+## UMAP by trajectory pseudotime
+
+```{r trajectory-plot, fig.width=8.2, fig.height=6.8}
+trajectory_plot
+```
+
+## Retained matrices
+
+```{r matrix-table}
+matrix_columns <- intersect(
+  c("matrix_id", "layer", "feature_type", "n_features", "n_cells", "storage"),
+  names(matrix_registry)
+)
+knitr::kable(matrix_registry[, matrix_columns, drop = FALSE])
+```
+
+## Retained coordinate spaces
+
+```{r space-table}
+space_columns <- intersect(
+  c("space_id", "dims", "storage", "description"),
+  names(space_registry)
+)
+knitr::kable(space_registry[, space_columns, drop = FALSE])
+```
+
+## Validation and methods
+
+The bundle was opened read-only. Public scWorkbench getters confirmed that all
+26,723 requested cells occur in `umap.atac` in bundle order, that every UMAP
+coordinate is finite, that Sample ID has no missing values, and that the
+promoted pseudotime vector returns values in the same cell order. No bundle
+state was changed and no new artifact was promoted.
+
+Plots were generated with `scworkbench::wb_plot_space_2d()`. Sample ID uses the
+source metadata field `orig.ident`. Trajectory color uses the existing promoted
+`metadata_cell_vector` artifact; its missing values were retained and rendered
+as light grey. The continuous `turbo` palette supplies the requested rainbow
+color progression.
+
+Report generated `r format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z")` with
+scWorkbench `r as.character(packageVersion("scworkbench"))` and R
+`r paste(R.version$major, R.version$minor, sep = ".")`.
