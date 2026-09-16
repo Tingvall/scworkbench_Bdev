@@ -39,14 +39,31 @@ features across 96 samples and passed the source, dimension, identifier-order,
 metadata, and no-filtering checks. The checksummed RDS and validation evidence
 remain in the external work directory named above.
 
+Bundle creation is paused until prefiltering has been implemented at the Seurat
+object stage. The prefiltering workflow will use the unfiltered RDS above,
+restrict its sample scope to the 78 single-stimulus samples and three controls,
+calculate factual RNA QC metrics from raw counts, and show distributions and
+proposed exclusions. It must not derive accepted cells until the user selects
+the QC thresholds.
+
+The intended accepted output is
+`intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_seurat.rds`.
+That file does not exist yet. The unfiltered source RDS remains unchanged.
+
+No Parse scWorkbench bundle or bundle-creation script is currently present.
+After the prefiltered RDS is accepted and validated, implement a new creation
+script from the current scWorkbench documentation and build the bundle cleanly
+from that object.
+
 Expected phases are:
 
 1. `01_readparsebio_unfiltered.R`
-2. inspect the prepared source and establish bundle import mappings
-3. create the bundle
-4. run QC and preprocessing
-5. run the dataset analysis
-6. validate the bundle
+2. implement prefiltering and calculate factual RNA QC metrics
+3. review distributions and proposed exclusions
+4. derive the accepted cells only after user-selected thresholds
+5. write and validate `parse_cytokines_prefiltered_seurat.rds`
+6. implement and run a clean scWorkbench bundle creation
+7. validate the bundle before downstream analysis
 
-The independently validated output is the `parse_cytokines` bundle. Reviewed
-cytokine gene sets may later be consumed by `processing/integration/`.
+The future independently validated output will be the `parse_cytokines` bundle.
+Reviewed cytokine gene sets may later be consumed by `processing/integration/`.
