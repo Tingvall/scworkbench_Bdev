@@ -2,7 +2,7 @@ schema_version: 1
 bundle_id: parse_cytokines
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
 role: source_analysis
-status: prefiltering_pending
+status: planned
 
 source:
   dataset_id: parse_cytokine_stimulation
@@ -51,45 +51,60 @@ proposed_sample_classification:
       conditions: 1
       samples: 3
   notes:
-    - user directed the prefiltered Seurat object and future bundle to include only control and single classes
+    - this classification was not applied to the count-only prefiltered Seurat object
     - control is separate because it has no stimulus components
     - Csf_1 and Csf_2 are single-stimulus labels despite their underscores
     - source spellings remain unchanged pending nomenclature review
 
 prefiltered_seurat_preparation:
-  status: implementation_pending
-  analysis_started: false
+  status: complete
+  completed_utc: 2026-09-18 23:45:08 UTC
+  script: processing/parse_cytokines/02_prefilter_min500counts.R
+  runner: processing/parse_cytokines/run_02_prefilter_min500counts.sh
+  environment: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
   source_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_unfiltered_seurat.rds
-  intended_output_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_seurat.rds
+  source_sha256: 1d1fb52d1b372416819e1705b980c2bc9d1ad2c1fc1bf0c4bbdbc94954f17a0b
+  output_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds
+  output_sha256: 1e4da7149190e6c93f71bc28fc47d1f58a20e22ee9cbec6894f0824394e9bc40
+  validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat_validation.json
+  sample_summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat_sample_summary.tsv
   sample_scope:
-    included_classes:
-      - single
-      - control
-    excluded_classes:
-      - combination
-    samples_before_qc: 81
-    cells_before_qc: 11275545
-    excluded_combination_samples: 15
-    excluded_combination_cells: 2138356
-  qc_plan:
+    included: all source samples
+    samples_before_filter: 96
+    samples_retained: 96
+    sample_class_filter: none
+  filter:
     assay: RNA
     layer: counts
-    mitochondrial_pattern: ^mt-
-    ribosomal_pattern: ^Rp[sl]
-    pattern_ignore_case: false
-    threshold_selection: pending_user_decision
-    accepted_cells: not_derived
-  requirements:
-    - calculate factual RNA QC metrics from raw counts before filtering
-    - show metric distributions and proposed exclusions before choosing thresholds
-    - require explicit user-selected thresholds before deriving the accepted cells
-    - preserve the unfiltered source RDS unchanged
-    - record source checksum, cell order, feature order, sample counts, and output validation
+    metric: column sum of raw RNA counts
+    operator: ">="
+    threshold: 500
+    additional_cell_filters: none
+    feature_filter: none
+  retained:
+    cells_before: 13413901
+    cells: 251599
+    cells_removed: 13162302
+    features: 78298
+    samples: 96
+    minimum_raw_RNA_counts: 500
+    maximum_raw_RNA_counts: 845848
+  checks:
+    nCount_RNA_matches_counts_layer: true
+    all_retained_cells_meet_threshold: true
+    all_removed_cells_are_below_threshold: true
+    cell_order_is_input_subset_order: true
+    feature_order_unchanged: true
+    cell_metadata_unchanged: true
+    feature_metadata_unchanged: true
+    sample_counts_reconcile: true
+    source_unchanged: true
+    output_rds_readback: true
 
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
-  status: absent_pending_prefiltered_seurat
-  source_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_seurat.rds
+  status: absent_pending_creation
+  source_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds
   creation_script: not_implemented
   clean_build_required: true
   prior_aborted_bundle_removed: 2026-09-15
@@ -100,10 +115,6 @@ analysis_intent:
   - evaluate selected gene sets along the Bdev reference pseudotime
 
 required_before_creation:
-  - implement the prefiltering workflow without changing the unfiltered source RDS
-  - calculate factual RNA QC metrics and present distributions and proposed exclusions
-  - obtain user-selected QC thresholds and derive the accepted cells
-  - write and validate the prefiltered Seurat RDS at the configured path
   - implement a new scWorkbench creation script that imports only the accepted prefiltered object
   - verify checksums, cell and feature order, sample counts, and bundle content before promotion
 

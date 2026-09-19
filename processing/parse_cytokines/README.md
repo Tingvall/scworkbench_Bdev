@@ -39,31 +39,43 @@ features across 96 samples and passed the source, dimension, identifier-order,
 metadata, and no-filtering checks. The checksummed RDS and validation evidence
 remain in the external work directory named above.
 
-Bundle creation is paused until prefiltering has been implemented at the Seurat
-object stage. The prefiltering workflow will use the unfiltered RDS above,
-restrict its sample scope to the 78 single-stimulus samples and three controls,
-calculate factual RNA QC metrics from raw counts, and show distributions and
-proposed exclusions. It must not derive accepted cells until the user selects
-the QC thresholds.
+The second step applies the user-selected prefilter in Seurat:
 
-The intended accepted output is
-`intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_seurat.rds`.
-That file does not exist yet. The unfiltered source RDS remains unchanged.
+```bash
+processing/parse_cytokines/run_02_prefilter_min500counts.sh
+```
+
+It calculates each cell's total directly from the raw RNA `counts` layer and
+retains cells whose total is at least 500. It applies no sample, feature, or
+additional cell filter. The completed output is:
+
+`intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds`
+
+The filter retained 251,599 of 13,413,901 cells, all 78,298 features, and all
+96 samples. The minimum retained raw RNA count is exactly 500. The script
+verified that `nCount_RNA` exactly matched the raw counts-layer column sums,
+retained cell order is the input subset order, feature order is unchanged,
+cell and feature metadata are unchanged, every retained cell meets the
+threshold, and every removed cell is below it. The output SHA-256 is
+`1e4da7149190e6c93f71bc28fc47d1f58a20e22ee9cbec6894f0824394e9bc40`.
+The unfiltered source remained unchanged.
+
+Validation, per-sample counts, environment versions, and session information
+are written beside the filtered RDS with the same filename stem. The previously
+reviewed single/combination/control classification was not used as a filter in
+this count-only prefilter.
 
 No Parse scWorkbench bundle or bundle-creation script is currently present.
-After the prefiltered RDS is accepted and validated, implement a new creation
-script from the current scWorkbench documentation and build the bundle cleanly
-from that object.
+Before bundle creation, consult the current documentation inside the supplied
+image, implement a new creation script, and build the bundle cleanly from the
+prefiltered object.
 
-Expected phases are:
+Workflow phases are:
 
 1. `01_readparsebio_unfiltered.R`
-2. implement prefiltering and calculate factual RNA QC metrics
-3. review distributions and proposed exclusions
-4. derive the accepted cells only after user-selected thresholds
-5. write and validate `parse_cytokines_prefiltered_seurat.rds`
-6. implement and run a clean scWorkbench bundle creation
-7. validate the bundle before downstream analysis
+2. `02_prefilter_min500counts.R`
+3. implement and run a clean scWorkbench bundle creation
+4. validate the bundle before downstream analysis
 
 The future independently validated output will be the `parse_cytokines` bundle.
 Reviewed cytokine gene sets may later be consumed by `processing/integration/`.
