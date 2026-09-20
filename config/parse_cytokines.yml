@@ -2,7 +2,7 @@ schema_version: 1
 bundle_id: parse_cytokines
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines
 role: source_analysis
-status: planned
+status: accepted
 
 source:
   dataset_id: parse_cytokine_stimulation
@@ -103,20 +103,51 @@ prefiltered_seurat_preparation:
 
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
-  status: absent_pending_creation
+  status: accepted
   source_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds
-  creation_script: not_implemented
+  source_sha256: 1e4da7149190e6c93f71bc28fc47d1f58a20e22ee9cbec6894f0824394e9bc40
+  creation_script: processing/parse_cytokines/03_create_parse_cytokines.R
+  runner: processing/parse_cytokines/run_03_create_parse_cytokines.sh
+  created_utc: 2026-09-19 23:34:29 UTC
+  completed_utc: 2026-09-19 23:44:19 UTC
+  environment:
+    image: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
+    image_sha256: 3fee33f5363b3f0132ec2816e8c6599ddb6eb27cddeee9641cdd6237464bca5c
+    scworkbench: 0.1.0
+  cells: 251599
+  features: 78298
+  samples: 96
+  matrices:
+    - RNA_counts
+  metadata_columns:
+    - sample_id
+    - replicate
+    - condition
+  ingest_report_artifact_id: obs_table_20260919_163604_r59kek1x
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z
   clean_build_required: true
   prior_aborted_bundle_removed: 2026-09-15
+  validation:
+    status: ok_with_warnings
+    expected_warning: external source deliberately not accessed by recipient validation
+    bundle_state_fingerprint: 3bfd5b22ec4a70084c7f6ffec06addf9886d0a6b0a63644eb777badda40c8383
+    recipient_validation_fingerprint: c61031e77e474ebb142438fdcdcef046298cbfcdb69a53c659434e778c489ed9
+    source_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/source_comparison.json
+    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/validation.json
+    checks:
+      source_checksum: true
+      source_stat_unchanged: true
+      ordered_cell_ids: true
+      ordered_feature_ids: true
+      sampled_raw_count_values_exact: true
+      required_metadata_values_exact: true
+      only_required_noncore_metadata_imported: true
+      sample_mappings_exact: true
 
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently
   - derive reviewed cytokine response gene sets
   - evaluate selected gene sets along the Bdev reference pseudotime
-
-required_before_creation:
-  - implement a new scWorkbench creation script that imports only the accepted prefiltered object
-  - verify checksums, cell and feature order, sample counts, and bundle content before promotion
 
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports
 workflow: processing/parse_cytokines

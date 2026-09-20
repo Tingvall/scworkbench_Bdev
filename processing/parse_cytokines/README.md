@@ -65,17 +65,32 @@ are written beside the filtered RDS with the same filename stem. The previously
 reviewed single/combination/control classification was not used as a filter in
 this count-only prefilter.
 
-No Parse scWorkbench bundle or bundle-creation script is currently present.
-Before bundle creation, consult the current documentation inside the supplied
-image, implement a new creation script, and build the bundle cleanly from the
-prefiltered object.
+The third step creates the separate `parse_cytokines` scWorkbench bundle from
+that accepted pre-filtered object:
+
+```bash
+processing/parse_cytokines/run_03_create_parse_cytokines.sh
+```
+
+It imports only the raw RNA `counts` layer as `RNA_counts` and the required
+`sample_id`, `replicate`, and `condition` cell metadata. It does not import a
+normalized layer, reductions, or unrelated Seurat metadata. The runner mounts
+the input RDS read-only, refuses to overwrite an existing bundle or report
+directory, and writes run-specific source comparison and recipient-validation
+evidence under `reports/bundle_import_<UTC timestamp>/`.
+
+The import verifies the accepted RDS checksum, exact cell and feature order,
+exact required metadata values, all 96 sample mappings, and distributed raw
+count values across every row and column of the source matrix. It then
+finalizes the bundle and runs the scWorkbench recipient validation gate.
 
 Workflow phases are:
 
 1. `01_readparsebio_unfiltered.R`
 2. `02_prefilter_min500counts.R`
-3. implement and run a clean scWorkbench bundle creation
-4. validate the bundle before downstream analysis
+3. `03_create_parse_cytokines.R`
+4. recipient validation within step 3 before downstream analysis
 
-The future independently validated output will be the `parse_cytokines` bundle.
-Reviewed cytokine gene sets may later be consumed by `processing/integration/`.
+The accepted independently validated output is the `parse_cytokines` bundle at
+`intermediate_objects/parse_cytokines/bundle/`. Reviewed cytokine gene sets may
+later be consumed by `processing/integration/`.

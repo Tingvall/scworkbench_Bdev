@@ -91,9 +91,26 @@ The reproducible dataset report source is
 `figure_scripts/bdev_reference/01_bdev_reference_report.Rmd`. Generated HTML
 and PNG outputs are in `figure_outputs/bdev_reference/`.
 
-## Planned workflows
+## Parse cytokine bundle
 
-The planned execution phases and their validation boundaries are documented in:
+The accepted `parse_cytokines` bundle is built from the checksummed
+pre-filtered Seurat RDS at
+`intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds`.
+It contains the raw `RNA_counts` matrix for 251,599 cells and 78,298 features,
+plus only the required `sample_id`, `replicate`, and `condition` metadata for
+all 96 samples. It contains no normalized matrix or dimensional reduction.
+
+`processing/parse_cytokines/03_create_parse_cytokines.R` performs atomic
+scWorkbench ingestion, compares source and imported identifiers, metadata, and
+distributed count values, finalizes the bundle, and runs recipient validation.
+The accepted bundle and run evidence are under
+`intermediate_objects/parse_cytokines/bundle/` and
+`intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/`,
+respectively.
+
+## Workflow documentation
+
+Execution phases and validation boundaries are documented in:
 
 - `processing/parse_cytokines/README.md`
 - `processing/scmulti_flt3ko_il7ko/README.md`

@@ -35,7 +35,7 @@ Each dataset has one directory directly under `intermediate_objects/`:
 | Dataset | Role | Current key object |
 |---|---|---|
 | `bdev_reference` | Reference | `bdev_reference/bundle/` |
-| `parse_cytokines` | Parse cytokine analysis | `parse_cytokines/prepared/parse_cytokines_unfiltered_seurat.rds` |
+| `parse_cytokines` | Parse cytokine analysis | `parse_cytokines/bundle/` |
 | `scmulti_flt3ko_il7ko` | KO multiome source analysis | Prepared object pending |
 | `bdev_integrated` | Bdev-centered integration | Bundle pending |
 

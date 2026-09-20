@@ -17,12 +17,14 @@ bundles:
 
   parse_cytokines:
     role: source_analysis
-    status: planned
+    status: accepted
     config: config/parse_cytokines.yml
     source_dataset: parse_cytokine_stimulation
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
     parents: []
-    accepted_state: null
+    accepted_state:
+      bundle_state_fingerprint: 3bfd5b22ec4a70084c7f6ffec06addf9886d0a6b0a63644eb777badda40c8383
+      recipient_validation_fingerprint: c61031e77e474ebb142438fdcdcef046298cbfcdb69a53c659434e778c489ed9
 
   scmulti_flt3ko_il7ko:
     role: source_analysis
