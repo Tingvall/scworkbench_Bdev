@@ -17,6 +17,11 @@ Expected phases are:
 6. `06_validate_bundle.R`: perform source, cell, coordinate, provenance, and
    recipient validation.
 
+For the Parse parent, downstream integration uses the accepted
+`set:parse_qc_control_single` universe and its promoted
+`parse_treatment_category` vector. Combined-stimulation cells remain retained
+in the parent bundle but are outside the integration input scope.
+
 Do not create an integration script until the applicable scWorkbench operation
 interfaces have been inspected in the supplied image and all required parent
 states have been accepted.

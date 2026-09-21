@@ -23,8 +23,8 @@ bundles:
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
     parents: []
     accepted_state:
-      bundle_state_fingerprint: bf3806ce1fa4adf6b02aef7567a3f1769c5f5fd7698b5a90d7e357a234517707
-      recipient_validation_fingerprint: 8aa988ad448f70617bd57a377c6a714708ec04c0ea168e633429d76145185d08
+      bundle_state_fingerprint: a7c1c15655cfbfd898c7f7124042cce5e6706b75d36e4da5d910deb207da0c8c
+      recipient_validation_fingerprint: 1f7f9144b9b42e0754f15b01d99a12170a32985829942f4b8ad40fba942a34ef
 
   scmulti_flt3ko_il7ko:
     role: source_analysis

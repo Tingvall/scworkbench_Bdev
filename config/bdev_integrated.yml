@@ -29,6 +29,15 @@ reference_inputs:
   default_umap: umap.atac
   pseudotime_artifact_id: cell_vector_20260914_162517_7q4y8xbb
 
+parse_inputs:
+  bundle_id: parse_cytokines
+  cell_set: set:parse_qc_control_single
+  treatment_category_vector_artifact_id: cell_vector_20260921_083504_zts1k30i
+  included_treatment_categories:
+    - control
+    - single
+  excluded_treatment_category: combined
+
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports
 workflow: processing/integration
 figures: figure_scripts/bdev_integrated

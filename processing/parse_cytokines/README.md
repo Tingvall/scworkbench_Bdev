@@ -138,6 +138,35 @@ cell-set recipes, promotion records, and recipient validation are under:
 
 `intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/`
 
+The sixth step applies the reviewed treatment classification:
+
+```bash
+processing/parse_cytokines/run_06_classify_treatments_and_select.sh
+```
+
+The explicit mapping is `config/parse_cytokines_treatment_categories.tsv`.
+It defines `control` as zero cytokine stimuli, `single` as exactly one, and
+`combined` as more than one. The map covers all 32 conditions and 96 samples;
+`Csf_1` and `Csf_2` remain reviewed single-stimulus labels despite their
+underscores.
+
+Before bundle mutation, the step writes the complete condition and sample
+classification, per-category counts, and all proposed treatment-scope
+exclusions. It then imports `treatment_category` and `cytokine_count` for all
+251,599 imported cells, promotes the categorical `parse_treatment_category`
+cell vector, and derives `set:parse_qc_control_single` as the exact intersection
+of `set:parse_qc_accepted` with the `control` and `single` categories.
+
+The accepted downstream set contains 154,209 cells across 81 samples and 27
+conditions: 4,816 control cells and 149,393 single-cytokine cells. The 40,006
+QC-accepted combined-stimulation cells are outside that downstream set. They
+remain in the bundle, as do all QC-excluded cells; `set:parse_cytokines`,
+`set:parse_qc_accepted`, and `set:parse_qc_excluded` retain their exact prior
+memberships. Classification, provenance, cell-set recipes, and recipient
+validation are under:
+
+`intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/`
+
 Workflow phases are:
 
 1. `01_readparsebio_unfiltered.R`
@@ -147,6 +176,9 @@ Workflow phases are:
 5. QC distribution review and explicit user threshold selection
 6. `05_apply_rna_qc_filter.R`, which writes the exclusion preview before
    deriving the durable exclusion and accepted-analysis sets
+7. `06_classify_treatments_and_select.R`, which classifies every sample/cell,
+   writes the treatment-selection preview, and derives the QC-accepted
+   control/single downstream analysis set
 
 The accepted independently validated output is the `parse_cytokines` bundle at
 `intermediate_objects/parse_cytokines/bundle/`. Reviewed cytokine gene sets may

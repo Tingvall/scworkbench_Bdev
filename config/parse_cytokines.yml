@@ -34,27 +34,39 @@ outside_bundle_preparation:
     stored_entries: 1422994774
     samples: 96
 
-proposed_sample_classification:
-  status: accepted_for_prefilter_scope
-  generated: 2026-09-15
-  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/parse_cytokines_seurat_report.md
-  sample_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/sample_classification_proposed.tsv
-  condition_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/condition_classification_proposed.tsv
-  classes:
-    single:
-      conditions: 26
-      samples: 78
-    combination:
-      conditions: 5
-      samples: 15
+treatment_classification:
+  status: complete
+  completed_utc: 2026-09-21 16:20:32 UTC
+  reviewed_mapping: config/parse_cytokines_treatment_categories.tsv
+  prior_inventory_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915/parse_cytokines_seurat_report.md
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z
+  condition_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/condition_treatment_classification.tsv
+  sample_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/sample_treatment_classification.tsv
+  cell_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/cell_treatment_classification.tsv
+  categories:
     control:
+      cytokine_count_rule: 0
       conditions: 1
       samples: 3
+      imported_cells: 5405
+      qc_accepted_cells: 4816
+    single:
+      cytokine_count_rule: 1
+      conditions: 26
+      samples: 78
+      imported_cells: 189617
+      qc_accepted_cells: 149393
+    combined:
+      cytokine_count_rule: ">1"
+      conditions: 5
+      samples: 15
+      imported_cells: 56577
+      qc_accepted_cells: 40006
   notes:
-    - this classification was not applied to the count-only prefiltered Seurat object
-    - control is separate because it has no stimulus components
+    - control has zero cytokine stimuli, single has exactly one, and combined has more than one
     - Csf_1 and Csf_2 are single-stimulus labels despite their underscores
-    - source spellings remain unchanged pending nomenclature review
+    - source condition spellings are preserved
+    - every imported cell and all 96 samples have exactly one treatment category
 
 prefiltered_seurat_preparation:
   status: complete
@@ -123,17 +135,21 @@ bundle:
     - sample_id
     - replicate
     - condition
+    - treatment_category
+    - cytokine_count
   ingest_report_artifact_id: obs_table_20260919_163604_r59kek1x
   report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z
   clean_build_required: true
   prior_aborted_bundle_removed: 2026-09-15
   validation:
     status: ok_with_warnings
-    expected_warning: external source deliberately not accessed by recipient validation
-    bundle_state_fingerprint: bf3806ce1fa4adf6b02aef7567a3f1769c5f5fd7698b5a90d7e357a234517707
-    recipient_validation_fingerprint: 8aa988ad448f70617bd57a377c6a714708ec04c0ea168e633429d76145185d08
+    expected_warnings:
+      - external source files deliberately not accessed by recipient validation
+      - metadata-import evidence table has no recorded content-identity baseline in the current scWorkbench build
+    bundle_state_fingerprint: a7c1c15655cfbfd898c7f7124042cce5e6706b75d36e4da5d910deb207da0c8c
+    recipient_validation_fingerprint: 1f7f9144b9b42e0754f15b01d99a12170a32985829942f4b8ad40fba942a34ef
     source_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/source_comparison.json
-    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/validation.json
+    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/validation.json
     checks:
       source_checksum: true
       source_stat_unchanged: true
@@ -262,6 +278,74 @@ rna_qc_filter:
     expected_warning: external source deliberately not accessed by recipient validation
     bundle_state_fingerprint: bf3806ce1fa4adf6b02aef7567a3f1769c5f5fd7698b5a90d7e357a234517707
     recipient_validation_fingerprint: 8aa988ad448f70617bd57a377c6a714708ec04c0ea168e633429d76145185d08
+
+treatment_selection:
+  status: complete
+  completed_utc: 2026-09-21 16:20:32 UTC
+  script: processing/parse_cytokines/06_classify_treatments_and_select.R
+  runner: processing/parse_cytokines/run_06_classify_treatments_and_select.sh
+  mapping: config/parse_cytokines_treatment_categories.tsv
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z
+  preview: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/treatment_selection_preview.md
+  classification:
+    metadata_source_sha256: 60e5113e8eca5ebadb4e2a9401e09aa1d3778814030ed44066655668d870b970
+    metadata_import_artifact_id: obs_table_20260921_083045_uwjbzqg1
+    treatment_category_field_id: meta:000004
+    cytokine_count_field_id: meta:000005
+    treatment_category_vector_artifact_id: cell_vector_20260921_083504_zts1k30i
+    imported_cells_classified: 251599
+    samples_classified: 96
+    conditions_classified: 32
+  input:
+    cell_set: set:parse_qc_accepted
+    cells: 194215
+    membership_unchanged: true
+  included_categories:
+    - control
+    - single
+  excluded_category: combined
+  accepted:
+    cell_set: set:parse_qc_control_single
+    role: analysis_universe
+    lifecycle_status: accepted
+    cells: 154209
+    samples: 81
+    conditions: 27
+    manifest_artifact_id: obs_table_20260921_083646_i7ble21s
+    rule_table_artifact_id: obs_table_20260921_083646_0nal42pn
+  excluded_by_treatment_scope:
+    definition: QC-accepted cells classified as combined
+    cells: 40006
+    list: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/proposed_treatment_scope_exclusions.tsv.gz
+  retained_universes:
+    imported:
+      cell_set: set:parse_cytokines
+      cells: 251599
+      membership_unchanged: true
+    qc_accepted:
+      cell_set: set:parse_qc_accepted
+      cells: 194215
+      membership_unchanged: true
+    qc_excluded:
+      cell_set: set:parse_qc_excluded
+      cells: 57384
+      membership_unchanged: true
+  checks:
+    preview_written_before_bundle_mutation: true
+    every_imported_cell_classified_once: true
+    every_sample_classified_once: true
+    combined_has_more_than_one_cytokine: true
+    downstream_is_qc_accepted_control_or_single: true
+    combined_absent_from_downstream: true
+  validation:
+    status: ok_with_warnings
+    bundle_state_fingerprint: a7c1c15655cfbfd898c7f7124042cce5e6706b75d36e4da5d910deb207da0c8c
+    recipient_validation_fingerprint: 1f7f9144b9b42e0754f15b01d99a12170a32985829942f4b8ad40fba942a34ef
+    warnings:
+      external_source_unverifiable: 3
+      durable_content_identity_missing: 1
+      durable_content_identity_missing_entity: obs_table_20260921_083045_uwjbzqg1
+      durable_content_identity_missing_scope: metadata_import_evidence_only
 
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently

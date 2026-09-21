@@ -96,9 +96,11 @@ and PNG outputs are in `figure_outputs/bdev_reference/`.
 The accepted `parse_cytokines` bundle is built from the checksummed
 pre-filtered Seurat RDS at
 `intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds`.
-It contains the raw `RNA_counts` matrix for 251,599 cells and 78,298 features,
-plus only the required `sample_id`, `replicate`, and `condition` metadata for
-all 96 samples. It contains no normalized matrix or dimensional reduction.
+It contains the raw `RNA_counts` matrix for 251,599 cells and 78,298 features.
+Ingestion retained only the required `sample_id`, `replicate`, and `condition`
+metadata for all 96 samples; the reviewed treatment step later added the
+derived `treatment_category` and `cytokine_count` fields. It contains no
+normalized matrix or dimensional reduction.
 The imported-cell universe remains the unchanged `set:parse_cytokines` set.
 
 `processing/parse_cytokines/03_create_parse_cytokines.R` performs atomic
@@ -126,6 +128,22 @@ disjoint, exhaustive partition of the 251,599 imported cells; all imported
 cells remain retained in the unchanged `set:parse_cytokines` universe and raw
 matrix. All 96 source samples retain accepted cells. The run evidence is under
 `intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/`.
+
+The reviewed treatment map classifies all 96 samples and 251,599 imported
+cells as `control` (zero cytokines), `single` (one cytokine), or `combined`
+(more than one cytokine). The classification is retained as the imported
+`treatment_category` and `cytokine_count` metadata fields and the promoted
+`parse_treatment_category` categorical vector. It includes 3 control, 78
+single-cytokine, and 15 combined samples.
+
+`processing/parse_cytokines/06_classify_treatments_and_select.R` wrote the
+complete classification and treatment-scope exclusion preview before deriving
+`set:parse_qc_control_single`. That accepted downstream universe contains
+154,209 QC-accepted control/single cells across 81 samples and 27 conditions.
+The 40,006 QC-accepted combined-stimulation cells remain in the bundle but are
+outside that downstream set. The imported and both QC-derived cell sets remain
+unchanged. Run evidence is under
+`intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/`.
 
 ## Workflow documentation
 

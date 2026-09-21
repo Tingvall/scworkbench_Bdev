@@ -1,8 +1,8 @@
 # Parse cytokine reports
 
 `01_report_prepared_seurat.py` summarizes the validated unfiltered Seurat
-preparation and proposes `single`, `combination`, and `control` stimulus
-classes without loading the large RDS:
+preparation and supplied the initial `single`, `combination`, and `control`
+classification review without loading the large RDS:
 
 ```bash
 python3 figure_scripts/parse_cytokines/01_report_prepared_seurat.py \
@@ -10,9 +10,10 @@ python3 figure_scripts/parse_cytokines/01_report_prepared_seurat.py \
   /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/object_inventory_20260915
 ```
 
-The generated sample and condition TSV files are proposed annotations. Review
-the noted source-label ambiguities before using them as canonical metadata or
-importing them into a scWorkbench bundle.
+The generated sample and condition TSV files are historical review inputs. The
+accepted canonical map now uses the category name `combined` and is recorded at
+`config/parse_cytokines_treatment_categories.tsv`; it was applied by
+`processing/parse_cytokines/06_classify_treatments_and_select.R`.
 
 After `processing/parse_cytokines/run_04_calculate_rna_qc.sh` has promoted the
 factual scWorkbench RNA-QC artifacts, render their distributions with:
@@ -33,5 +34,8 @@ preview was written before the durable sets were derived and is available at:
 `intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/exclusion_preview.md`
 
 The distribution report still represents all imported cells. Filtering did
-not replace those figures or remove imported cells; the selected downstream
-analysis universe is the separate `set:parse_qc_accepted` cell set.
+not replace those figures or remove imported cells. `set:parse_qc_accepted`
+retains all QC-accepted treatment categories; the narrower downstream analysis
+universe is `set:parse_qc_control_single`, containing only QC-accepted control
+and single-cytokine cells. Treatment-selection evidence is under
+`intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/`.
