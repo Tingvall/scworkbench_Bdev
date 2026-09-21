@@ -130,10 +130,10 @@ bundle:
   validation:
     status: ok_with_warnings
     expected_warning: external source deliberately not accessed by recipient validation
-    bundle_state_fingerprint: 3bfd5b22ec4a70084c7f6ffec06addf9886d0a6b0a63644eb777badda40c8383
-    recipient_validation_fingerprint: c61031e77e474ebb142438fdcdcef046298cbfcdb69a53c659434e778c489ed9
+    bundle_state_fingerprint: bf3806ce1fa4adf6b02aef7567a3f1769c5f5fd7698b5a90d7e357a234517707
+    recipient_validation_fingerprint: 8aa988ad448f70617bd57a377c6a714708ec04c0ea168e633429d76145185d08
     source_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/source_comparison.json
-    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/validation.json
+    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/validation.json
     checks:
       source_checksum: true
       source_stat_unchanged: true
@@ -143,6 +143,125 @@ bundle:
       required_metadata_values_exact: true
       only_required_noncore_metadata_imported: true
       sample_mappings_exact: true
+
+rna_qc:
+  status: filtering_complete
+  completed_utc: 2026-09-20 20:59:38 UTC
+  script: processing/parse_cytokines/04_calculate_rna_qc.R
+  runner: processing/parse_cytokines/run_04_calculate_rna_qc.sh
+  matrix_id: RNA_counts
+  input_cell_set: set:parse_cytokines
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_20260920T185317Z
+  figure_report: figure_outputs/parse_cytokines/rna_qc_20260920T210025Z/rna_qc_report.md
+  artifacts:
+    metrics: cell_vector_family_20260920_112100_67jnbgga
+    qc_features: feature_table_20260920_113419_sz0tf72b
+    summary: obs_table_20260920_113419_nmlnvh9t
+  metrics:
+    - total_counts
+    - detected_features
+    - mitochondrial_counts
+    - mitochondrial_percent
+    - ribosomal_counts
+    - ribosomal_percent
+  feature_matching:
+    case_sensitive: true
+    mitochondrial_pattern: ^mt-
+    mitochondrial_features: 37
+    ribosomal_pattern: ^Rp[sl]
+    ribosomal_features: 430
+    ribosomal_definition: feature-symbol prefix, not a curated structural-ribosome set
+    membership: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_20260920T185317Z/qc_feature_membership.tsv
+  cell_universes:
+    imported:
+      cell_set: set:parse_cytokines
+      cells: 251599
+      status: retained_unchanged
+    proposed_exclusion:
+      cell_set: set:parse_qc_excluded
+      cells: 57384
+      status: accepted
+    accepted_analysis:
+      cell_set: set:parse_qc_accepted
+      cells: 194215
+      status: accepted
+  decision_boundary:
+    threshold_selection: user_selected
+    exclusion_cell_ids_materialized: true
+    exclusion_set_created: true
+    accepted_analysis_set_created: true
+    sensitivity_preview: figure_outputs/parse_cytokines/rna_qc_20260920T210025Z/rna_qc_tail_sensitivity.tsv
+    sensitivity_status: preview_only_not_selected_or_applied
+  validation:
+    stage: metric_calculation_before_filtering
+    status: ok_with_warnings
+    bundle_state_fingerprint: e185ae3d120f1b6c35d3e3c2178eaf7a4de7e3b12d595b84b70f1a42ab1b7085
+    recipient_validation_fingerprint: cdf484a10ee07cd46498a790a8ceca69eae184332cfd3af35268532cbb7dadb5
+    expected_warning: external source deliberately not accessed by recipient validation
+    imported_membership_unchanged: true
+    cell_set_registry_unchanged: true
+    artifact_content_verified: true
+    threshold_selection_not_performed: true
+
+rna_qc_filter:
+  status: complete
+  completed_utc: 2026-09-21 07:02:53 UTC
+  script: processing/parse_cytokines/05_apply_rna_qc_filter.R
+  runner: processing/parse_cytokines/run_05_apply_rna_qc_filter.sh
+  input_cell_set: set:parse_cytokines
+  metrics_artifact_id: cell_vector_family_20260920_112100_67jnbgga
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z
+  preview: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/exclusion_preview.md
+  criteria:
+    total_counts:
+      operator: ">="
+      threshold: 1000
+    detected_features:
+      operator: ">="
+      threshold: 500
+    mitochondrial_percent:
+      operator: "<="
+      threshold: 10
+    acceptance_combination: all_criteria_AND
+    exclusion_combination: failure_of_any_criterion_OR
+  criterion_failures:
+    total_counts: 48228
+    detected_features: 49461
+    mitochondrial_percent: 11691
+  excluded:
+    cell_set: set:parse_qc_excluded
+    role: exclusion_set
+    lifecycle_status: accepted
+    cells: 57384
+    percent_of_imported: 22.807721811295
+    manifest_artifact_id: obs_table_20260920_223905_6hyo83aa
+    rule_table_artifact_id: obs_table_20260920_223905_0qbi3crh
+  accepted:
+    cell_set: set:parse_qc_accepted
+    role: analysis_universe
+    lifecycle_status: accepted
+    cells: 194215
+    percent_of_imported: 77.192278188705
+    manifest_artifact_id: obs_table_20260920_231328_m37bb1mv
+    rule_table_artifact_id: obs_table_20260920_231328_ip0v5y21
+  sample_scope:
+    imported_samples: 96
+    samples_with_accepted_cells: 96
+    minimum_accepted_cells_per_sample: 294
+    minimum_percent_excluded: 8.42671447781264
+    maximum_percent_excluded: 44.2216551221291
+  checks:
+    preview_written_before_set_promotion: true
+    imported_membership_unchanged: true
+    accepted_cells_meet_all_criteria: true
+    excluded_cells_fail_one_or_more_criteria: true
+    accepted_and_excluded_disjoint: true
+    accepted_and_excluded_partition_imported: true
+  validation:
+    status: ok_with_warnings
+    expected_warning: external source deliberately not accessed by recipient validation
+    bundle_state_fingerprint: bf3806ce1fa4adf6b02aef7567a3f1769c5f5fd7698b5a90d7e357a234517707
+    recipient_validation_fingerprint: 8aa988ad448f70617bd57a377c6a714708ec04c0ea168e633429d76145185d08
 
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently

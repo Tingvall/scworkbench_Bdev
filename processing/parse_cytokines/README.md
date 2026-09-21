@@ -84,12 +84,69 @@ exact required metadata values, all 96 sample mappings, and distributed raw
 count values across every row and column of the source matrix. It then
 finalizes the bundle and runs the scWorkbench recipient validation gate.
 
+The fourth step calculates factual RNA QC metrics through the registered
+scWorkbench `rna_qc_metrics` operation:
+
+```bash
+processing/parse_cytokines/run_04_calculate_rna_qc.sh
+```
+
+It uses every cell in the imported `set:parse_cytokines` universe and promotes
+total RNA counts, detected features, and explicitly matched mitochondrial and
+ribosomal-prefix counts and percentages. Feature matching is case-sensitive:
+`^mt-` and `^Rp[sl]` in the mouse-symbol namespace. The exact membership is an
+audit artifact. The ribosomal-prefix metric is not asserted to be a curated
+structural-ribosome set.
+
+The runner uses 400-cell matrix chunks because the current BPCells getter's
+dense-fallback guard limits any one materialized slice to 256 MiB. This changes
+only bounded-memory batching, not metric values or the analyzed cell universe.
+
+This step does not select a threshold, create an exclusion set, or derive an
+accepted analysis population. The imported cell set remains unchanged. Render
+the distributions and neutral empirical-tail sensitivity previews with:
+
+```bash
+figure_scripts/parse_cytokines/run_02_rna_qc_report.sh
+```
+
+The user selected the following inclusive acceptance criteria after reviewing
+the distributions:
+
+- total RNA counts >= 1,000;
+- detected RNA features >= 500;
+- mitochondrial percentage <= 10%.
+
+Apply them with:
+
+```bash
+processing/parse_cytokines/run_05_apply_rna_qc_filter.sh
+```
+
+The fifth step writes the combined proposed-exclusion list, criterion overlap,
+and per-sample/per-condition effects before it promotes any QC-derived cell
+set. It then records `set:parse_qc_excluded` as the accepted exclusion set and
+`set:parse_qc_accepted` as the accepted analysis universe. The two sets are
+validated as a disjoint, exhaustive partition of the imported cells. It never
+replaces or narrows the imported `set:parse_cytokines` membership or the raw
+`RNA_counts` matrix.
+
+The completed filter retained 194,215 analysis cells (77.1923%) and marked
+57,384 cells (22.8077%) as excluded. All 96 samples retain accepted cells. The
+pre-promotion preview, complete compressed exclusion list, overlap tables,
+cell-set recipes, promotion records, and recipient validation are under:
+
+`intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/`
+
 Workflow phases are:
 
 1. `01_readparsebio_unfiltered.R`
 2. `02_prefilter_min500counts.R`
 3. `03_create_parse_cytokines.R`
-4. recipient validation within step 3 before downstream analysis
+4. `04_calculate_rna_qc.R`
+5. QC distribution review and explicit user threshold selection
+6. `05_apply_rna_qc_filter.R`, which writes the exclusion preview before
+   deriving the durable exclusion and accepted-analysis sets
 
 The accepted independently validated output is the `parse_cytokines` bundle at
 `intermediate_objects/parse_cytokines/bundle/`. Reviewed cytokine gene sets may

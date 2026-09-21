@@ -99,6 +99,7 @@ pre-filtered Seurat RDS at
 It contains the raw `RNA_counts` matrix for 251,599 cells and 78,298 features,
 plus only the required `sample_id`, `replicate`, and `condition` metadata for
 all 96 samples. It contains no normalized matrix or dimensional reduction.
+The imported-cell universe remains the unchanged `set:parse_cytokines` set.
 
 `processing/parse_cytokines/03_create_parse_cytokines.R` performs atomic
 scWorkbench ingestion, compares source and imported identifiers, metadata, and
@@ -107,6 +108,24 @@ The accepted bundle and run evidence are under
 `intermediate_objects/parse_cytokines/bundle/` and
 `intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/`,
 respectively.
+
+`processing/parse_cytokines/04_calculate_rna_qc.R` uses the registered
+scWorkbench `rna_qc_metrics` operation to calculate total counts, detected
+features, and explicitly matched mitochondrial and ribosomal-prefix counts and
+percentages for every imported cell. The promoted metrics, exact feature
+membership, and summary passed recipient validation. The distribution report
+is under `figure_outputs/parse_cytokines/rna_qc_20260920T210025Z/`.
+
+After distribution review, the user selected `total_counts >= 1000`,
+`detected_features >= 500`, and `mitochondrial_percent <= 10` as inclusive
+acceptance criteria. `processing/parse_cytokines/05_apply_rna_qc_filter.R`
+wrote the combined exclusion preview and sample/condition effects before
+deriving any accepted set. It then promoted `set:parse_qc_excluded` with 57,384
+cells and `set:parse_qc_accepted` with 194,215 cells. These are a validated,
+disjoint, exhaustive partition of the 251,599 imported cells; all imported
+cells remain retained in the unchanged `set:parse_cytokines` universe and raw
+matrix. All 96 source samples retain accepted cells. The run evidence is under
+`intermediate_objects/parse_cytokines/reports/rna_qc_filter_20260921T035031Z/`.
 
 ## Workflow documentation
 
