@@ -179,6 +179,95 @@ Workflow phases are:
 7. `06_classify_treatments_and_select.R`, which classifies every sample/cell,
    writes the treatment-selection preview, and derives the QC-accepted
    control/single downstream analysis set
+8. `07_build_signature_states.R`, which learns 2,000 HVGs from control cells,
+   builds a 30-PC representation for the control/single set, and promotes a
+   fixed-resolution Parse-only Leiden state vector
+9. `08_discover_specific_signatures.R`, the explicitly approved outside-
+   scWorkbench replicate-aware step: exact raw-count pseudobulk aggregation,
+   limma-voom response/specificity contrasts, and three-fold leave-one-
+   replicate-out signature-size validation
+10. `09_score_and_report_signatures.R`, which uses scWorkbench UCell on raw
+    counts and checks score transfer at the sample-median level
+11. `09_finalize_committed_ucell_report.R`, the bounded recovery/finalization
+    path for the committed score artifact described below
+
+Run the three signature stages in order:
+
+```bash
+processing/parse_cytokines/run_07_build_signature_states.sh
+processing/parse_cytokines/run_08_discover_specific_signatures.sh
+processing/parse_cytokines/run_09_score_and_report_signatures.sh
+```
+
+The installed scWorkbench build committed all 31 UCell score keys, their
+summary, and both QC tables in commit
+`commit_20260921_155948_s32blwqt`. Its generic artifact serializer then failed
+while checkpointing the durable-session receipt because the promoted family
+contains a 1.398-GB provenance row-order value; serializing the enclosing
+manifest/receipt exceeds R's 2^31-1-byte character-string limit. The score
+payload itself is complete in `artifact_pseudotime`: every key has exactly
+154,209 distinct downstream cells.
+
+The completed report was therefore finalized read-only, one signature at a
+time, with:
+
+```bash
+processing/parse_cytokines/run_09_finalize_committed_ucell_report.sh
+```
+
+It accepted 23 signatures (9 induced and 14 repressed) spanning 14 of the 26
+single cytokines. Eight discovery candidates failed UCell transfer and 21
+cytokine/direction pairs had not advanced from discovery. The report and final
+TSV/GMT exports are under
+`intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/`.
+All imported and downstream cell-set memberships were rechecked unchanged;
+SQLite `quick_check` and recipient-readiness checks passed.
+
+The standard full recipient validator and a supported writable bundle open are
+currently blocked by the oversized provenance value. Consequently, the 23
+final sets are exported but are not yet registered in bundle namespace
+`parse_cytokine_signatures`. The recovery did not rewrite or delete the
+committed artifact and did not bypass scWorkbench with a direct registry write.
+The accepted bundle fingerprint in `config/bundles.yml` therefore remains the
+last fully recipient-validated parent state rather than this signature-stage
+database state.
+
+The checked-in stage-09 implementation now keeps per-cell score families in
+the durable session and promotes only compact summaries/QC tables before the
+feature-set import. This prevents a clean rerun from recreating the oversized
+row-order provenance artifact.
+
+The exclusion audit and all-candidate visualization were added with the
+read-only figure command:
+
+```bash
+figure_scripts/parse_cytokines/run_03_signature_sample_treatment_violins.sh
+```
+
+Its 31-page PDF contains every scored discovery gene set, including the eight
+that failed UCell transfer. For each treatment it draws three separate
+cell-level violins, one per biological sample, and marks each sample median.
+The companion exclusion table accounts for all 52 cytokine/direction pairs:
+21 lacked the minimum five discovery-eligible genes, eight failed the
+sample-median UCell thresholds, and 23 were accepted. Directions without a
+gene set are listed rather than assigned an undefined score or plot.
+
+Signature discovery is restricted to `set:parse_qc_control_single`. Combined
+stimulation cells remain retained but are not used. Bdev is not read by these
+stages. The primary statistical unit is the biological sample: each cytokine
+is tested both against control and against the equal-weight mean of the other
+25 single-cytokine conditions. Induced and repressed programs are separate.
+Unsupported directions are reported rather than forced into the final library.
+
+The planned outside-scWorkbench boundary was limited to replicate-aware
+statistical work that the installed build does not provide: BPCells exact
+sample/state count aggregation and limma-voom modelling. State construction,
+per-cell UCell scoring, and score promotion ran in scWorkbench. UCell uses raw
+`RNA_counts`, does not graph-smooth scores, and treats sample medians as the
+primary confirmation unit. Raw scores are compared within a signature, not
+directly across signatures. The read-only finalizer queries scWorkbench's
+durable score payload table in bounded per-signature slices solely because the
+standard artifact loader cannot materialize the oversized provenance value.
 
 The accepted independently validated output is the `parse_cytokines` bundle at
 `intermediate_objects/parse_cytokines/bundle/`. Reviewed cytokine gene sets may

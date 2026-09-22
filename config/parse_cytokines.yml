@@ -347,6 +347,93 @@ treatment_selection:
       durable_content_identity_missing_entity: obs_table_20260921_083045_uwjbzqg1
       durable_content_identity_missing_scope: metadata_import_evidence_only
 
+signature_analysis:
+  status: report_complete_bundle_registration_blocked
+  completed_utc: 2026-09-22 00:58:58 UTC
+  input:
+    cell_set: set:parse_qc_control_single
+    cells: 154209
+    samples: 81
+    control_samples: 3
+    single_cytokine_samples: 78
+    combined_cells_used: false
+    bdev_used: false
+  state_construction:
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_states_20260921T182946Z
+    control_derived_hvgs: 2000
+    pca_dimensions: 30
+    parse_only_leiden_states: 18
+    cluster_artifact_id: cell_vector_20260921_131138_sevom6ds
+  discovery:
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_discovery_20260921T221102Z
+    method: exact sample/state pseudobulk plus replicate-aware limma-voom
+    candidates: 31
+    candidate_up: 16
+    candidate_down: 15
+    cytokines_with_candidate: 16
+  ucell_transfer:
+    matrix_id: RNA_counts
+    max_rank: 1500
+    graph_smoothing: false
+    cross_signature_calibration: false
+    primary_unit: biological_sample_median
+    acceptance:
+      response_auc_minimum: 0.60
+      specificity_auc_minimum: 0.60
+      balanced_auc_minimum: 0.65
+    score_commit_id: commit_20260921_155948_s32blwqt
+    score_artifact_id: cell_vector_family_20260921_155957_5n7edbnw
+    score_summary_artifact_id: obs_table_20260921_164902_2mk1awzd
+    qc_key_artifact_id: obs_table_20260921_164903_d0ndemln
+    qc_pairwise_artifact_id: obs_table_20260921_164903_vtghjfz9
+    signatures: 31
+    scores_per_signature: 154209
+  final:
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z
+    accepted_signatures: 23
+    accepted_up: 9
+    accepted_down: 14
+    cytokines_with_accepted_signature: 14
+    ucell_transfer_not_confirmed: 8
+    not_advanced_from_discovery: 21
+    feature_set_tsv: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/final_accepted_feature_sets.tsv
+    feature_set_gmt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/final_accepted_feature_sets.gmt
+    bundle_namespace: parse_cytokine_signatures
+    bundle_registration_status: deferred
+  exclusion_and_distribution_supplement:
+    status: complete
+    completed_utc: 2026-09-22 01:33:27 UTC
+    script: figure_scripts/parse_cytokines/03_signature_sample_treatment_violins.R
+    runner: figure_scripts/parse_cytokines/run_03_signature_sample_treatment_violins.sh
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/SIGNATURE_EXCLUSIONS_AND_VIOLINS.md
+    all_candidate_pdf: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/ucell_sample_treatment_violins_all_candidates.pdf
+    individual_png_directory: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/ucell_sample_treatment_violins
+    figure_manifest: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/ucell_sample_treatment_violin_manifest.tsv
+    exclusion_table: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/signature_exclusion_reasons.tsv
+    plotted_gene_sets: 31
+    accepted_gene_sets_plotted: 23
+    ucell_transfer_failures_plotted: 8
+    discovery_insufficient_directions_documented: 21
+    biological_samples_per_treatment: 3
+    cells_per_signature: 154209
+    plot_unit: cell-level UCell distribution within each biological sample, grouped by treatment
+    confirmation_unit: biological sample median
+    bundle_access: read_only
+    bdev_used: false
+    combined_cells_used: false
+  validation:
+    status: bounded_validation_passed_full_recipient_validator_blocked
+    sqlite_quick_check: ok
+    recipient_ready: true
+    score_payload_complete: true
+    score_cells_match_analysis_set: true
+    imported_membership_unchanged: true
+    analysis_membership_unchanged: true
+    limitation: committed artifact provenance_json is 1398209771 bytes and its enclosing JSON exceeds R's 2^31-1-byte character-string limit
+    direct_database_rewrite_used: false
+    artifact_deleted_or_rewritten: false
+    accepted_bundle_fingerprint_updated: false
+
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently
   - derive reviewed cytokine response gene sets

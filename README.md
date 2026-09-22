@@ -145,6 +145,30 @@ outside that downstream set. The imported and both QC-derived cell sets remain
 unchanged. Run evidence is under
 `intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/`.
 
+The individual-cytokine signature workflow used only that control/single
+population and did not use Bdev. Replicate-aware response and specificity
+testing produced 31 discovery candidates; sample-level transfer of raw-count
+scWorkbench UCell scores retained 23 final signatures (9 induced and 14
+repressed) across 14 cytokines. The report, heatmap, distributions, exact
+sample scores, state-composition diagnostics, and final TSV/GMT gene sets are
+under
+`intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/`.
+
+The same directory now also contains a 31-page treatment-by-sample UCell
+violin collection covering every scored discovery gene set (23 accepted plus
+8 UCell-transfer failures) and a complete 52-direction exclusion audit. The
+21 remaining directions did not yield the prespecified minimum five eligible
+genes, so they have no gene set or UCell score to plot. See
+`SIGNATURE_EXCLUSIONS_AND_VIOLINS.md` in that report directory.
+
+The score commit is complete, but scWorkbench's enclosing JSON for its 1.398-GB
+provenance row-order value exceeds R's 2^31-1-byte character-string limit
+during a writable open or full recipient validation. Bounded checks passed and
+cell memberships remain unchanged. Final feature-set registration is therefore deferred, and
+the central accepted fingerprint remains the last fully validated Parse parent
+state. No direct database rewrite or artifact deletion was used to work around
+the limitation.
+
 ## Workflow documentation
 
 Execution phases and validation boundaries are documented in:

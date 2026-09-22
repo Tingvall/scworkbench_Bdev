@@ -39,3 +39,54 @@ retains all QC-accepted treatment categories; the narrower downstream analysis
 universe is `set:parse_qc_control_single`, containing only QC-accepted control
 and single-cytokine cells. Treatment-selection evidence is under
 `intermediate_objects/parse_cytokines/reports/treatment_selection_20260921T145825Z/`.
+
+The individual-cytokine signature workflow generates its report directly from
+the promoted scWorkbench UCell score family:
+
+```bash
+processing/parse_cytokines/run_07_build_signature_states.sh
+processing/parse_cytokines/run_08_discover_specific_signatures.sh
+processing/parse_cytokines/run_09_score_and_report_signatures.sh
+```
+
+For the current already-committed 31-key UCell family, the report was completed
+with the bounded read-only finalizer:
+
+```bash
+processing/parse_cytokines/run_09_finalize_committed_ucell_report.sh
+```
+
+The final run directory contains `REPORT.md`, an oriented condition-by-
+signature specificity heatmap, multi-page sample-median UCell distributions,
+exact sample medians, descriptive cell-level quantiles, all candidate/final
+statuses, the final feature-set table and GMT, and the committed UCell
+promotion audit. The completed report is:
+
+`intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/REPORT.md`
+
+It contains 23 accepted signatures across 14 cytokines. The report
+distinguishes the unchanged imported set from the control/single analysis
+population and records that neither combined-stimulation cells nor Bdev were
+used for signature discovery. `validation.json` records bounded payload,
+membership, SQLite, and recipient-readiness checks. Full recipient validation
+and bundle feature-set registration remain deferred because the committed
+31-key family has a 1.398-GB provenance value whose enclosing JSON exceeds R's
+2^31-1-byte character-string limit; no artifact or registry row was rewritten
+directly.
+
+To explain every exclusion and render all scored gene sets—not only the 23
+accepted sets—as cell-level, per-biological-sample violins grouped by
+treatment, run:
+
+```bash
+figure_scripts/parse_cytokines/run_03_signature_sample_treatment_violins.sh
+```
+
+This read-only figure step queries each committed UCell key in a bounded slice.
+It writes a 31-page PDF and 31 PNGs (23 accepted and 8 UCell-transfer failures),
+plus a manifest and a complete table covering all 52 cytokine/direction
+possibilities, to the same signature report directory. The 21 directions with
+fewer than five discovery-eligible genes are documented but cannot be plotted
+because no gene set or UCell score exists. The explanatory supplement is:
+
+`intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/SIGNATURE_EXCLUSIONS_AND_VIOLINS.md`
