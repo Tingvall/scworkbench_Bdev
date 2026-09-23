@@ -20,11 +20,17 @@ bundles:
     status: accepted
     config: config/parse_cytokines.yml
     source_dataset: parse_cytokine_stimulation
-    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z
     parents: []
     accepted_state:
-      bundle_state_fingerprint: a7c1c15655cfbfd898c7f7124042cce5e6706b75d36e4da5d910deb207da0c8c
-      recipient_validation_fingerprint: 1f7f9144b9b42e0754f15b01d99a12170a32985829942f4b8ad40fba942a34ef
+      bundle_state_fingerprint: 2b3da8d50575f0eaede5e503bc064eaced08cc86adfb33edcca97feed082e82d
+      recipient_validation_fingerprint: 387ee12396340871f4853812ad7df228c1b3f46759bba0a1936b0422d6aa8984
+    runtime:
+      r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
+      scworkbench_version: 0.1.0.9004
+      build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+      test_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/runtime_v4_tests
+    validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/validation.json
 
   scmulti_flt3ko_il7ko:
     role: source_analysis

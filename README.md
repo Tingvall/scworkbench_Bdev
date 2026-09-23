@@ -99,17 +99,20 @@ pre-filtered Seurat RDS at
 It contains the raw `RNA_counts` matrix for 251,599 cells and 78,298 features.
 Ingestion retained only the required `sample_id`, `replicate`, and `condition`
 metadata for all 96 samples; the reviewed treatment step later added the
-derived `treatment_category` and `cytokine_count` fields. It contains no
-normalized matrix or dimensional reduction.
+derived `treatment_category` and `cytokine_count` fields. At ingestion it
+contained no normalized matrix or dimensional reduction. The subsequent
+signature-state workflow added `RNA_log1p_cp10k` and `parse.signature_pca`.
 The imported-cell universe remains the unchanged `set:parse_cytokines` set.
 
 `processing/parse_cytokines/03_create_parse_cytokines.R` performs atomic
 scWorkbench ingestion, compares source and imported identifiers, metadata, and
 distributed count values, finalizes the bundle, and runs recipient validation.
-The accepted bundle and run evidence are under
+The original ingestion bundle and evidence remain under
 `intermediate_objects/parse_cytokines/bundle/` and
-`intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/`,
-respectively.
+`intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/`.
+The current accepted copy is
+`intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z/`,
+as recorded in `config/bundles.yml`.
 
 `processing/parse_cytokines/04_calculate_rna_qc.R` uses the registered
 scWorkbench `rna_qc_metrics` operation to calculate total counts, detected
@@ -161,13 +164,21 @@ violin collection covering every scored discovery gene set (23 accepted plus
 genes, so they have no gene set or UCell score to plot. See
 `SIGNATURE_EXCLUSIONS_AND_VIOLINS.md` in that report directory.
 
-The score commit is complete, but scWorkbench's enclosing JSON for its 1.398-GB
-provenance row-order value exceeds R's 2^31-1-byte character-string limit
-during a writable open or full recipient validation. Bounded checks passed and
-cell memberships remain unchanged. Final feature-set registration is therefore deferred, and
-the central accepted fingerprint remains the last fully validated Parse parent
-state. No direct database rewrite or artifact deletion was used to work around
-the limitation.
+The Parse bundle is finalized. Recovery repaired scWorkbench's handling of
+the existing 1.398-GB provenance record in a separate runtime built from the
+supplied image's source. All 23 accepted gene sets are registered read-only in
+`parse_cytokine_signatures`, and full recipient validation verified the existing
+31-signature UCell family. Metadata, matrices, PCA, and cell-set memberships
+were preserved; every original bundle file retained its SHA-256. Five missing
+commit files were restored byte-for-byte from the authenticated saved session.
+
+The accepted copy and its required scWorkbench `0.1.0.9004` library are pinned
+in `config/bundles.yml`. Processing and figure runners select that runtime
+automatically. The SIF itself is unchanged and still contains the original
+limitation. Recovery and validation evidence is under
+`intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/`.
+Earlier signature reports retain their historical blocked status; this recovery
+report records its resolution.
 
 ## Workflow documentation
 

@@ -464,6 +464,12 @@ main <- function() {
     paste(c(set_id, accepted_sets$description[which(rows)[[1L]]], accepted_sets$feature_id[rows]), collapse = "\t")
   }, character(1L))
   write_lines_atomic(accepted_gmt, file.path(report_dir, "final_accepted_feature_sets.gmt"))
+  # feature_set_import's table file parser requires CSV, not the TSV export.
+  accepted_csv_path <- file.path(report_dir, "final_accepted_feature_sets.csv")
+  write.csv(accepted_sets, accepted_csv_path, row.names = FALSE)
+  csv_readback <- read.csv(accepted_csv_path, check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(csv_readback) <- rownames(accepted_sets)
+  stopifnot(identical(csv_readback, accepted_sets))
 
   import_session <- wb_session_create(
     bundle, workspace_root = session_root,
@@ -475,7 +481,7 @@ main <- function() {
       matrix = counts_matrix,
       cell_set = analysis_set,
       min_cells = 10L,
-      source_path = accepted_feature_path,
+      source_path = accepted_csv_path,
       source_format = "table",
       namespace = "parse_cytokine_signatures",
       collection = "individual_cytokine",
@@ -502,6 +508,11 @@ main <- function() {
   )
   import_dag <- wb_session_dag(imported$session, bundle = bundle,
                                include_artifacts = TRUE, include_active = TRUE)
+  imported_manifest <- imported$run$outputs$import_manifest$table
+  stopifnot(nrow(imported_manifest) == length(accepted_ids),
+            setequal(as.character(imported_manifest$feature_set), accepted_ids),
+            all(imported_manifest$status == "imported"),
+            all(imported_manifest$n_genes_raw == imported_manifest$n_genes_mapped_to_bundle))
   import_promotion <- wb_session_promote_current(
     bundle, imported$session,
     outputs = list(

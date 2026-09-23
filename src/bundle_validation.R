@@ -3,10 +3,23 @@
 validate_registered_bundle <- function(registry, bundle_id,
                                        run_recipient_validation = TRUE,
                                        progress = TRUE) {
+  entry <- bundle_registry_entry(registry, bundle_id)
+  runtime <- entry$runtime
+  if (!is.null(runtime$r_library)) {
+    if (!dir.exists(file.path(runtime$r_library, "scworkbench"))) {
+      stop("Registered scWorkbench runtime is missing: ", runtime$r_library)
+    }
+    .libPaths(c(runtime$r_library, .libPaths()))
+  }
   if (!requireNamespace("scworkbench", quietly = TRUE)) {
     stop("Run validate_registered_bundle() inside the supplied scWorkbench image")
   }
-  entry <- bundle_registry_entry(registry, bundle_id)
+  if (!is.null(runtime$scworkbench_version) && !identical(
+    as.character(getNamespaceVersion("scworkbench")), runtime$scworkbench_version
+  )) {
+    stop("This bundle requires scWorkbench ", runtime$scworkbench_version,
+         "; restart R with its registered runtime before loading scWorkbench.")
+  }
   if (!identical(entry$status, "accepted")) {
     stop("Bundle is not registered as accepted: ", bundle_id)
   }

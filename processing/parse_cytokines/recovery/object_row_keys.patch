@@ -1,0 +1,13 @@
+--- a/R/provenance_json.R
++++ b/R/provenance_json.R
+@@ -160,6 +160,10 @@
+ 
+ .wb_object_row_key_tokens <- function(keys) {
+   if (!nrow(keys)) return(character())
++  plain_character <- length(keys) > 0L && all(vapply(keys, function(column) {
++    is.character(column) && is.null(attributes(column)) && !anyNA(column)
++  }, logical(1)))
++  if (plain_character) return(.wb_object_character_row_key_tokens(keys))
+   vapply(seq_len(nrow(keys)), function(i) {
+     jsonlite::serializeJSON(as.list(keys[i, , drop = FALSE]), digits = NA)
+   }, character(1))

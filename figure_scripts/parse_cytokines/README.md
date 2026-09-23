@@ -67,12 +67,14 @@ promotion audit. The completed report is:
 It contains 23 accepted signatures across 14 cytokines. The report
 distinguishes the unchanged imported set from the control/single analysis
 population and records that neither combined-stimulation cells nor Bdev were
-used for signature discovery. `validation.json` records bounded payload,
-membership, SQLite, and recipient-readiness checks. Full recipient validation
-and bundle feature-set registration remain deferred because the committed
-31-key family has a 1.398-GB provenance value whose enclosing JSON exceeds R's
-2^31-1-byte character-string limit; no artifact or registry row was rewritten
-directly.
+used for signature discovery. Its `validation.json` records the bounded
+payload, membership, SQLite, and readiness checks available at that time.
+The provenance limitation was subsequently resolved in a separate recovery
+runtime: all 23 sets are registered, and full recipient validation has passed.
+See
+`intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/REPORT.md`.
+The original report is preserved; figure runners now use the accepted recovered
+bundle and runtime from `config/bundles.yml`.
 
 To explain every exclusion and render all scored gene sets—not only the 23
 accepted sets—as cell-level, per-biological-sample violins grouped by

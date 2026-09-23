@@ -17,3 +17,11 @@ Bundle status values used here are:
 
 Large inputs, bundles, reports, and run workspaces belong under the mirrored
 storage root recorded in `bundles.yml`, outside Git.
+
+A bundle can declare `runtime.r_library` and `runtime.scworkbench_version` when
+it needs a separately built scWorkbench runtime in addition to the supplied
+image. The runtime's build evidence must be recorded with the bundle. Parse
+processing and figure runners resolve both the active bundle path and runtime
+from the registry; their first bundle argument still permits an explicit path.
+`validate_registered_bundle()` loads the declared library before opening the
+bundle, and refuses an incompatible scWorkbench namespace already loaded in R.

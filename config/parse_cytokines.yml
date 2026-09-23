@@ -114,7 +114,7 @@ prefiltered_seurat_preparation:
     output_rds_readback: true
 
 bundle:
-  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z
   status: accepted
   source_rds: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/prepared/parse_cytokines_prefiltered_min500counts_seurat.rds
   source_sha256: 1e4da7149190e6c93f71bc28fc47d1f58a20e22ee9cbec6894f0824394e9bc40
@@ -122,30 +122,50 @@ bundle:
   runner: processing/parse_cytokines/run_03_create_parse_cytokines.sh
   created_utc: 2026-09-19 23:34:29 UTC
   completed_utc: 2026-09-19 23:44:19 UTC
-  environment:
-    image: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
-    image_sha256: 3fee33f5363b3f0132ec2816e8c6599ddb6eb27cddeee9641cdd6237464bca5c
-    scworkbench: 0.1.0
   cells: 251599
   features: 78298
   samples: 96
   matrices:
-    - RNA_counts
+  - RNA_counts
+  - RNA_log1p_cp10k
   metadata_columns:
-    - sample_id
-    - replicate
-    - condition
-    - treatment_category
-    - cytokine_count
+  - sample_id
+  - replicate
+  - condition
+  - treatment_category
+  - cytokine_count
   ingest_report_artifact_id: obs_table_20260919_163604_r59kek1x
   report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z
   clean_build_required: true
   prior_aborted_bundle_removed: 2026-09-15
   validation:
     status: ok_with_warnings
+    level: recipient
+    completed_utc: 2026-09-23 21:45:43 UTC
+    bundle_state_fingerprint: 2b3da8d50575f0eaede5e503bc064eaced08cc86adfb33edcca97feed082e82d
+    recipient_validation_fingerprint: 387ee12396340871f4853812ad7df228c1b3f46759bba0a1936b0422d6aa8984
+    recipient_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/validation.json
+    scientific_state_checks: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/scientific_state_checks.json
+    original_bundle_preservation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/source_preservation.json
+    warnings:
+      DURABLE_CONTENT_IDENTITY_MISSING: 1
+      EXTERNAL_SOURCE_UNVERIFIABLE: 3
+  creation_environment:
+    image: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif
+    image_sha256: 3fee33f5363b3f0132ec2816e8c6599ddb6eb27cddeee9641cdd6237464bca5c
+    scworkbench: 0.1.0
+  runtime:
+    r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
+    scworkbench_version: 0.1.0.9004
+    build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+    test_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/runtime_v4_tests
+  spaces:
+  - parse.signature_pca
+  prior_validation:
+    status: ok_with_warnings
     expected_warnings:
-      - external source files deliberately not accessed by recipient validation
-      - metadata-import evidence table has no recorded content-identity baseline in the current scWorkbench build
+    - external source files deliberately not accessed by recipient validation
+    - metadata-import evidence table has no recorded content-identity baseline in the current scWorkbench build
     bundle_state_fingerprint: a7c1c15655cfbfd898c7f7124042cce5e6706b75d36e4da5d910deb207da0c8c
     recipient_validation_fingerprint: 1f7f9144b9b42e0754f15b01d99a12170a32985829942f4b8ad40fba942a34ef
     source_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/bundle_import_20260919T233232Z/source_comparison.json
@@ -348,8 +368,8 @@ treatment_selection:
       durable_content_identity_missing_scope: metadata_import_evidence_only
 
 signature_analysis:
-  status: report_complete_bundle_registration_blocked
-  completed_utc: 2026-09-22 00:58:58 UTC
+  status: complete
+  completed_utc: 2026-09-23 21:45:43 UTC
   input:
     cell_set: set:parse_qc_control_single
     cells: 154209
@@ -378,8 +398,8 @@ signature_analysis:
     cross_signature_calibration: false
     primary_unit: biological_sample_median
     acceptance:
-      response_auc_minimum: 0.60
-      specificity_auc_minimum: 0.60
+      response_auc_minimum: 0.6
+      specificity_auc_minimum: 0.6
       balanced_auc_minimum: 0.65
     score_commit_id: commit_20260921_155948_s32blwqt
     score_artifact_id: cell_vector_family_20260921_155957_5n7edbnw
@@ -399,7 +419,9 @@ signature_analysis:
     feature_set_tsv: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/final_accepted_feature_sets.tsv
     feature_set_gmt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/final_accepted_feature_sets.gmt
     bundle_namespace: parse_cytokine_signatures
-    bundle_registration_status: deferred
+    bundle_registration_status: complete
+    bundle_registration_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization
+    registered_read_only: true
   exclusion_and_distribution_supplement:
     status: complete
     completed_utc: 2026-09-22 01:33:27 UTC
@@ -422,6 +444,21 @@ signature_analysis:
     bdev_used: false
     combined_cells_used: false
   validation:
+    status: ok_with_warnings
+    level: recipient
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/validation.json
+    warnings:
+      DURABLE_CONTENT_IDENTITY_MISSING: 1
+      EXTERNAL_SOURCE_UNVERIFIABLE: 3
+    existing_ucell_content_verified: true
+    all_23_gene_set_memberships_exact: true
+    metadata_and_cell_sets_unchanged: true
+    original_bundle_sha256_unchanged: true
+    accepted_bundle_fingerprint_updated: true
+    direct_database_rewrite_used: false
+    artifact_deleted_or_rewritten: false
+  report_completed_utc: 2026-09-22 00:58:58 UTC
+  prior_bounded_validation:
     status: bounded_validation_passed_full_recipient_validator_blocked
     sqlite_quick_check: ok
     recipient_ready: true
@@ -433,6 +470,27 @@ signature_analysis:
     direct_database_rewrite_used: false
     artifact_deleted_or_rewritten: false
     accepted_bundle_fingerprint_updated: false
+bundle_recovery:
+  status: complete
+  completed_utc: 2026-09-23 21:45:43 UTC
+  script: processing/parse_cytokines/10_recover_parse_bundle.R
+  runner: processing/parse_cytokines/run_10_recover_parse_bundle.sh
+  source_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle
+  recovered_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization
+  source_preservation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/source_preservation.json
+  source_files_verified: 41
+  restored_commit_files: 5
+  materialization_restoration: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/materialization_restoration.json
+  runtime:
+    r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
+    scworkbench_version: 0.1.0.9004
+    build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+    test_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/runtime_v4_tests
+  registration_runtime_version: 0.1.0.9003
+  validation_runtime_version: 0.1.0.9004
+  image_unchanged: true
+  full_validation_requires_isolated_runtime: true
 
 analysis_intent:
   - process the Parse cytokine-stimulation dataset independently

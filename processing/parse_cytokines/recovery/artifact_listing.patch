@@ -1,0 +1,18 @@
+--- a/R/artifacts.R
++++ b/R/artifacts.R
+@@ -25,8 +25,13 @@
+   where <- character(0); params <- list()
+   if (!is.null(type)) { where <- c(where, "a.type = ?"); params <- c(params, list(type)) }
+   if (!isTRUE(include_history) && has_lifecycle) where <- c(where, "COALESCE(el.lifecycle_state, 'current') = 'current'")
+-  sql <- paste0(select, if (length(where)) paste0(" WHERE ", paste(where, collapse = " AND ")) else "", " ORDER BY a.created_at DESC;")
+-  if (length(params)) DBI::dbGetQuery(con, sql, params = params) else DBI::dbGetQuery(con, sql)
++  # SQLite's temporary sorter can fail on a legacy multi-gigabyte registry
++  # record. Fetch once, then order row indices without copying string payloads.
++  sql <- paste0(select, if (length(where)) paste0(" WHERE ", paste(where, collapse = " AND ")) else "", ";")
++  rows <- if (length(params)) DBI::dbGetQuery(con, sql, params = params) else DBI::dbGetQuery(con, sql)
++  rows <- rows[order(rows$created_at, decreasing = TRUE, na.last = TRUE, method = "radix"), , drop = FALSE]
++  rownames(rows) <- NULL
++  rows
+ }
+ 
+ .wb_art_table_json_path <- function(column) {

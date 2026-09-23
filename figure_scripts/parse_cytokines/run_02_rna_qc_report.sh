@@ -9,7 +9,8 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 
 IMAGE="${SCWORKBENCH_IMAGE:-/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif}"
-BUNDLE_DIR="${1:-/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/bundle}"
+source "${REPO_ROOT}/src/parse_runtime.sh"
+configure_parse_runtime "${1:-}"
 RUN_ID="rna_qc_$(date -u +%Y%m%dT%H%M%SZ)"
 OUTPUT_DIR="${2:-${REPO_ROOT}/figure_outputs/parse_cytokines/${RUN_ID}}"
 PARSE_THREADS="${PARSE_THREADS:-4}"
@@ -59,6 +60,7 @@ fi
 ulimit -v "${MEMORY_LIMIT_KIB}"
 
 exec "${CONTAINER_RUNTIME}" exec --cleanenv --no-home \
+  "${SCWORKBENCH_RUNTIME_ARGS[@]}" \
   --bind "${REPO_ROOT}:${REPO_ROOT}:rw" \
   --bind "${BUNDLE_DIR}:${BUNDLE_DIR}:ro" \
   --env "OMP_NUM_THREADS=${PARSE_THREADS}" \

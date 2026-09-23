@@ -188,8 +188,11 @@ Workflow phases are:
    replicate-out signature-size validation
 10. `09_score_and_report_signatures.R`, which uses scWorkbench UCell on raw
     counts and checks score transfer at the sample-median level
-11. `09_finalize_committed_ucell_report.R`, the bounded recovery/finalization
+11. `09_finalize_committed_ucell_report.R`, the bounded report-finalization
     path for the committed score artifact described below
+12. `10_recover_parse_bundle.R`, which preserves the original bundle, repairs
+    the engine runtime, registers the accepted sets in a copy, and completes
+    recipient validation; see `recovery/README.md`
 
 Run the three signature stages in order:
 
@@ -223,19 +226,31 @@ TSV/GMT exports are under
 All imported and downstream cell-set memberships were rechecked unchanged;
 SQLite `quick_check` and recipient-readiness checks passed.
 
-The standard full recipient validator and a supported writable bundle open are
-currently blocked by the oversized provenance value. Consequently, the 23
-final sets are exported but are not yet registered in bundle namespace
-`parse_cytokine_signatures`. The recovery did not rewrite or delete the
-committed artifact and did not bypass scWorkbench with a direct registry write.
-The accepted bundle fingerprint in `config/bundles.yml` therefore remains the
-last fully recipient-validated parent state rather than this signature-stage
-database state.
+That original build could not complete a writable open or full recipient
+validation with the oversized provenance record. The stage-10 recovery has now
+resolved this in a separate scWorkbench `0.1.0.9004` runtime built from the
+image's source. It retains the original identity scheme and score payload,
+streams oversized registry JSON for hashing, accelerates equivalent character
+row-key serialization, preserves imported read-only flags, and avoids sorting
+the large provenance field in SQLite. The unchanged TSV was round-tripped to
+CSV for the documented feature-set table parser.
+
+All 23 accepted sets are registered read-only in `parse_cytokine_signatures`.
+Full recipient validation passed, including the existing 31-signature score
+family's content identity. Five missing materialization files from the original
+interrupted commit were restored from its saved session, each with exactly the
+raw-file SHA-256 recorded in the registry. The original bundle's 41 files are byte-for-byte
+unchanged. The accepted copy and its runtime are recorded in `config/bundles.yml`;
+processing and figure runners resolve them automatically. Evidence is under
+`intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/`.
+The earlier bounded report remains historical evidence. No direct database
+rewrite or artifact deletion was used for recovery.
 
 The checked-in stage-09 implementation now keeps per-cell score families in
 the durable session and promotes only compact summaries/QC tables before the
 feature-set import. This prevents a clean rerun from recreating the oversized
-row-order provenance artifact.
+row-order provenance artifact. Stage 09 now supplies CSV to the table parser
+and checks every staged set before promotion.
 
 The exclusion audit and all-candidate visualization were added with the
 read-only figure command:
@@ -266,9 +281,10 @@ per-cell UCell scoring, and score promotion ran in scWorkbench. UCell uses raw
 `RNA_counts`, does not graph-smooth scores, and treats sample medians as the
 primary confirmation unit. Raw scores are compared within a signature, not
 directly across signatures. The read-only finalizer queries scWorkbench's
-durable score payload table in bounded per-signature slices solely because the
-standard artifact loader cannot materialize the oversized provenance value.
+durable score payload table in bounded per-signature slices, as required when
+the original build encountered the provenance limitation.
 
 The accepted independently validated output is the `parse_cytokines` bundle at
-`intermediate_objects/parse_cytokines/bundle/`. Reviewed cytokine gene sets may
-later be consumed by `processing/integration/`.
+`intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z/`.
+Its required runtime is registered alongside it. Reviewed cytokine gene sets
+may later be consumed by `processing/integration/`.

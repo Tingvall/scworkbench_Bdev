@@ -1,0 +1,11 @@
+--- a/R/registry_materialization.R
++++ b/R/registry_materialization.R
+@@ -155,7 +155,7 @@
+         set_id = as.character(meta$set_id[1] %||% NA_character_), namespace = as.character(meta$namespace[1] %||% NA_character_),
+         organism = as.character(meta$organism[1] %||% NA_character_), source_id = as.character(meta$source_id[1] %||% NA_character_),
+         source_version = as.character(meta$source_version[1] %||% NA_character_), origin = as.character(meta$origin[1] %||% NA_character_),
+-        recipe = as.character(meta$recipe_json[1] %||% NA_character_), is_readonly = as.integer(meta$is_readonly[1] %||% 0L))
++        recipe = as.character(meta$recipe_json[1] %||% NA_character_), is_readonly = as.logical(meta$is_readonly[1] %||% 0L))
+     } else if (identical(registry_type, "feature_set") && identical(action, "delete")) {
+       wb_feature_set_delete(bundle, feature_set = key$feature_set, matrix_id = key$matrix_id %||% NULL)
+     } else if (identical(registry_type, "cell_set")) {

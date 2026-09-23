@@ -1,0 +1,17 @@
+--- a/R/bundle_init.R
++++ b/R/bundle_init.R
+@@ -414,13 +414,9 @@
+     rows <- DBI::dbFetch(query, n = as.integer(chunk_size))
+     if (!nrow(rows)) break
+     n <- n + nrow(rows)
+-    payload <- as.character(jsonlite::toJSON(
+-      .wb_json_sanitize(rows), dataframe = "rows", auto_unbox = TRUE,
+-      null = "null", na = "null"
+-    ))
+     state <- .wb_prov_sha256_object(list(
+       previous = state,
+-      rows_sha256 = digest::digest(payload, algo = "sha256", serialize = FALSE)
++      rows_sha256 = .wb_manifest_rows_sha256(rows)
+     ))
+   }
+   list(row_count = as.integer(n), content_sha256 = state)

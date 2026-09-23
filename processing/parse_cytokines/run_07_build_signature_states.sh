@@ -6,7 +6,8 @@ REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 
 IMAGE="${SCWORKBENCH_IMAGE:-/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif}"
 PARSE_ROOT="/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines"
-BUNDLE_DIR="${1:-${PARSE_ROOT}/bundle}"
+source "${REPO_ROOT}/src/parse_runtime.sh"
+configure_parse_runtime "${1:-}"
 RUN_ID="signature_states_$(date -u +%Y%m%dT%H%M%SZ)"
 REPORT_DIR="${2:-${PARSE_ROOT}/reports/${RUN_ID}}"
 SESSION_ROOT="${3:-${PARSE_ROOT}/sessions}"
@@ -54,6 +55,7 @@ fi
 ulimit -v "${MEMORY_LIMIT_KIB}"
 
 exec "${CONTAINER_RUNTIME}" exec --cleanenv --no-home \
+  "${SCWORKBENCH_RUNTIME_ARGS[@]}" \
   --bind "${REPO_ROOT}:${REPO_ROOT}:ro" \
   --bind "${PARSE_ROOT}:${PARSE_ROOT}:rw" \
   --env "SCWORKBENCH_CREATED_BY=${SCWORKBENCH_CREATED_BY}" \
