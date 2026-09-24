@@ -288,3 +288,55 @@ The accepted independently validated output is the `parse_cytokines` bundle at
 `intermediate_objects/parse_cytokines/bundle_recovered_20260923T200125Z/`.
 Its required runtime is registered alongside it. Reviewed cytokine gene sets
 may later be consumed by `processing/integration/`.
+
+## Separate rest-only cytokine collection
+
+The requested omission of treatment-versus-control selection is configured in
+`config/parse_cytokines_rest_only.yml`. It uses a separate working review bundle,
+`parse_cytokines_rest_only`, with `parse_cytokines` as its accepted parent.
+The original parent bundle and its 23 registered signatures remain unchanged.
+
+```bash
+bash processing/parse_cytokines/run_rest_only.sh discover
+bash processing/parse_cytokines/run_rest_only.sh prepare
+bash processing/parse_cytokines/run_rest_only.sh score
+bash processing/parse_cytokines/run_rest_only.sh report
+```
+
+Stage 11 reselects membership and candidate size from the saved specificity
+fits, using only target-versus-other-single-stimuli effects, FDR, fold signs,
+specificity-only ranking/state concordance, and rest AUC. The control AUC,
+combined AUC and control-based dominance term are absent. The saved models
+still estimate variance using the original 81 samples, including control;
+they are not refitted after deleting the control samples. Existing Parse
+states also retain their original control-derived HVG construction.
+
+Stage 12 imports the complete 154,209-cell analysis population and all 78,298
+RNA features into a separate bundle through scWorkbench. Its ingest adapter
+requires a sparse `Matrix` payload rather than the backed BPCells object;
+counts are unchanged. Ordered identifiers, metadata, all cell totals and every
+gene-by-sample pseudobulk count are verified against the accepted source.
+
+Stage 13 scores the new memberships with native scWorkbench UCell and tests
+sample-median discrimination among the 78 single-stimulus samples only.
+Passing sets are imported into `parse_cytokine_rest_only` in the private durable
+session overlay. No operation outputs are promoted: the user's report-before-
+promotion requirement takes precedence over the generic engine recommendation
+to promote before reporting. The working input bundle contains no published
+rest-only namespace. The durable workspace and staged bundle are recorded in
+`scoring.json`; terminal score primitives are also retained separately as RDS.
+
+Reports and exports are under
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/`.
+The runner mounts the accepted parent and repository read-only and permits
+writes only under the separate derived storage root. Scoring resumes completed
+durable checkpoints without repeating the expensive UCell operation.
+
+The completed review run has 51 directions with sufficient eligible genes,
+47 passing discovery, and 37 passing UCell confirmation (13 up, 24 down;
+24 stimuli). The final collection has 1,140 memberships covering 756 distinct
+genes. Compared with the original accepted directions, 16 additional directions
+pass and two fail after reselection: c-kit up and TNF-alpha up each select five
+genes and have sample-median UCell rest AUC 0.50. All 47 AUCs were independently
+recomputed from the exported sample medians; staged memberships match the GMT
+and TSV exports exactly. No new result has been promoted.

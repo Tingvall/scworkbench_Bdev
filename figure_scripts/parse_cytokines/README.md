@@ -92,3 +92,74 @@ fewer than five discovery-eligible genes are documented but cannot be plotted
 because no gene set or UCell score exists. The explanatory supplement is:
 
 `intermediate_objects/parse_cytokines/reports/signature_report_20260921T221910Z/SIGNATURE_EXCLUSIONS_AND_VIOLINS.md`
+
+For a complete inventory of all 52 individual-stimulus directions, including
+excluded candidates, run:
+
+```bash
+bash figure_scripts/parse_cytokines/run_04_cytokine_signal_inventory.sh
+```
+
+The optional first argument is a new, empty output directory. By default,
+reports go to the ignored `figure_outputs/parse_cytokines/signal_inventory_<UTC>/`
+directory. Both the accepted Parse bundle and source reports are mounted
+read-only; only this output directory is writable in the container.
+
+The offline HTML report provides a searchable, sortable inventory, individual
+signature records, three figures, and CSV/TSV downloads. It summarizes saved
+gene-level effects/FDR, gene counts at each selection step, discovery and UCell
+AUCs against control and other single stimuli, sample-median IQRs, off-target
+condition profiles, native score correlations, and gene-membership overlap.
+The separate scope table also includes the five combined treatments and control.
+No DE, scoring, or promotion is rerun. Rest means the other 25 individual
+stimuli, excluding control and combinations; missing metrics for unscored
+directions remain NA. The report's metric dictionary explains raw versus
+response-oriented scores and distinguishes gene-level FDR from signature AUC.
+
+The inventory verifies the accepted bundle fingerprint, all registered gene
+memberships, sample metadata, gene effects, and score coverage. Input/output
+checksums, the runtime session, and `validation.json` accompany each report.
+
+`CHECKS.html` is the concise view of the same inventory: pass/fail/not-evaluated
+for each acceptance check, eligible and selected gene counts, and the raw
+p-value and BH-FDR ranges across the selected genes. `check_summary.csv` and
+`individual_check_results.tsv` retain the decisions; `selected_gene_pvalues.tsv`
+gives exact values and both contrast filter results for every selected gene.
+P-values belong to genes. The AUC and stability checks do not have saved
+signature-level p-values. Directions without selected gene sets retain NA in
+the selected-set summaries; their few eligible genes, where present, have a
+separate p-value download.
+
+To count the consequences of omitting checks from the saved results, run:
+
+```bash
+bash figure_scripts/parse_cytokines/run_05_check_omission_report.sh
+```
+
+This report separates acceptance of existing gene sets with unchanged
+memberships from candidate eligibility after gene filters are removed.
+Single-check and grouped scoring omissions use the saved AUC/stability results;
+missing downstream checks remain unassessed. Gene-filter counts reuse saved
+full-data and training-fold coefficients, verify the original 52 eligible-gene
+counts, and report newly eligible directions. They are not final acceptance
+counts for revised signatures: no reselection, cross-validation, or UCell
+rescoring is performed. The original bundle and discovery outputs stay
+read-only. Results, per-direction details, checksums and validation go to a
+new ignored output directory; an optional first argument chooses that directory.
+
+The new collection that actually omits treatment-versus-control selection is
+rendered by `06_rest_only_signal_report.R`, after its native scoring stage:
+
+```bash
+bash processing/parse_cytokines/run_rest_only.sh report
+```
+
+Its `REPORT.html` includes all 52 direction outcomes, pass/fail checks, gene
+counts, old/new membership comparisons, a three-page overview figure PDF, and
+sample-distribution plots for every scored candidate. Passing sets are exported
+as GMT/TSV with exact specificity p-values and FDR in a separate gene-evidence
+table. Up/down here means expression relative to other individual stimuli;
+it does not establish a change from unstimulated control. The report records
+all thresholds, the reuse of original models/states, input hashes, and the
+unpromoted durable-session location. Both the accepted Parse parent and Bdev
+integration remain unchanged.

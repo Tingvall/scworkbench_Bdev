@@ -32,6 +32,21 @@ bundles:
       test_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/runtime_v4_tests
     validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/finalization/validation.json
 
+  parse_cytokines_rest_only:
+    role: derived_analysis
+    status: working
+    review_status: awaiting_user_review
+    config: config/parse_cytokines_rest_only.yml
+    source_dataset: parse_cytokine_stimulation
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/bundle
+    parents:
+      - parse_cytokines
+    accepted_state: null
+    runtime:
+      r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
+      scworkbench_version: 0.1.0.9004
+      build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+
   scmulti_flt3ko_il7ko:
     role: source_analysis
     status: planned
@@ -43,7 +58,8 @@ bundles:
 
   bdev_integrated:
     role: derived_integration
-    status: planned
+    status: working
+    review_status: awaiting_user_review
     config: config/bdev_integrated.yml
     source_dataset: null
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/bundle
@@ -51,5 +67,12 @@ bundles:
     parents:
       - bdev_reference
       - parse_cytokines
+    active_phase: parse_cytokine_pseudotime
+    future_parents:
       - scmulti_flt3ko_il7ko
+    runtime:
+      r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
+      scworkbench_version: 0.1.0.9004
+      build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+      test_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/reports/signature_recovery_20260923T200125Z/runtime_v4_tests
     accepted_state: null

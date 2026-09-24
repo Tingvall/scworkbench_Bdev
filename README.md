@@ -10,8 +10,9 @@ bundle:
    cytokine response gene sets.
 3. `scmulti_flt3ko_il7ko`: IL7KO/FLT3KO RNA and ATAC multiome data used as a
    query and validation dataset.
-4. `bdev_integrated`: a derived integration bundle that consumes the three
-   accepted parent bundles with `bdev_reference` as the reference.
+4. `bdev_integrated`: a derived integration bundle with `bdev_reference` as
+   the reference. Its current cytokine phase uses the accepted Bdev and Parse
+   parents; the KO parent is reserved for a later phase after acceptance.
 
 The three parent bundles remain independent and read-only during integration.
 All joint state is written to `bdev_integrated`.
@@ -180,6 +181,42 @@ limitation. Recovery and validation evidence is under
 Earlier signature reports retain their historical blocked status; this recovery
 report records its resolution.
 
+The separate `parse_cytokines_rest_only` working bundle rebuilds cytokine
+signatures without treatment-versus-control selection. It retains the
+target-versus-other-single-stimuli contrast, performs fresh membership and size
+selection, and uses native UCell for confirmation. Its configuration is
+`config/parse_cytokines_rest_only.yml`; the source workflow is documented in
+`processing/parse_cytokines/README.md`. New scores and passing gene sets remain
+staged for report review, with no result promotions or changes to the accepted
+Parse parent. Reports and GMT/TSV exports are under
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/`.
+Of 52 possible directions, 47 pass discovery and 37 pass UCell confirmation:
+13 up and 24 down across 24 stimuli, containing 1,140 memberships and 756
+distinct genes. These directions describe differences from other individual
+stimuli, not changes relative to unstimulated control.
+
+## Cytokine signatures along Bdev pseudotime
+
+The working integration has scored 22 of the 23 accepted Parse signatures on
+all 26,723 Bdev cells and summarized them along the 12,642 existing `pt` values.
+IFN-gamma up is excluded from scoring because only 35/50 source genes map to
+Bdev, below the prespecified 80% coverage threshold. Exact source `pt` values
+and all 14,081 missing entries are preserved. Directional signatures remain
+separate. The current analysis pools all samples and cell-cycle states, with
+continuous sliding-window median curves and interquartile-range bands. Windows
+span 10% of the observed pt range and advance by 1%, with 5% and 15% width
+sensitivity. Window membership, SD and cell counts are exported. Low-coverage
+centers are marked; connecting segments across them are for display. The earlier
+fixed-bin pooled report is preserved; sample and phase splits are historical only.
+
+The integration is **awaiting figure-report review**, remains unaccepted, and
+has not completed full recipient validation. Analysis artifacts were already
+promoted before the request for a report; no further bundle changes are allowed
+pending review. The report stage mounts all bundles read-only and writes to
+`intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html`
+under mirrored storage. Reproducible sources are in `processing/integration/`
+and `figure_scripts/bdev_integrated/`.
+
 ## Workflow documentation
 
 Execution phases and validation boundaries are documented in:
@@ -188,6 +225,6 @@ Execution phases and validation boundaries are documented in:
 - `processing/scmulti_flt3ko_il7ko/README.md`
 - `processing/integration/README.md`
 
-Source selections and operation parameters remain unset until each input has
-been inspected and the applicable scWorkbench interfaces have been confirmed
-inside the supplied image.
+Source selections and operation parameters are recorded after inspecting each
+input and confirming the applicable scWorkbench interfaces inside the supplied
+image. Future KO mapping parameters remain unset.

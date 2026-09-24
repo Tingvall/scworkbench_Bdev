@@ -2,7 +2,14 @@ schema_version: 1
 bundle_id: bdev_integrated
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
 role: derived_integration
-status: planned
+status: working
+review_status: awaiting_user_review
+review_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html
+active_phase: parse_cytokine_pseudotime
+run_id: cytokine_pt_20260923T2231Z
+runtime_registry_entry: bdev_integrated
+future_parents:
+  - scmulti_flt3ko_il7ko
 
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/bundle
@@ -10,7 +17,6 @@ bundle:
   parents:
     - bdev_reference
     - parse_cytokines
-    - scmulti_flt3ko_il7ko
 
 mutation_policy:
   input_bundles: read_only
@@ -21,7 +27,7 @@ preflight_gate:
   - all parent bundles pass recipient validation
   - source and sample identities are complete
   - original cell identifiers are retained and collision handling is explicit
-  - required feature universes and genome builds are compatible
+  - gene identifiers and feature coverage are checked for RNA signature transfer
   - Bdev reference space and promoted pseudotime inputs are explicit
   - proposed retained integration outputs are reviewed before promotion
 
@@ -31,6 +37,7 @@ reference_inputs:
 
 parse_inputs:
   bundle_id: parse_cytokines
+  namespace: parse_cytokine_signatures
   cell_set: set:parse_qc_control_single
   treatment_category_vector_artifact_id: cell_vector_20260921_083504_zts1k30i
   included_treatment_categories:
@@ -38,6 +45,43 @@ parse_inputs:
     - single
   excluded_treatment_category: combined
 
+cytokine_analysis:
+  population: pooled
+  active_summary: sliding_window
+  sliding_window:
+    primary_width_fraction: 0.10
+    width_fractions: [0.05, 0.10, 0.15]
+    step_fraction: 0.01
+    min_cells: 30
+    edge_policy: clip_to_observed_pt_range
+  matrix: RNA_counts
+  scoring: ucell
+  max_rank: 1500
+  graph_smoothing: false
+  minimum_genes: 5
+  minimum_feature_coverage: 0.8
+  pseudotime_source: exact_reference_metadata_pt
+  pseudotime_direction: as_is
+  pooled_bins: [30, 20, 50]
+  pooled_min_cells_per_bin: 30
+  summary: median
+  spread_band: interquartile_range
+  spread_statistic: within_bin_sample_sd
+  connect_retained_bins: true
+  mark_low_coverage_intervals: true
+  bootstrap_n: 0
+  seed: 1729
+  inference: descriptive
+
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports
 workflow: processing/integration
 figures: figure_scripts/bdev_integrated
+
+processing:
+  runner: processing/integration/run_stage.sh
+  preflight: processing/integration/01_preflight_inputs.R
+  create: processing/integration/02_create_bdev_integrated.R
+  score: processing/integration/03_score_parse_signatures.R
+  dynamics: processing/integration/04_cytokine_pseudotime.R
+  validate: processing/integration/05_validate_cytokine_bundle.R
+  report: figure_scripts/bdev_integrated/03_sliding_window_cytokine_report.R
