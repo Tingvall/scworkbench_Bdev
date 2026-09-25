@@ -92,6 +92,11 @@ The reproducible dataset report source is
 `figure_scripts/bdev_reference/01_bdev_reference_report.Rmd`. Generated HTML
 and PNG outputs are in `figure_outputs/bdev_reference/`.
 
+The IL-7/Flt3L top25-core sanity check maps log1p(CP10k) RNA expression onto
+the accepted ATAC-derived UMAP. Its separate up and down figures, expression
+detection table, and provenance are under
+`intermediate_objects/bdev_reference/reports/il7_flt3_top25_core_atac_umap_20260925/`.
+
 ## Parse cytokine bundle
 
 The accepted `parse_cytokines` bundle is built from the checksummed
@@ -181,28 +186,55 @@ limitation. Recovery and validation evidence is under
 Earlier signature reports retain their historical blocked status; this recovery
 report records its resolution.
 
-The separate `parse_cytokines_rest_only` working bundle rebuilds cytokine
+The separate `parse_cytokines_rest_only` accepted bundle rebuilds cytokine
 signatures without treatment-versus-control selection. It retains the
 target-versus-other-single-stimuli contrast, performs fresh membership and size
-selection, and uses native UCell for confirmation. Its configuration is
+selection, and uses native UCell for confirmation. The promoted competitor-aware
+collection contains 33 passing full signatures and 33 corresponding stable core
+sets in separate read-only namespaces. Its configuration is
 `config/parse_cytokines_rest_only.yml`; the source workflow is documented in
-`processing/parse_cytokines/README.md`. New scores and passing gene sets remain
-staged for report review, with no result promotions or changes to the accepted
-Parse parent. Reports and GMT/TSV exports are under
+`processing/parse_cytokines/README.md`. Reports and GMT/TSV exports are under
 `intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/`.
-Of 52 possible directions, 47 pass discovery and 37 pass UCell confirmation:
-13 up and 24 down across 24 stimuli, containing 1,140 memberships and 756
-distinct genes. These directions describe differences from other individual
-stimuli, not changes relative to unstimulated control.
+These directions describe differences from other individual stimuli, not
+changes relative to unstimulated control.
+
+A separate, unpromoted version tests Bdev-compatible 25--50 gene `full` sets
+and fixed `top25` sets while preserving the accepted collection above. It
+constructed both variants for all 52 cytokine directions; 24 full variants
+and 27 top25 variants passed full-data competitor-aware discrimination. Exact
+memberships, three-fold cores, holdout results, and the complete table are in
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_bdev25_dual_v1/`.
+The implementation and method are in `processing/parse_cytokines/` under
+`16_competitor_aware_bdev25_dual.R` and
+`COMPETITOR_AWARE_BDEV25_DUAL_WORKFLOW.md`.
+
+A further unpromoted pilot refines Flt3L and IL-7 up/down candidates beginning
+from the intersection of three fold-specific top-100 lists. It caches exact
+sample-level UCell rank contributions for the 651-gene union, removes genes
+only when deletion improves the full-data target-to-strongest-competitor gap,
+and verifies initial and final sets with native scWorkbench UCell. All four
+final sets pass the internal mean route; the report, exact memberships,
+metrics, and Bdev `SCT_data` ATAC-UMAP figures are in
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/flt3_il7_competitor_refinement_top100_v1/`.
 
 ## Cytokine signatures along Bdev pseudotime
 
-The working integration has scored 22 of the 23 accepted Parse signatures on
+The latest review repeats the integration with all 33 passing competitor-aware
+full signatures. Native UCell scores cover all 26,723 Bdev cells, and pooled
+trajectory profiles use the 12,642 cells with defined existing `pt`. The former
+five-gene/80% Bdev mapping gate is diagnostic in this branch: 24 signatures meet
+it and nine remain plotted with 3–11 mapped genes. The profiles use 10% windows
+with 1% steps and IQR bands, plus 5% and 15% sensitivity. Exact source
+pseudotime and all 14,081 missing values are preserved. The review report is
+`intermediate_objects/bdev_integrated/reports/competitor_aware_pt_all33_20260925/trajectory_review/REPORT.html`.
+The session and scores remain unpromoted pending review.
+
+The earlier integration scored 22 of the 23 original accepted Parse signatures on
 all 26,723 Bdev cells and summarized them along the 12,642 existing `pt` values.
 IFN-gamma up is excluded from scoring because only 35/50 source genes map to
 Bdev, below the prespecified 80% coverage threshold. Exact source `pt` values
 and all 14,081 missing entries are preserved. Directional signatures remain
-separate. The current analysis pools all samples and cell-cycle states, with
+separate. That earlier analysis pools all samples and cell-cycle states, with
 continuous sliding-window median curves and interquartile-range bands. Windows
 span 10% of the observed pt range and advance by 1%, with 5% and 15% width
 sensitivity. Window membership, SD and cell counts are exported. Low-coverage
@@ -210,12 +242,10 @@ centers are marked; connecting segments across them are for display. The earlier
 fixed-bin pooled report is preserved; sample and phase splits are historical only.
 
 The integration is **awaiting figure-report review**, remains unaccepted, and
-has not completed full recipient validation. Analysis artifacts were already
-promoted before the request for a report; no further bundle changes are allowed
-pending review. The report stage mounts all bundles read-only and writes to
-`intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html`
-under mirrored storage. Reproducible sources are in `processing/integration/`
-and `figure_scripts/bdev_integrated/`.
+has not completed full recipient validation. The original 22-signature branch
+promoted analysis artifacts before report review. The new 33-signature branch
+is staged and unpromoted. Reproducible sources are in
+`processing/integration/` and `figure_scripts/bdev_integrated/`.
 
 ## Workflow documentation
 

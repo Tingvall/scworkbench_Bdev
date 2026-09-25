@@ -69,7 +69,8 @@ bundles:
     parents:
       - bdev_reference
       - parse_cytokines
-    active_phase: parse_cytokine_pseudotime
+      - parse_cytokines_rest_only
+    active_phase: competitor_aware_cytokine_pseudotime
     future_parents:
       - scmulti_flt3ko_il7ko
     runtime:

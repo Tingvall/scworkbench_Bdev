@@ -1,17 +1,39 @@
 # Bdev-centered integration workflow
 
+The latest review branch repeats the pooled Bdev trajectory analysis with all
+33 full signatures accepted by the competitor-aware
+`parse_cytokines_rest_only` workflow. Run ID
+`competitor_aware_pt_all33_20260925` uses native raw-count UCell scores on all
+26,723 Bdev cells and the exact 12,642 defined `Bdev@meta.data$pt` values. The
+same 5%, 10%, and 15% sliding windows, 1% steps, 30-cell minimum, endpoint
+clipping, medians, and IQR bands are used so the output is directly comparable
+with the prior trajectory report.
+
+All 33 signatures are retained. The former transfer rule of at least five
+mapped genes and 80% membership is reported as a diagnostic and does not filter
+this branch. Twenty-four signatures meet that rule; nine are scored with lower
+Bdev mapping after missing genes are dropped. The report lists the exact mapped
+membership for each set. Scores, imports, and native operation history remain
+in the durable review session and have not been promoted. The reproducible
+entry point is
+`bash processing/integration/run_competitor_aware_trajectory.sh score|figures competitor_aware_pt_all33_20260925`.
+The report is under
+`reports/competitor_aware_pt_all33_20260925/trajectory_review/` in the
+configured integration storage root.
+
 The approved [cytokine pseudotime strategy](CYTOKINE_PSEUDOTIME_STRATEGY.md)
 starts with the accepted Bdev and Parse parents. KO integration follows after
 that parent is accepted. The registry distinguishes active from future parents.
 
-The current run is awaiting user review of its figure report. Analysis artifacts
+The earlier `cytokine_pt_20260923T2231Z` run is also awaiting user review of its
+figure report. Analysis artifacts
 had already been promoted into the working derived bundle before the request
 to review figures first. No additional promotion, finalization or acceptance is
 authorized while this review is pending. The runner enforces
 `review_status: awaiting_user_review` by allowing only the read-only `figures`
 stage. Change that status only after explicit user approval to resume.
 
-The user's current scope is pooled data with sliding windows. The figures stage
+That earlier scope used pooled data with sliding windows. Its figures stage
 selects `03_sliding_window_cytokine_report.R`, which computes native window
 medians, quartiles and SD from retained UCell scores and writes a separate
 `sliding_window_review/` report. The main width is 10% of the observed pt range,
@@ -67,7 +89,8 @@ imputed, flipped, rescaled, or refitted. The 14,081 missing entries remain in
 metadata. Gene-set membership is transferred by exact feature ID; missing genes
 are reported and no synonym mapping is inferred.
 
-Coverage eligibility is at least five genes and 80% of the original membership.
+In the initial branch, coverage eligibility is at least five genes and 80% of
+the original membership.
 IFN-gamma up has 35/50 genes and is excluded from primary scoring. The source set
 and its mapped membership remain retained. Secondary member-gene curves use
 mean log1p(CP10K) expression to retain sparse RNA support; primary UCell curves

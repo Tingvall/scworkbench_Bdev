@@ -58,3 +58,30 @@ promotion:
   failed_sets: 0
   full_feature_set_namespace: parse_cytokine_rest_only
   core_feature_set_namespace: parse_cytokine_rest_only_core
+review_analyses:
+  competitor_aware_bdev25_dual_v1:
+    status: complete_unpromoted
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_bdev25_dual_v1
+    namespace: parse_cytokine_rest_only_bdev25_v1
+    bdev_use: RNA_counts_feature_identifiers_only
+    candidate_directions: 52
+    variants: [full, top25]
+    constructed_full_sets: 52
+    constructed_top25_sets: 52
+    full_variant_passes: 24
+    top25_variant_passes: 27
+    result_promotions: 0
+  flt3_il7_competitor_refinement_top100_v1:
+    status: complete_unpromoted
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/flt3_il7_competitor_refinement_top100_v1
+    namespace: parse_cytokine_rest_only_refinement_pilot_top100_v1
+    targets: [Flt3L, IL-7]
+    directions: [up, down]
+    bdev_feature_universe: SCT_counts
+    bdev_expression_matrix: SCT_data
+    candidate_top_n: 100
+    cached_top_n: 100
+    top100_union_genes: 651
+    constructed_candidates: 4
+    final_passes: 4
+    result_promotions: 0

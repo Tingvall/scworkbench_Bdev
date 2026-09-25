@@ -1,6 +1,17 @@
 # Integrated Bdev reports
 
-`03_sliding_window_cytokine_report.R` renders the current pooled sliding-window
+`05_competitor_aware_sliding_window_report.R` is the current report source. It
+uses the unpromoted native UCell session created by
+`processing/integration/06_score_competitor_aware_signatures.R` and profiles all
+33 accepted competitor-aware full signatures. Bdev gene coverage is retained
+as a diagnostic: 24 pass the former five-gene/80% transfer rule and all 33 are
+plotted. The report uses the same pooled 5%/10%/15% sliding-window design as the
+last iteration and writes overview PNG/PDF files plus a multi-page PDF with one
+page per cytokine. Run both stages through
+`processing/integration/run_competitor_aware_trajectory.sh` with run ID
+`competitor_aware_pt_all33_20260925`.
+
+`03_sliding_window_cytokine_report.R` renders the earlier pooled sliding-window
 review from the working `bdev_integrated` bundle. It reuses retained UCell scores
 and runs native scWorkbench distribution summaries on overlapping cell subsets.
 Run it through
@@ -29,8 +40,9 @@ with their generated reports, remain historical records. The fixed-bin report
 is linked from the sliding-window report for comparison.
 
 Only the report directory is writable during this stage; every bundle and
-session is mounted read-only. The current report is
+session is mounted read-only. The earlier report is
 `intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html`
-under mirrored storage. The integration remains working and unaccepted pending
-user review. Its analysis artifacts were already promoted before the user
-requested report review; the pooled revision performs no further promotions.
+under mirrored storage. The latest report is
+`intermediate_objects/bdev_integrated/reports/competitor_aware_pt_all33_20260925/trajectory_review/REPORT.html`.
+The integration remains working and unaccepted pending user review. The latest
+scoring session and trajectory review perform no promotion.

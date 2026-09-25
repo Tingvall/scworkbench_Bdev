@@ -4,9 +4,10 @@ storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_
 role: derived_integration
 status: working
 review_status: awaiting_user_review
-review_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html
-active_phase: parse_cytokine_pseudotime
+review_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/competitor_aware_pt_all33_20260925/trajectory_review/REPORT.html
+active_phase: competitor_aware_cytokine_pseudotime
 run_id: cytokine_pt_20260923T2231Z
+latest_run_id: competitor_aware_pt_all33_20260925
 runtime_registry_entry: bdev_integrated
 future_parents:
   - scmulti_flt3ko_il7ko
@@ -17,6 +18,7 @@ bundle:
   parents:
     - bdev_reference
     - parse_cytokines
+    - parse_cytokines_rest_only
 
 mutation_policy:
   input_bundles: read_only
@@ -73,6 +75,35 @@ cytokine_analysis:
   seed: 1729
   inference: descriptive
 
+competitor_aware_cytokine_analysis:
+  source_bundle: parse_cytokines_rest_only
+  source_namespace: parse_cytokine_rest_only
+  source_collection: competitor_aware_full
+  source_review: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_review_v3
+  source_promotion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_promotion
+  source_signatures: 33
+  use_core_sets: false
+  population: pooled
+  matrix: RNA_counts
+  scoring: ucell
+  max_rank: 1500
+  graph_smoothing: false
+  minimum_genes: 5
+  minimum_feature_coverage: 0.8
+  coverage_gate_application: diagnostic_only_all_33_passing_sets_retained
+  pseudotime_source: exact_reference_metadata_pt
+  pseudotime_direction: as_is
+  sliding_window:
+    primary_width_fraction: 0.10
+    width_fractions: [0.05, 0.10, 0.15]
+    step_fraction: 0.01
+    min_cells: 30
+    edge_policy: clip_to_observed_pt_range
+  summary: median
+  spread_band: interquartile_range
+  inference: descriptive
+  promotion: none_pending_review
+
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports
 workflow: processing/integration
 figures: figure_scripts/bdev_integrated
@@ -85,3 +116,6 @@ processing:
   dynamics: processing/integration/04_cytokine_pseudotime.R
   validate: processing/integration/05_validate_cytokine_bundle.R
   report: figure_scripts/bdev_integrated/03_sliding_window_cytokine_report.R
+  competitor_aware_score: processing/integration/06_score_competitor_aware_signatures.R
+  competitor_aware_report: figure_scripts/bdev_integrated/05_competitor_aware_sliding_window_report.R
+  competitor_aware_runner: processing/integration/run_competitor_aware_trajectory.sh

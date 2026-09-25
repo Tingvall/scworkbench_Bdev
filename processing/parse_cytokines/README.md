@@ -224,6 +224,43 @@ promotes both imports in one receipt, finalizes recipient readiness, and runs
 full recipient validation. Failed sets and per-cell score families remain
 unpromoted.
 
+The Bdev-compatible dual-set review is a separate version specified in
+`COMPETITOR_AWARE_BDEV25_DUAL_WORKFLOW.md`. It keeps the accepted analysis
+above intact, restricts candidate membership to genes present among Bdev
+`RNA_counts` features, and retains two candidates per cytokine direction:
+a flexible 25--50 gene `full` set and a fixed `top25` set. Both variants use
+the same deterministic effect/FDR ranking, are cross-fitted independently at
+their fixed full-data sizes, and receive separate three-fold core sets. Run it
+with:
+
+```bash
+processing/parse_cytokines/run_16_competitor_aware_bdev25_dual.sh
+```
+
+Version 1 completed all 52 directions for both variants. The full variants
+passed full-data discrimination in 24/52 cases and the top25 variants in
+27/52. The review and exact gene memberships are under
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_bdev25_dual_v1/`.
+The branch is unpromoted and uses its own sessions and namespace.
+
+The Flt3L/IL-7 iterative-refinement pilot is specified in
+`COMPETITOR_REFINEMENT_PILOT_WORKFLOW.md` and run with:
+
+```bash
+processing/parse_cytokines/run_17_flt3_il7_competitor_refinement_pilot.sh
+```
+
+It constructs four candidates from the intersection of three fold-specific
+top-100 lists, restricted to Bdev `SCT_counts` features. Exact UCell capped-rank
+contributions for the 651-gene top-100 union are cached after aggregation to
+the 81 samples. One-gene deletions then maximize the complete-data median
+target-to-strongest-competitor gap without reranking cells. Native scWorkbench
+UCell confirms the initial and final scores and supplies responder metrics.
+All four refined sets pass the internal mean route; Flt3L up and IL-7 up also
+pass the responder route. Bdev expression figures use `SCT_data` on the
+existing ATAC UMAP. The unpromoted report is under
+`intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/flt3_il7_competitor_refinement_top100_v1/`.
+
 The installed scWorkbench build committed all 31 UCell score keys, their
 summary, and both QC tables in commit
 `commit_20260921_155948_s32blwqt`. Its generic artifact serializer then failed
@@ -362,3 +399,12 @@ pass and two fail after reselection: c-kit up and TNF-alpha up each select five
 genes and have sample-median UCell rest AUC 0.50. All 47 AUCs were independently
 recomputed from the exported sample medians; staged memberships match the GMT
 and TSV exports exactly. No new result has been promoted.
+
+## Planned all-cytokine competitor refinement
+
+`ALL_CYTOKINE_COMPETITOR_REFINEMENT_AND_BDEV_REPORTING.md` freezes the completed
+Flt3L/IL-7 pilot method for the planned all-cytokine extension. It specifies all
+52 attempted directions, cross-fitted top-100 candidate construction, greedy
+competitor-aware refinement, final mean/responder tests, native Bdev UCell
+scoring, bright UCell UMAPs, and 5% sliding-window pseudotime plots. The
+all-cytokine analysis described there has not been started.
