@@ -202,6 +202,16 @@ processing/parse_cytokines/run_08_discover_specific_signatures.sh
 processing/parse_cytokines/run_09_score_and_report_signatures.sh
 ```
 
+The separate competitor-aware review is specified in
+`COMPETITOR_AWARE_SIGNATURE_WORKFLOW.md`. It evaluates sizes 5, 10, 15, 20,
+30, 40, and 50 without a gene-level FDR cutoff, selects size from full-data
+target-to-strongest-competitor gaps, and reports selected-size cross-fitted
+stability and core membership without promoting results. Run it with:
+
+```bash
+processing/parse_cytokines/run_14_competitor_aware_signature_review.sh
+```
+
 The installed scWorkbench build committed all 31 UCell score keys, their
 summary, and both QC tables in commit
 `commit_20260921_155948_s32blwqt`. Its generic artifact serializer then failed

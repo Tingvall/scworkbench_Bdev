@@ -163,3 +163,20 @@ it does not establish a change from unstimulated control. The report records
 all thresholds, the reuse of original models/states, input hashes, and the
 unpromoted durable-session location. Both the accepted Parse parent and Bdev
 integration remain unchanged.
+
+To render cell-level UCell violin maps for all 51 rest-only directions with at
+least five eligible genes, including control and every individual cytokine
+condition, run:
+
+```bash
+bash figure_scripts/parse_cytokines/run_07_rest_only_all_candidate_violin_maps.sh
+```
+
+The combined 51-page PDF and four PDFs split by UCell pass/fail and up/down are
+written under the rest-only report. The 47 discovery-passing memberships reuse
+their completed scores. The four discovery failures are assigned their
+prespecified best-sized exploratory memberships and scored in a separate
+unpromoted scWorkbench session solely to complete the requested figure. Every
+page shows three cell-level violins per condition, one per biological sample,
+with sample medians overlaid. Control is displayed but remains excluded from
+the rest-only UCell AUC. No result is promoted.
