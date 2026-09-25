@@ -156,3 +156,16 @@ from full-data size selection. With only three replicates, each fold ranking is
 estimated from two samples per condition and may be unstable. The responder
 route can also be uninformative for down signatures when scores accumulate at
 zero. Independent data are required to validate the exact exported membership.
+
+## 8. Post-review promotion
+
+After review of the full results and all 52 violin maps, the user authorized
+promotion. Promotion is limited to the 33 full-data passing sets and their 33
+three-fold core sets. Full sets retain their reviewed identifiers and are
+registered read-only in `parse_cytokine_rest_only`. Core identifiers append
+`.core` and are registered read-only in `parse_cytokine_rest_only_core`.
+
+Failed candidates and per-cell score families remain unpromoted. Both imports
+are staged and checked before one closure-aware promotion. Exact ordered gene
+membership, unchanged cells and cell sets, recipient readiness, and full
+recipient validation are required before the bundle is registered as accepted.

@@ -34,18 +34,20 @@ bundles:
 
   parse_cytokines_rest_only:
     role: derived_analysis
-    status: working
-    review_status: awaiting_user_review
+    status: accepted
     config: config/parse_cytokines_rest_only.yml
     source_dataset: parse_cytokine_stimulation
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/bundle
     parents:
       - parse_cytokines
-    accepted_state: null
+    accepted_state:
+      bundle_state_fingerprint: 9781535e991790f4f695032f74f9845ec93e934f4a4149a8c6622b63404fcea2
+      recipient_validation_fingerprint: 584679dddc9c956c88783f6fd11a5b73ff86d2781ff9c6e7936f1582e99236d6
     runtime:
       r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
       scworkbench_version: 0.1.0.9004
       build_provenance: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/build_provenance.json
+    validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_promotion/validation.json
 
   scmulti_flt3ko_il7ko:
     role: source_analysis

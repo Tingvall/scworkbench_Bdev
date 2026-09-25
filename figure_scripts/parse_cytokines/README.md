@@ -180,3 +180,17 @@ unpromoted scWorkbench session solely to complete the requested figure. Every
 page shows three cell-level violins per condition, one per biological sample,
 with sample medians overlaid. Control is displayed but remains excluded from
 the rest-only UCell AUC. No result is promoted.
+
+To render the same violin layout for all 52 gene sets selected by the newer
+competitor-aware analysis, run:
+
+```bash
+bash figure_scripts/parse_cytokines/run_08_competitor_aware_selected_violin_maps.sh
+```
+
+This writes a combined 52-page PDF and four PDFs split by full-data pass/fail
+and direction inside the competitor-aware review directory. It reuses the
+completed native UCell scores, shows the three biological samples separately,
+and records the selected size, full-data gaps, holdout stability, and core size
+on each page. Control is displayed and is part of the competitor-aware test.
+No result is promoted.

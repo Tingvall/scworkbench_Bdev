@@ -212,6 +212,18 @@ stability and core membership without promoting results. Run it with:
 processing/parse_cytokines/run_14_competitor_aware_signature_review.sh
 ```
 
+After review of that analysis and its complete violin inventory, promote only
+the 33 passing full sets and their three-fold stable cores with:
+
+```bash
+processing/parse_cytokines/run_15_promote_competitor_aware_signatures.sh
+```
+
+This registers the full and core sets read-only in distinct namespaces,
+promotes both imports in one receipt, finalizes recipient readiness, and runs
+full recipient validation. Failed sets and per-cell score families remain
+unpromoted.
+
 The installed scWorkbench build committed all 31 UCell score keys, their
 summary, and both QC tables in commit
 `commit_20260921_155948_s32blwqt`. Its generic artifact serializer then failed

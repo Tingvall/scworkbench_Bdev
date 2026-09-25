@@ -1,8 +1,7 @@
 schema_version: 1
 bundle_id: parse_cytokines_rest_only
 role: derived_analysis
-status: working
-review_status: awaiting_user_review
+status: accepted
 source_dataset: parse_cytokine_stimulation
 parent_bundle: parse_cytokines
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only
@@ -39,6 +38,23 @@ analysis:
   chunk_size: 400
   random_seed: 1729
 publication:
-  promote_results: false
+  promote_results: true
   report_before_promotion: true
   export_passed_gene_sets: true
+  full_feature_set_namespace: parse_cytokine_rest_only
+  core_feature_set_namespace: parse_cytokine_rest_only_core
+  promotion_scope: competitor_aware_full_data_passing_sets_and_three_fold_cores
+  source_review: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_review_v3
+accepted_state:
+  bundle_state_fingerprint: 9781535e991790f4f695032f74f9845ec93e934f4a4149a8c6622b63404fcea2
+  recipient_validation_fingerprint: 584679dddc9c956c88783f6fd11a5b73ff86d2781ff9c6e7936f1582e99236d6
+validation:
+  status: ok_with_warnings
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_promotion/validation.json
+promotion:
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/competitor_aware_signature_promotion
+  full_sets: 33
+  core_sets: 33
+  failed_sets: 0
+  full_feature_set_namespace: parse_cytokine_rest_only
+  core_feature_set_namespace: parse_cytokine_rest_only_core
