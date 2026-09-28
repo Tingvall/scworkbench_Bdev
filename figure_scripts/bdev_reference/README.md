@@ -51,3 +51,18 @@ medians with hollow points. It does not recalculate UCell scores or window
 summaries. Run it with
 `run_07_flt3_il7_ucell_trajectory_all_windows_diagnostic.sh`; the diagnostic
 report is registered in `config/bdev_reference.yml`.
+
+# All-cytokine refined UCell report
+
+After reviewing a completed all-cytokine Parse refinement report, run:
+
+```bash
+figure_scripts/bdev_reference/run_08_all_cytokine_refined_ucell_report.sh \
+  /path/to/all_cytokine_competitor_refinement_report
+```
+
+The unpromoted report scores only final Parse sets passing the mean and/or
+responder route. It uses native scWorkbench UCell on Bdev `RNA_counts`, the
+unchanged `umap.atac` coordinates, and the unchanged `pt` metadata. Pseudotime
+curves use 5% windows, 1% steps, a 20-cell minimum, median lines and type-7 IQR
+bands. Missing `pt` values remain missing.

@@ -400,11 +400,41 @@ genes and have sample-median UCell rest AUC 0.50. All 47 AUCs were independently
 recomputed from the exported sample medians; staged memberships match the GMT
 and TSV exports exactly. No new result has been promoted.
 
-## Planned all-cytokine competitor refinement
+## All-cytokine competitor refinement
 
 `ALL_CYTOKINE_COMPETITOR_REFINEMENT_AND_BDEV_REPORTING.md` freezes the completed
 Flt3L/IL-7 pilot method for the planned all-cytokine extension. It specifies all
 52 attempted directions, cross-fitted top-100 candidate construction, greedy
 competitor-aware refinement, final mean/responder tests, native Bdev UCell
 scoring, bright UCell UMAPs, and 5% sliding-window pseudotime plots. The
-all-cytokine analysis described there has not been started.
+all-cytokine analysis described there completed unpromoted on 2026-09-25.
+
+The implementation is available as two deliberately separate review stages.
+Generate the complete 52-direction Parse inventory with:
+
+```bash
+processing/parse_cytokines/run_18_all_cytokine_competitor_refinement.sh
+```
+
+The command writes a new timestamped, unpromoted report by default. It uses
+the fixed top-100 protocol and does not run Bdev scoring. After the Parse
+inventory and exact passing memberships have been reviewed, generate native
+Bdev UCell scores, UMAPs and 5% pseudotime reports by passing that report
+directory explicitly:
+
+```bash
+figure_scripts/bdev_reference/run_08_all_cytokine_refined_ucell_report.sh \
+  /path/to/all_cytokine_competitor_refinement_report
+```
+
+Neither stage promotes a session or modifies a parent bundle. The Parse rank
+cache checkpoints under the corresponding `.incomplete` directory; native
+UCell operations use durable scWorkbench session workspaces and can be resumed.
+
+The completed Parse report is
+`intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/`.
+It contains all 52 attempts: 43 constructible candidates, 38 final passes, nine
+construction failures, and five final discrimination failures. All 38 passes
+meet the mean route and 22 also meet the responder route. The corresponding
+Bdev report is
+`intermediate_objects/bdev_reference/reports/all_cytokine_refined_ucell_v1_20260925/`.

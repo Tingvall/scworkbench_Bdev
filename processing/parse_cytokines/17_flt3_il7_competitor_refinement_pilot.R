@@ -25,11 +25,20 @@ source("src/bundle_validation.R")
 
 candidate_top_n <- if (length(args) == 2L) as.integer(args[[2L]]) else 100L
 cache_top_n <- 100L
+analysis_scope <- Sys.getenv("SCWB_REFINEMENT_SCOPE", "pilot")
+stopifnot(analysis_scope %in% c("pilot", "all_cytokines"))
+all_cytokines <- identical(analysis_scope, "all_cytokines")
 stopifnot(is.finite(candidate_top_n), candidate_top_n >= 1L,
   candidate_top_n <= cache_top_n)
-analysis_id <- paste0("flt3_il7_competitor_refinement_top", candidate_top_n,
-  "_v1")
-namespace <- paste0("parse_cytokine_rest_only_refinement_pilot_top",
+if (all_cytokines && candidate_top_n != 100L) {
+  stop("The all-cytokine protocol requires candidate_top_n = 100")
+}
+analysis_id <- if (all_cytokines) {
+  "all_cytokine_competitor_refinement_top100_v1"
+} else paste0("flt3_il7_competitor_refinement_top", candidate_top_n, "_v1")
+namespace <- if (all_cytokines) {
+  "parse_cytokine_rest_only_refinement_all_top100_v1"
+} else paste0("parse_cytokine_rest_only_refinement_pilot_top",
   candidate_top_n, "_v1")
 targets <- c("Flt3L", "IL-7")
 directions <- c("up", "down")
@@ -58,6 +67,7 @@ log_event <- function(...) {
   cat(format(Sys.time(), tz = "UTC"), ..., "\n")
   flush.console()
 }
+log_event("Starting", analysis_id, "scope", analysis_scope)
 
 registry <- load_bundle_registry()
 parent_cfg <- read_project_yaml("config/parse_cytokines.yml")
@@ -67,6 +77,7 @@ runtime <- registry$bundles$parse_cytokines$runtime
 stopifnot(identical(as.character(packageVersion("scworkbench")),
   runtime$scworkbench_version), identical(as.character(packageVersion("UCell")),
   "2.12.0"), is.finite(ncores), ncores >= 1L)
+log_event("Loaded project configuration and runtime contracts")
 
 source_dir <- parent_cfg$signature_analysis$discovery$report
 input_paths <- c(
@@ -75,25 +86,40 @@ input_paths <- c(
   review_config = "config/parse_cytokines_rest_only.yml",
   reference_config = "config/bdev_reference.yml",
   registry = "config/bundles.yml",
-  methods = "processing/parse_cytokines/COMPETITOR_REFINEMENT_PILOT_WORKFLOW.md",
-  script = "processing/parse_cytokines/17_flt3_il7_competitor_refinement_pilot.R",
-  parse_manifest = file.path(cfg$bundle_dir, "manifest.json"),
+  methods = if (all_cytokines)
+    "processing/parse_cytokines/ALL_CYTOKINE_COMPETITOR_REFINEMENT_AND_BDEV_REPORTING.md" else
+    "processing/parse_cytokines/COMPETITOR_REFINEMENT_PILOT_WORKFLOW.md",
+  script = if (all_cytokines)
+    "processing/parse_cytokines/18_all_cytokine_competitor_refinement.R" else
+    "processing/parse_cytokines/17_flt3_il7_competitor_refinement_pilot.R",
+  parse_manifest = file.path(registry$bundles$parse_cytokines$bundle_dir,
+    "manifest.json"),
+  review_manifest = file.path(cfg$bundle_dir, "manifest.json"),
   bdev_manifest = file.path(registry$bundles$bdev_reference$bundle_dir,
     "manifest.json")
 )
+if (all_cytokines) input_paths <- c(input_paths,
+  implementation =
+    "processing/parse_cytokines/17_flt3_il7_competitor_refinement_pilot.R")
 missing_inputs <- input_paths[!file.exists(input_paths)]
 if (length(missing_inputs)) stop("Missing inputs: ", paste(missing_inputs,
   collapse = ", "))
 
 for (id in c("parse_cytokines", "parse_cytokines_rest_only", "bdev_reference")) {
-  checked <- validate_registered_bundle(registry, id,
-    run_recipient_validation = FALSE)
-  stopifnot(isTRUE(checked$identity_ok), isTRUE(checked$fingerprint_ok))
+  log_event("Checking accepted validation report", id)
   validation_path <- if (id == "bdev_reference") ref_cfg$validation$report else
     registry$bundles[[id]]$validation_report
   stopifnot(isTRUE(jsonlite::read_json(validation_path,
     simplifyVector = TRUE)$ok))
 }
+# The accepted Parse parent supplies the fits and is not opened again below.
+# Check its immutable manifest directly, avoiding a redundant bundle connection.
+accepted_parse_manifest <- jsonlite::read_json(input_paths[["parse_manifest"]],
+  simplifyVector = TRUE)
+stopifnot(identical(accepted_parse_manifest$bundle_id, "parse_cytokines"),
+  identical(accepted_parse_manifest$current_state$fingerprint,
+    registry$bundles$parse_cytokines$accepted_state$bundle_state_fingerprint))
+log_event("Validated registered input bundles")
 
 # Bdev supplies the SCT_counts feature universe and the final display matrix.
 bdev <- wb_open_bundle(registry$bundles$bdev_reference$bundle_dir,
@@ -101,10 +127,14 @@ bdev <- wb_open_bundle(registry$bundles$bdev_reference$bundle_dir,
 on.exit(try(wb_close_bundle(bdev), silent = TRUE), add = TRUE)
 bdev_manifest <- wb_manifest(bdev)
 bdev_fingerprint <- bdev_manifest$current_state$fingerprint
+stopifnot(identical(bdev_manifest$bundle_id, "bdev_reference"),
+  identical(bdev_fingerprint,
+    registry$bundles$bdev_reference$accepted_state$bundle_state_fingerprint))
 bdev_sct_count_features <- as.character(wb_feature_ids(bdev, "SCT_counts"))
 bdev_sct_data_features <- as.character(wb_feature_ids(bdev, "SCT_data"))
 stopifnot(length(bdev_sct_count_features) == 20533L,
   !anyDuplicated(bdev_sct_count_features), !anyDuplicated(bdev_sct_data_features))
+log_event("Opened Bdev feature universe")
 
 fits <- readRDS(input_paths[["fits"]])
 features <- as.character(fits$filtered_genes)
@@ -112,6 +142,14 @@ stopifnot(identical(rownames(fits$full$coefficients), features),
   all(vapply(fits$folds[folds], function(x) identical(
     rownames(x$coefficients), features), logical(1))))
 bdev_eligible <- features %in% bdev_sct_count_features
+if (all_cytokines) {
+  targets <- sub("^specificity::", "", grep("^specificity::",
+    colnames(fits$full$coefficients), value = TRUE))
+  stopifnot(length(targets) == 26L, !anyDuplicated(targets),
+    !"control" %in% targets)
+}
+attempted_directions <- length(targets) * length(directions)
+log_event("Loaded specificity fits for", length(targets), "targets")
 
 rank_genes <- function(stats, target, direction) {
   sign <- if (direction == "up") 1 else -1
@@ -175,8 +213,9 @@ for (target in targets) for (direction in directions) {
     fold2_top100_size = length(top100[["2"]]),
     fold3_top100_size = length(top100[["3"]]),
     candidate_size = length(candidate), construction_ok = construction_ok,
-    construction_status = if (construction_ok) "PASS" else
-      "FAIL_FEWER_THAN_20_IN_THREE_FOLD_TOP50_INTERSECTION",
+    construction_status = if (construction_ok) "PASS" else paste0(
+      "FAIL_FEWER_THAN_20_IN_THREE_FOLD_TOP", candidate_top_n,
+      "_INTERSECTION"),
     stringsAsFactors = FALSE)
   if (length(candidate)) {
     local <- candidate_order
@@ -208,7 +247,8 @@ direction_inventory <- do.call(rbind, direction_rows)
 candidate_membership <- do.call(rbind, candidate_members)
 top100_membership <- do.call(rbind, pool_rows)
 pool_genes <- sort(unique(top100_membership$feature_id))
-stopifnot(nrow(direction_inventory) == 4L, length(pool_genes) > 0L,
+stopifnot(nrow(direction_inventory) == attempted_directions,
+  length(pool_genes) > 0L,
   all(unlist(candidate_sets, use.names = FALSE) %in% pool_genes),
   all(pool_genes %in% bdev_sct_count_features))
 write_tsv(direction_inventory, file.path(stage_dir, "candidate_inventory.tsv"))
@@ -217,14 +257,19 @@ write_tsv(top100_membership, file.path(stage_dir,
   "top100_fold_membership.tsv"))
 write_tsv(data.frame(pool_rank = seq_along(pool_genes), feature_id = pool_genes),
   file.path(stage_dir, "top100_union_genes.tsv"))
-log_event("Constructed", length(candidate_sets), "of 4 top", candidate_top_n,
+log_event("Constructed", length(candidate_sets), "of", attempted_directions,
+  "top", candidate_top_n,
   "-intersection candidates;",
   length(pool_genes), "genes in reusable top100 union")
 
 # Parse metadata and exact sample-level UCell capped-rank contribution cache.
 parse <- wb_open_bundle(cfg$bundle_dir, validate = FALSE)
 on.exit(try(wb_close_bundle(parse), silent = TRUE), add = TRUE)
-parse_fingerprint <- wb_manifest(parse)$current_state$fingerprint
+parse_manifest <- wb_manifest(parse)
+parse_fingerprint <- parse_manifest$current_state$fingerprint
+stopifnot(identical(parse_manifest$bundle_id, "parse_cytokines_rest_only"),
+  identical(parse_fingerprint,
+    registry$bundles$parse_cytokines_rest_only$accepted_state$bundle_state_fingerprint))
 cells <- as.character(wb_cells(parse, "all"))
 md <- wb_meta(parse, cells = cells, cols = list(
   wb_ref_metadata_field("core:cell_id"), "sample_id", "condition", "replicate",
@@ -438,9 +483,11 @@ native_session_workspace <- NA_character_
 native_summary <- data.frame()
 native_sample_scores <- data.frame()
 native_condition_results <- data.frame()
+native_condition_profile <- data.frame()
 if (length(native_signatures)) {
-  session_id <- paste0("flt3_il7_refinement_top", candidate_top_n,
-    "_native_v1")
+  session_id <- if (all_cytokines) {
+    "all_cytokine_refinement_top100_native_v1"
+  } else paste0("flt3_il7_refinement_top", candidate_top_n, "_native_v1")
   session_root <- file.path(cfg$storage_root, "sessions", cfg$run_id)
   workspace <- file.path(session_root, session_id)
   session <- if (dir.exists(workspace)) wb_session_resume(parse, workspace) else
@@ -461,7 +508,8 @@ if (length(native_signatures)) {
       min_cells = 10L, features = native_signatures, name = session_id,
       max_rank = max_rank, ncores = ncores, parallel_backend = "auto",
       chunk_size = rank_outer_chunk, missing_features_policy = "error"),
-      notes = "Native verification and responder scoring for unpromoted Flt3L/IL-7 refinement pilot")
+      notes = paste("Native verification and responder scoring for unpromoted",
+        analysis_id))
     session <- result$session
     run <- result$run
   } else {
@@ -476,6 +524,7 @@ if (length(native_signatures)) {
     all(is.finite(score$value)), setequal(unique(score$key), names(native_signatures)))
   sample_rows <- list()
   condition_rows <- list()
+  profile_rows <- list()
   key_rle <- rle(as.character(score$key))
   ends <- cumsum(key_rle$lengths)
   starts <- ends - key_rle$lengths + 1L
@@ -549,9 +598,24 @@ if (length(native_signatures)) {
       responder_target_rank = 1L + sum(competitors > target_value),
       responder_pass = target_value > competitor_value,
       stringsAsFactors = FALSE)
+    condition_names <- names(mean_metric$condition_values)
+    profile_rows[[j]] <- data.frame(score_key = key,
+      signature_id = map$signature_id, cytokine = map$cytokine,
+      direction = map$direction, set_stage = map$set_stage,
+      set_size = map$set_size, condition = condition_names,
+      is_target = condition_names == map$cytokine,
+      median_oriented_native_sample_mean = as.numeric(
+        mean_metric$condition_values[condition_names]),
+      mean_condition_rank = rank(-mean_metric$condition_values[condition_names],
+        ties.method = "min"),
+      median_responder_fraction = as.numeric(
+        responder_values[condition_names]),
+      responder_condition_rank = rank(-responder_values[condition_names],
+        ties.method = "min"), stringsAsFactors = FALSE)
   }
   native_sample_scores <- do.call(rbind, sample_rows)
   native_condition_results <- do.call(rbind, condition_rows)
+  native_condition_profile <- do.call(rbind, profile_rows)
   native_condition_results$overall_pass <- with(native_condition_results,
     mean_pass | responder_pass)
 }
@@ -559,6 +623,8 @@ write_tsv(native_summary, file.path(stage_dir, "native_ucell_summary.tsv"))
 write_tsv(native_sample_scores, file.path(stage_dir, "sample_metrics.tsv"))
 write_tsv(native_condition_results, file.path(stage_dir,
   "initial_final_metrics.tsv"))
+write_tsv(native_condition_profile, file.path(stage_dir,
+  "condition_metrics.tsv"))
 
 # One-row-per-direction result table, including construction failures.
 summary_rows <- lapply(seq_len(nrow(direction_inventory)), function(i) {
@@ -567,13 +633,15 @@ summary_rows <- lapply(seq_len(nrow(direction_inventory)), function(i) {
   if (!isTRUE(info$construction_ok)) {
     return(data.frame(signature_id = id, cytokine = info$cytokine,
       direction = info$direction, candidate_size = info$candidate_size,
-      construction_ok = FALSE, final_size = NA_integer_, genes_removed = NA_integer_,
+      construction_ok = FALSE, construction_status = info$construction_status,
+      final_size = NA_integer_, genes_removed = NA_integer_,
       initial_mean_gap = NA_real_, final_mean_gap = NA_real_,
       mean_gap_improvement = NA_real_, final_mean_strongest_competitor = NA_character_,
       final_mean_rank = NA_integer_, final_mean_pass = NA,
       final_responder_gap = NA_real_, final_responder_strongest_competitor = NA_character_,
       final_responder_rank = NA_integer_, final_responder_pass = NA,
-      final_overall_pass = FALSE, final_genes = NA_character_,
+      final_overall_pass = FALSE,
+      final_status = info$construction_status, final_genes = NA_character_,
       removed_genes = NA_character_, stringsAsFactors = FALSE))
   }
   initial <- native_condition_results[native_condition_results$signature_id == id &
@@ -586,7 +654,8 @@ summary_rows <- lapply(seq_len(nrow(direction_inventory)), function(i) {
   stopifnot(nrow(initial) == 1L, nrow(final) == 1L)
   data.frame(signature_id = id, cytokine = info$cytokine,
     direction = info$direction, candidate_size = length(initial_genes),
-    construction_ok = TRUE, final_size = length(final_genes),
+    construction_ok = TRUE, construction_status = info$construction_status,
+    final_size = length(final_genes),
     genes_removed = length(removed), initial_mean_gap = initial$mean_standardized_gap,
     final_mean_gap = final$mean_standardized_gap,
     mean_gap_improvement = final$mean_standardized_gap - initial$mean_standardized_gap,
@@ -597,12 +666,20 @@ summary_rows <- lapply(seq_len(nrow(direction_inventory)), function(i) {
     final_responder_rank = final$responder_target_rank,
     final_responder_pass = final$responder_pass,
     final_overall_pass = final$overall_pass,
+    final_status = if (isTRUE(final$overall_pass)) "PASS" else
+      "FAIL_MEAN_AND_RESPONDER_DISCRIMINATION",
     final_genes = paste(final_genes, collapse = ";"),
     removed_genes = paste(removed, collapse = ";"), stringsAsFactors = FALSE)
 })
 signature_summary <- do.call(rbind, summary_rows)
 write_tsv(signature_summary, file.path(stage_dir, "signature_summary.tsv"))
 
+# The completed pilot keeps its original gene-expression figures. The
+# all-cytokine workflow deliberately stops after Parse review; native Bdev
+# signal scoring and figures are a separate post-review stage.
+if (all_cytokines) {
+  figure_files <- character()
+} else {
 # Bdev SCT_data expression on the existing ATAC UMAP.
 figure_dir <- file.path(stage_dir, "figures")
 dir.create(figure_dir, showWarnings = FALSE)
@@ -716,21 +793,25 @@ for (direction in directions) {
     bg = "white", limitsize = FALSE)
   figure_files[direction] <- path
 }
+}
 
 stopifnot(identical(parse_fingerprint,
   wb_manifest(parse)$current_state$fingerprint), identical(bdev_fingerprint,
   wb_manifest(bdev)$current_state$fingerprint),
   all(file.exists(figure_files)))
 
-report <- c("# Flt3L/IL-7 competitor-refinement pilot", "",
+report <- c(if (all_cytokines)
+    "# All-cytokine competitor refinement" else
+    "# Flt3L/IL-7 competitor-refinement pilot", "",
   paste0("This is a separate, unpromoted top-", candidate_top_n,
-    " pilot. Per-gene rank contributions were cached for the union of all fold-specific top-100 lists."), "",
+    if (all_cytokines) " all-cytokine analysis. " else " pilot. ",
+    "Per-gene rank contributions were cached for the union of all fold-specific top-100 lists."), "",
   paste0("- Reusable top-100 union: **", length(pool_genes), " genes**."),
   paste0("- Constructed top-", candidate_top_n,
     "-intersection candidates: **", length(candidate_sets),
-    "/4**."),
+    "/", attempted_directions, "**."),
   paste0("- Final overall passes: **", sum(signature_summary$final_overall_pass),
-    "/4**."), "",
+    "/", attempted_directions, "**."), "",
   "| Cytokine | Direction | Candidate | Final | Removed | Initial mean gap | Final mean gap | Mean competitor | Mean | Responder | Overall |",
   "|---|---|---:|---:|---:|---:|---:|---|---|---|---|")
 for (i in seq_len(nrow(signature_summary))) {
@@ -749,11 +830,14 @@ for (i in seq_len(nrow(signature_summary))) {
 report <- c(report, "", "## Outputs", "",
   "- `signature_summary.tsv`: one-row-per-direction final metrics.",
   "- `initial_final_metrics.tsv`: native initial and final mean/responder metrics.",
+  "- `condition_metrics.tsv`: all 27 condition-level mean and responder summaries.",
   "- `candidate_membership.tsv` and `final_gene_membership.tsv`: exact memberships.",
   "- `optimization_trace.tsv`: every tested deletion and selected removal.",
   "- `top100_union_sample_rank_cache.rds`: reusable sample-level capped-rank cache.",
   "- `top100_union_sample_rank_contributions.tsv.gz`: tabular cache export.",
-  "- `figures/`: Bdev SCT_data expression on the existing ATAC UMAP.", "",
+  if (all_cytokines)
+    "- Bdev scoring and figures are intentionally deferred until this Parse result is reviewed." else
+    "- `figures/`: Bdev SCT_data expression on the existing ATAC UMAP.", "",
   "Refinement and final testing use the same complete dataset, so pass status is an internally optimized discrimination result.")
 writeLines(report, file.path(stage_dir, "REPORT.md"))
 file.copy(input_paths[["methods"]], file.path(stage_dir, "METHODS.md"),
@@ -770,7 +854,8 @@ completion <- list(status = "complete", promoted = FALSE,
   parse_bundle_unchanged = TRUE,
   bdev_bundle = registry$bundles$bdev_reference$bundle_dir,
   bdev_bundle_fingerprint = bdev_fingerprint, bdev_bundle_unchanged = TRUE,
-  bdev_feature_universe = "SCT_counts", bdev_expression_matrix = "SCT_data",
+  bdev_feature_universe = "SCT_counts",
+  bdev_expression_matrix = if (all_cytokines) NULL else "SCT_data",
   targets = targets, directions = directions, candidate_top_n = candidate_top_n,
   cached_top_n = cache_top_n, top100_union_genes = length(pool_genes),
   minimum_final_size = minimum_size, constructed_candidates = length(candidate_sets),
@@ -793,4 +878,4 @@ write_tsv(output_manifest[order(output_manifest$file), ],
   file.path(stage_dir, "output_manifest.tsv"))
 
 if (!file.rename(stage_dir, output_dir)) stop("Failed to finalize output directory")
-log_event("Completed unpromoted Flt3L/IL-7 refinement pilot at", output_dir)
+log_event("Completed unpromoted", analysis_id, "at", output_dir)

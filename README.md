@@ -217,6 +217,24 @@ final sets pass the internal mean route; the report, exact memberships,
 metrics, and Bdev `SCT_data` ATAC-UMAP figures are in
 `intermediate_objects/parse_cytokines_rest_only/reports/rest_only_20260924/flt3_il7_competitor_refinement_top100_v1/`.
 
+The fixed pilot method is implemented for all 26 cytokines and both directions
+as a two-stage, unpromoted review workflow. First run
+`processing/parse_cytokines/run_18_all_cytokine_competitor_refinement.sh` to
+produce the complete 52-direction Parse inventory. After reviewing that result,
+pass its directory to
+`figure_scripts/bdev_reference/run_08_all_cytokine_refined_ucell_report.sh` to
+score only passing signatures in Bdev and generate UCell UMAP and 5%
+sliding-window pseudotime reports. The full workflow completed as an unpromoted
+review on 2026-09-25.
+Of 52 attempted directions, 43 constructed a stable top-100 intersection and
+38 passed the final Parse mean and/or responder tests. Native Bdev UCell scored
+those 38 sets across all 26,723 cells; the 5% pseudotime summaries preserve all
+12,642 defined source `pt` values and 14,081 missing entries. Parse results are
+under
+`intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/`;
+Bdev UMAP and trajectory results are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_refined_ucell_v1_20260925/`.
+
 ## Cytokine signatures along Bdev pseudotime
 
 The latest review repeats the integration with all 33 passing competitor-aware

@@ -85,3 +85,22 @@ review_analyses:
     constructed_candidates: 4
     final_passes: 4
     result_promotions: 0
+  all_cytokine_competitor_refinement_top100_v1:
+    status: complete_unpromoted
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925
+    namespace: parse_cytokine_rest_only_refinement_all_top100_v1
+    targets: 26
+    directions: [up, down]
+    attempted_directions: 52
+    bdev_feature_universe: SCT_counts
+    candidate_top_n: 100
+    cached_top_n: 100
+    top100_union_genes: 4064
+    constructed_candidates: 43
+    construction_failures: 9
+    final_passes: 38
+    final_mean_passes: 38
+    final_responder_passes: 22
+    final_discrimination_failures: 5
+    native_max_abs_sample_mean_error: 7.21644966006352e-16
+    result_promotions: 0

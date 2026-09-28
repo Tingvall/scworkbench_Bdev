@@ -3,8 +3,8 @@
 ## Status and next step
 
 This document freezes the method tested on Flt3L and IL-7 and defines how it
-will be extended to all Parse cytokine signals. The all-cytokine analysis has
-**not** been started.
+was extended to all Parse cytokine signals. The unpromoted all-cytokine review
+completed on 2026-09-25.
 
 The next analysis will attempt an up and a down signature for each of the 26
 single-cytokine conditions. Control is a competitor and threshold reference,
@@ -292,7 +292,7 @@ median and IQR.
   bands describe the cells in each window and do not quantify uncertainty of
   the median trajectory.
 
-## Exact next action, not yet executed
+## Executed workflow
 
 1. Generalize the Flt3L/IL-7 refinement script from two cytokines to all 26
    single-cytokine conditions and both directions.
@@ -311,8 +311,12 @@ median and IQR.
 8. Validate cell and feature alignment, exact source `pt`, missingness, bundle
    fingerprints, output checksums and the absence of promotions.
 
-No step in this all-cytokine action list has been run as part of documenting
-the protocol.
+All steps in this action list were executed for the version-1 unpromoted
+review. The Parse stage attempted 52 directions, constructed 43 candidates and
+retained 38 final passing signatures. The Bdev stage scored those 38 signatures
+and generated 23 trajectory and 61 UMAP figures. The registered report paths
+are in `config/parse_cytokines_rest_only.yml` and
+`config/bdev_reference.yml`.
 
 ## Reference implementation from the completed pilot
 
