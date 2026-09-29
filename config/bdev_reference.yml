@@ -41,12 +41,23 @@ reference_state:
     defined_cells: 12642
     missing_cells: 14081
     authoritative_exact_values: metadata
+  gene_set_scores:
+    default:
+      name: combined_flattened_rank
+      artifact_id: cell_vector_family_20260929_120047_i11wgdku
+      formula: 0.5 * breadth + 0.5 * intensity
+      rank_cutoff: 1500
+      source_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_v2_20260929
+    components:
+      breadth: cell_vector_family_20260929_121111_0lx2kuzv
+      intensity: cell_vector_family_20260929_122255_gny6iw1j
+    promotion_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929
 
 validation:
   status: ok_with_warnings
-  bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
-  recipient_validation_fingerprint: d0547bf04bc928030c64629bf5149f2daf3b1f64e44a9ec99e3b1feb5d9e95c2
-  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/import/validation.json
+  bundle_state_fingerprint: 1027f6390c6b853acc2bf40d3fae9abb59393f4256cb39285685eb2b2973f7ec
+  recipient_validation_fingerprint: e8291159c9472770275b73e5563f1477a01d19b775b3c44037ed89a43849b83b
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929/recipient_validation.json
 
 reports:
   inspection: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/inspection/complete
@@ -59,6 +70,14 @@ reports:
   flt3_il7_refined_ucell_umap_bright: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/flt3_il7_refined_ucell_umap_bright_v2_20260925
   flt3_il7_refined_ucell_trajectory_all_windows_diagnostic: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/flt3_il7_refined_ucell_trajectory_all_windows_20260925
   all_cytokine_refined_ucell: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_refined_ucell_v1_20260925
+  all_cytokine_refined_drivers: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_refined_drivers_v5_mean_internal_scale_bb_20260928
+  all_cytokine_balanced_vs_ucell: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_balanced_vs_ucell_v3_mean_internal_scale_20260928
+  all_cytokine_three_method_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_three_method_comparison_v1_20260928
+  all_cytokine_neighborhood_coordination: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_neighborhood_coordination_v1_20260928
+  all_cytokine_neighborhood_rank_change: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_neighborhood_mean_rank_change_v2_20260928
+  all_cytokine_ucell_rankmean_genechange: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_ucell_rankmean_genechange_v1_20260928
+  all_cytokine_breadth_intensity: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_v2_20260929
+  all_cytokine_breadth_intensity_promotion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929
 
 processing:
   inspect: processing/bdev_reference/01_inspect_bdev_reference.R
@@ -72,3 +91,11 @@ processing:
   flt3_il7_refined_ucell_umap_bright: figure_scripts/bdev_reference/06_flt3_il7_refined_ucell_umap.R
   flt3_il7_refined_ucell_trajectory_all_windows_diagnostic: figure_scripts/bdev_reference/07_flt3_il7_ucell_trajectory_all_windows_diagnostic.R
   all_cytokine_refined_ucell: figure_scripts/bdev_reference/08_all_cytokine_refined_ucell_report.R
+  all_cytokine_refined_drivers: figure_scripts/bdev_reference/09_all_cytokine_refined_driver_report.R
+  all_cytokine_balanced_vs_ucell: figure_scripts/bdev_reference/10_all_cytokine_balanced_score_comparison.R
+  all_cytokine_three_method_comparison: figure_scripts/bdev_reference/10_all_cytokine_balanced_score_comparison.R
+  all_cytokine_neighborhood_coordination: figure_scripts/bdev_reference/11_all_cytokine_neighborhood_coordination_report.R
+  all_cytokine_neighborhood_rank_change: figure_scripts/bdev_reference/12_all_cytokine_neighborhood_rank_change_report.R
+  all_cytokine_ucell_rankmean_genechange: figure_scripts/bdev_reference/13_all_cytokine_rankmean_comparison_report.R
+  all_cytokine_breadth_intensity: figure_scripts/bdev_reference/14_all_cytokine_breadth_intensity_report.R
+  promote_flattened_rank_scores: processing/bdev_reference/04_promote_flattened_rank_scores.R

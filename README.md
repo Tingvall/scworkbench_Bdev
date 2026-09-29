@@ -235,6 +235,97 @@ under
 Bdev UMAP and trajectory results are under
 `intermediate_objects/bdev_reference/reports/all_cytokine_refined_ucell_v1_20260925/`.
 
+The follow-up driver report uses those same 38 passing profiles, saved UCell
+scores, `umap.atac` coordinates, and 5% rolling-window summaries. Within each
+reviewed signature, native scWorkbench mean-expression trajectory dynamics
+select five drivers; a separate native median summary supplies the plotted
+gene-expression lines. Every combined figure contains the score UMAP, rolling
+median/IQR curve, and five colored, directly labeled driver curves. The 38 PNGs,
+38-page PDF, driver tables, checks, and provenance are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_refined_drivers_v5_mean_internal_scale_bb_20260928/`.
+The plotted mean trajectory for each driver is independently min-max scaled to
+0-1 so sparse, low-expression genes are visible; raw mean and median curves
+remain in separate tables and driver identities and ranks are unchanged. The
+driver panel includes labeled dashed lines at the saved BB1/BB2 median
+pseudotimes.
+
+The expression-balanced sensitivity analysis retains the original UCell result
+beside a score that gives every member gene exactly `1 / signature_size` weight.
+For each gene, zero expression contributes zero and positive `SCT_data` values
+are converted to within-gene percentiles before averaging. Each of the 38
+figures compares old and new UMAPs and 5% rolling median/IQR trajectories and
+retains the same five driver-expression curves. The report, cell scores, weight
+table, score correlations, checks, and provenance are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_balanced_vs_ucell_v3_mean_internal_scale_20260928/`.
+
+The subsequent three-method report adds a robust trajectory-level consensus.
+Within each existing 5% pseudotime window, every signature gene's mean
+`SCT_data` trajectory is independently scaled to 0-1; the plotted center and
+band are the median and IQR across all member genes. This method has no
+per-cell score or UMAP. Each figure compares its trajectory with native UCell
+and the per-cell balanced score, and the driver panel marks the saved BB1/BB2
+median boundaries with labeled dashed lines. Results are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_three_method_comparison_v1_20260928/`.
+
+The neighborhood-coordination sensitivity analysis produces a third per-cell
+score. It uses native scWorkbench neighbors in the existing 50-dimensional
+RNA-PCA space, smooths each gene over local cells, converts genes independently
+to zero-aware percentiles, and multiplies equal-gene mean intensity by the
+fraction of participating genes. The primary setting is `k=30` with a 0.75
+activity-percentile threshold; `k=15/50` and thresholds `0.60/0.90` are retained
+as sensitivity variants. Its UMAPs, rolling trajectories, driver panels,
+per-cell values, and sensitivity tables are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_neighborhood_coordination_v1_20260928/`.
+
+The neighborhood mean-rank-change analysis retains gene-level changes as the unit
+of evidence. For each signature gene, `SCT_data` expression is averaged over
+the cell and its 29 nearest RNA-PCA neighbors and converted to a within-gene
+percentile. Each gene's median percentile in a 5% pseudotime window is compared
+with that gene five 1%-step windows earlier; the signature change is the mean
+of those bounded gene-level differences. Per-cell UMAP values compare each cell's gene
+percentiles with the corresponding lagged-window gene medians before taking
+the signature mean. A separate coordination flag requires at least 20% of genes
+to change by at least 0.05 in the score direction and is not multiplied into
+the continuous score. Each of the 38 figures contains the blue-white-red change
+UMAP, the change trajectory, and the unchanged top-five drivers plotted as
+individual gene-rank changes with BB1/BB2 boundaries. Results are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_neighborhood_mean_rank_change_v2_20260928/`.
+
+The native rank-mean comparison runs scWorkbench
+`trajectory_geneset_dynamics(score_method="rank_mean")` on the same 38 sets and
+compares it with saved UCell and k=30 gene-wise mean-rank-change scores. The
+built-in operation ranks the union of selected genes within each cell. Because
+it exports trajectory bins rather than per-cell scores, the report reconstructs
+its documented cell-level formula for UMAP display and validates those values
+exactly against all native 50-bin medians. The main figures use the same saved
+5%-wide rolling-window memberships for all methods. Results are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_ucell_rankmean_genechange_v1_20260928/`.
+
+The breadth/rank-intensity comparison applies the separately authorized custom
+score to raw `RNA_counts` for the same 38 sets. Within each cell, positive genes
+are ranked from highest to lowest across the full RNA feature universe, using
+average ranks for ties and a rank cutoff of 1,500. Breadth is the fraction of
+signature genes detected; intensity is the sum of linear rank weights divided
+by the full signature size; and the combined score uses equal weights
+(`alpha=0.5`). Each profile orders its UMAPs and matching 5%-window median/IQR
+trajectories as native rank-mean, combined, breadth, and intensity. All 26,723
+cells are scored, while trajectory plots use only the 12,642 cells with defined
+existing `pt`; the 14,081 missing values remain unchanged. Results are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_v2_20260929/`.
+
+Following review, the Combined flattened-rank family was promoted as the
+accepted default Bdev gene-set score. Its scWorkbench artifact is
+`cell_vector_family_20260929_120047_i11wgdku`. Breadth and Intensity remain
+available as the separately promoted component families
+`cell_vector_family_20260929_121111_0lx2kuzv` and
+`cell_vector_family_20260929_122255_gny6iw1j`. Promotion used native identity
+materialization (`cell_vector_family_calibrate`, `zscore` with centering and
+scaling disabled), and every promoted value was checked exactly against the
+reviewed score report. Recipient validation completed with only the two
+expected external-source trust-boundary warnings. The promotion receipt and
+validation are under
+`intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929/`.
+
 ## Cytokine signatures along Bdev pseudotime
 
 The latest review repeats the integration with all 33 passing competitor-aware
