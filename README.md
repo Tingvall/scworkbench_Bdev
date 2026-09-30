@@ -8,7 +8,7 @@ bundle:
    its accepted `pt` pseudotime.
 2. `parse_cytokines`: Parse RNA cytokine-stimulation data used to derive
    cytokine response gene sets.
-3. `scmulti_flt3ko_il7ko`: IL7KO/FLT3KO RNA and ATAC multiome data used as a
+3. `scmulti_flt3ko_il7ko`: IL7KO/FLT3LKO RNA and ATAC multiome data used as a
    query and validation dataset.
 4. `bdev_integrated`: a derived integration bundle with `bdev_reference` as
    the reference. Its current cytokine phase uses the accepted Bdev and Parse

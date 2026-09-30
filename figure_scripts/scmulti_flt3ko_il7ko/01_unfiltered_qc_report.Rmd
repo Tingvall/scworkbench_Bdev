@@ -1,0 +1,174 @@
+---
+title: "FLT3LKO and IL7KO multiome: unfiltered QC"
+subtitle: "Per-library RNA and ATAC metrics for all Cell Ranger ARC filtered-matrix cells"
+output:
+  github_document:
+    toc: true
+    toc_depth: 3
+params:
+  qc_dir: null
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center", fig.width = 11, fig.height = 6.5, dpi = 160)
+suppressPackageStartupMessages({
+  library(data.table); library(ggplot2); library(jsonlite); library(knitr); library(patchwork)
+})
+qc_dir <- normalizePath(params$qc_dir, mustWork = TRUE)
+qc_path <- file.path(qc_dir, "cell_qc_metrics.tsv.gz")
+qc <- fread(cmd = paste("gzip -cd", shQuote(qc_path)))
+summary_long <- fread(file.path(qc_dir, "sample_qc_summary.tsv"))
+validation <- fromJSON(file.path(qc_dir, "validation.json"), simplifyVector = FALSE)
+context <- fromJSON(file.path(qc_dir, "qc_context.json"), simplifyVector = TRUE)
+sample_levels <- c("FLT3LKO_BM_WT", "FLT3LKO_BM_KO", "IL7KO_BM_WT", "IL7KO_BM_KO")
+qc[, library_id := factor(library_id, levels = sample_levels)]
+summary_long[, library_id := factor(library_id, levels = sample_levels)]
+sample_colors <- c(FLT3LKO_BM_WT = "#4E79A7", FLT3LKO_BM_KO = "#E15759", IL7KO_BM_WT = "#59A14F", IL7KO_BM_KO = "#B07AA1")
+theme_qc <- theme_bw(base_size = 11) + theme(
+  panel.grid.minor = element_blank(), axis.text.x = element_text(angle = 25, hjust = 1),
+  legend.position = "none", strip.background = element_rect(fill = "grey94", colour = "grey70"),
+  plot.title = element_text(face = "bold")
+)
+fmt_number <- function(x, digits = 2L) ifelse(is.na(x), "NA", format(round(x, digits), big.mark = ",", trim = TRUE, scientific = FALSE))
+summary_display <- copy(summary_long)
+summary_display[, `Median [Q1–Q3]` := paste0(fmt_number(median), " [", fmt_number(q1), "–", fmt_number(q3), "]")]
+violin_metric <- function(metric, label, log_scale = FALSE, percent = FALSE) {
+  p <- ggplot(qc, aes(x = library_id, y = .data[[metric]], fill = library_id)) +
+    geom_violin(scale = "width", trim = TRUE, linewidth = 0.2, alpha = 0.8) +
+    geom_boxplot(width = 0.16, outlier.shape = NA, fill = "white", linewidth = 0.3) +
+    scale_fill_manual(values = sample_colors, drop = FALSE) + labs(x = NULL, y = label, title = label) + theme_qc
+  if (log_scale) p <- p + scale_y_log10(labels = scales::label_number(big.mark = ","))
+  if (percent) p <- p + scale_y_continuous(labels = scales::label_percent(accuracy = 1))
+  p
+}
+```
+
+# Scope and interpretation
+
+This report describes QC distributions for every cell present in the aggregated Cell Ranger ARC filtered feature-barcode matrix. **No additional cell filtering, threshold selection, pass/fail classification, normalization, or batch correction was performed.** Differences between libraries are observations, not exclusion criteria.
+
+The corrected knockout identity is **FLT3LKO**, targeting the ligand gene *Flt3l*. The stable repository bundle key remains `scmulti_flt3ko_il7ko`, but biological labels use `FLT3LKO` or `Flt3l`.
+
+The aggregate was produced with Cell Ranger ARC 2.2.0 using `r context$genome` reference `r context$reference_version` and aggregation normalization set to `r context$normalization`.
+
+# Cell inventory
+
+```{r cell-inventory}
+cell_inventory <- qc[, .(
+  `Cells reported` = .N, `Unique cell IDs` = uniqueN(cell_id),
+  `Cell Ranger is_cell = 1` = sum(is_cell == 1L)
+), by = .(library_id, knockout_target, genotype, tissue)]
+cell_inventory <- cell_inventory[order(match(as.character(library_id), sample_levels))]
+kable(cell_inventory, format = "pipe")
+```
+
+The report contains `r format(nrow(qc), big.mark = ",")` cells, matching the input matrix exactly. Barcode suffix-to-library assignments were checked against `aggr.csv` and the aggregate summary counts.
+
+# RNA QC
+
+RNA UMI and detected-gene counts are original Cell Ranger per-barcode metrics. Mitochondrial and ribosomal percentages were calculated directly from the unmodified aggregate count matrix. Mitochondrial features were identified by `chrM` intervals or an `mt-` symbol prefix; ribosomal genes used `Rpl`/`Rps` prefixes.
+
+```{r rna-qc-plots, fig.height=9}
+p1 <- violin_metric("gex_umis_count", "RNA UMIs", log_scale = TRUE)
+p2 <- violin_metric("gex_genes_count", "Detected genes", log_scale = TRUE)
+p3 <- violin_metric("matrix_mito_percent", "Mitochondrial RNA (%)")
+p4 <- violin_metric("matrix_ribosomal_percent", "Ribosomal RNA (%)")
+(p1 | p2) / (p3 | p4)
+```
+
+```{r rna-scatter}
+ggplot(qc, aes(gex_umis_count, gex_genes_count, colour = library_id)) +
+  geom_point(size = 0.18, alpha = 0.25) +
+  scale_x_log10(labels = scales::label_number(big.mark = ",")) +
+  scale_y_log10(labels = scales::label_number(big.mark = ",")) +
+  scale_colour_manual(values = sample_colors, drop = FALSE) + facet_wrap(~library_id, nrow = 2) +
+  labs(x = "RNA UMIs", y = "Detected genes", title = "RNA complexity by library") +
+  theme_qc + theme(legend.position = "none")
+```
+
+# ATAC QC
+
+Fragment totals, peak-region fragments, TSS fragments and mitochondrial reads are original per-barcode Cell Ranger ARC metrics. FRiP is peak-region fragments divided by total ATAC fragments. TSS enrichment was calculated with Signac against the exact Cell Ranger GRCm39-2024-A TSS BED. Nucleosome signal used Signac's standard sampling target of 5,000 fragment records per cell.
+
+```{r atac-qc-plots, fig.height=12}
+p1 <- violin_metric("atac_fragments", "ATAC fragments", log_scale = TRUE)
+p2 <- violin_metric("atac_frip", "ATAC FRiP", percent = TRUE)
+p3 <- violin_metric("tss_enrichment", "TSS enrichment")
+p4 <- violin_metric("nucleosome_signal", "Nucleosome signal")
+p5 <- violin_metric("atac_tss_fragment_fraction", "TSS fragment fraction", percent = TRUE)
+p6 <- violin_metric("atac_mitochondrial_read_fraction", "ATAC mitochondrial read fraction", percent = TRUE)
+(p1 | p2) / (p3 | p4) / (p5 | p6)
+```
+
+```{r atac-scatter, fig.height=11}
+atac_depth_frip <- ggplot(qc, aes(atac_fragments, atac_frip, colour = library_id)) +
+  geom_point(size = 0.18, alpha = 0.25) + scale_x_log10(labels = scales::label_number(big.mark = ",")) +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
+  scale_colour_manual(values = sample_colors, drop = FALSE) + facet_wrap(~library_id, nrow = 2) +
+  labs(x = "ATAC fragments", y = "FRiP", title = "ATAC depth and peak overlap") + theme_qc
+tss_nucleosome <- ggplot(qc, aes(tss_enrichment, nucleosome_signal, colour = library_id)) +
+  geom_point(size = 0.18, alpha = 0.25) + scale_colour_manual(values = sample_colors, drop = FALSE) +
+  facet_wrap(~library_id, nrow = 2) +
+  labs(x = "TSS enrichment", y = "Nucleosome signal", title = "Fragment-structure QC") + theme_qc
+atac_depth_frip / tss_nucleosome
+```
+
+# Per-library numerical summaries
+
+Values are medians and interquartile ranges across all reported cells. No value was used as a cutoff.
+
+```{r summary-tables, results='asis'}
+metric_order <- c(
+  "gex_umis_count", "gex_genes_count", "matrix_mito_percent", "matrix_ribosomal_percent",
+  "atac_fragments", "atac_frip", "atac_tss_fragment_fraction", "tss_enrichment",
+  "nucleosome_signal", "atac_mitochondrial_read_fraction", "matrix_detected_peaks"
+)
+for (metric_name in metric_order) {
+  table_data <- summary_display[metric == metric_name, .(
+    Library = library_id, Target = knockout_target, Genotype = genotype,
+    Cells = cells, Missing = missing, `Median [Q1–Q3]`
+  )]
+  table_data <- table_data[order(match(as.character(Library), sample_levels))]
+  cat("\n## ", unique(summary_display[metric == metric_name]$metric_label), "\n\n", sep = "")
+  print(kable(table_data, format = "pipe")); cat("\n")
+}
+```
+
+# Validation and provenance
+
+```{r validation}
+validation_table <- data.frame(
+  Check = c(
+    "Filtering performed", "Thresholds selected", "Input cells", "Reported cells",
+    "Unique reported cell IDs", "All cells marked as cells by Cell Ranger",
+    "GEX UMI totals agree between matrix and source metrics",
+    "Detected-gene totals agree between matrix and source metrics",
+    "Aggregate-peak counts exactly equal source peak-region cut sites (not expected)"
+  ),
+  Value = c(
+    as.character(validation$filtering_performed),
+    as.character(validation$thresholding_performed),
+    format(validation$input_cells, big.mark = ","),
+    format(validation$reported_cells, big.mark = ","),
+    format(validation$unique_cell_ids, big.mark = ","),
+    as.character(validation$all_cells_are_cellranger_cells),
+    as.character(validation$source_matrix_comparison$gex_umis_exact),
+    as.character(validation$source_matrix_comparison$detected_genes_exact),
+    as.character(validation$source_matrix_comparison$peak_counts_equal_peak_region_cutsites)
+  )
+)
+kable(validation_table, format = "pipe")
+```
+
+The RNA count comparisons are exact because aggregation normalization was
+`none`. Exact equality is not expected for the ATAC comparison: the aggregate
+matrix uses its newly constructed 200,063-peak universe, whereas the original
+per-library counters describe each source run's peak regions. Both values are
+retained, and the comparison is recorded as a provenance diagnostic rather
+than a QC failure.
+
+Retained beside this report: `cell_qc_metrics.tsv.gz`, `sample_qc_summary.tsv`, `sample_manifest.tsv`, `input_inventory.tsv`, `validation.json`, `qc_context.json`, and `session_info.txt`.
+
+# Current boundary
+
+This report intentionally stops before cell selection. It does not create a QC-accepted cell set, preprocess an RNA or ATAC latent space, create the scWorkbench source bundle, construct a common Bdev/query peak universe, or train/project PeakVI.

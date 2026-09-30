@@ -2,30 +2,113 @@ schema_version: 1
 bundle_id: scmulti_flt3ko_il7ko
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko
 role: source_analysis
-status: planned
+status: accepted
 
 source:
-  dataset_id: scmulti_flt3ko_il7ko
+  dataset_id: scmulti_flt3lko_il7ko
+  biological_label: FLT3LKO_IL7KO_BM
+  knockout_targets:
+    - Flt3l
+    - Il7
   root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko
-  selected_inputs: null
-  checksum_inventory: null
-  delivery_status: pending_inventory
+  selected_inputs:
+    aggregate_matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/filtered_feature_bc_matrix.h5
+    aggregate_fragments: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_fragments.tsv.gz
+    aggregate_fragments_index: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_fragments.tsv.gz.tbi
+    aggregate_peaks: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_peaks.bed
+    aggregation_manifest: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/aggr.csv
+    reference: /home/jtg/resources/refs/refdata-cellranger-arc-GRCm39-2024-A
+  checksum_inventory: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/unfiltered_qc_v1_20260929/input_inventory.tsv
+  delivery_status: ingested_and_validated
 
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/bundle
+  cells: 28541
+  samples: 4
+  matrices:
+    RNA_counts:
+      features: 33696
+      cells: 28541
+      layer: counts
+      feature_type: gene
+    ATAC_aggregate_peaks:
+      features: 200063
+      cells: 28541
+      layer: counts
+      feature_type: peak
+  cell_sets:
+    imported: set:scmulti_flt3ko_il7ko
+    downstream_qc: set:qc_use_downstream
+  downstream_qc_cells: 23252
+  retained_not_selected: 5289
+  physical_filtering_performed: false
 
 analysis_intent:
   - process RNA and ATAC modalities independently from Bdev
   - preserve genotype, sample, replicate, and receptor-sorted population metadata
   - prepare a validated query state for Bdev-reference mapping
 
-required_before_creation:
+naming:
+  technical_bundle_id: scmulti_flt3ko_il7ko
+  corrected_biological_identity: scmulti_flt3lko_il7ko
+  note: FLT3LKO targets the ligand gene Flt3l, not the receptor gene Flt3
+
+creation_prerequisites_completed:
   - inventory delivered Cell Ranger ARC or derived inputs
   - establish genome build and fragment/index identities
   - establish sample, genotype, replicate, and condition mappings
   - verify paired-modality cell identifiers and input checksums
   - select supported scWorkbench ingestion and preprocessing operations
 
+validation:
+  status: ok_with_warnings
+  warning_scope: external source paths are deliberately not reopened during recipient validation
+  bundle_state_fingerprint: c102c6b3c00a022ea108889924cc2094e6cebfefb534a76aa730dd982b73723b
+  recipient_validation_fingerprint: 91a26f713d93f58242d61cfe9757115e778b5115a180dcac406b3adc9d7b4d46
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/validation.json
+
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports
 workflow: processing/scmulti_flt3ko_il7ko
 figures: figure_scripts/scmulti_flt3ko_il7ko
+
+qc:
+  status: complete_with_downstream_selection
+  filtering_performed: false
+  thresholding_performed: false
+  cells_reported: 28541
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/unfiltered_qc_v1_20260929/REPORT.md
+  cell_metrics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/unfiltered_qc_v1_20260929/cell_qc_metrics.tsv.gz
+  sample_summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/unfiltered_qc_v1_20260929/sample_qc_summary.tsv
+  validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/unfiltered_qc_v1_20260929/validation.json
+  selection:
+    physical_cell_filtering_performed: false
+    combination: all_criteria_must_pass
+    inequalities_are_strict: true
+    thresholds:
+      rna_umi: "> 1000"
+      detected_genes: "> 500"
+      mitochondrial_percent: "< 20"
+      atac_fragments: "> 1000"
+      tss_enrichment: "> 2"
+      nucleosome_signal: "< 2"
+    cells_use_downstream: 23252
+    cells_retained_not_selected: 5289
+    cell_markers: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/cell_qc_selection.tsv.gz
+    downstream_cell_ids: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/downstream_cell_ids.txt
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/REPORT.md
+    validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/validation.json
+
+reports:
+  source_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929
+  completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/completion.json
+  source_comparison: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/source_comparison.json
+
+processing:
+  calculate_unfiltered_qc: processing/scmulti_flt3ko_il7ko/01_calculate_unfiltered_qc.R
+  render_unfiltered_qc: processing/scmulti_flt3ko_il7ko/02_render_unfiltered_qc_report.R
+  runner: processing/scmulti_flt3ko_il7ko/run_unfiltered_qc.sh
+  mark_qc_analysis_set: processing/scmulti_flt3ko_il7ko/03_mark_qc_analysis_set.R
+  render_qc_selection: processing/scmulti_flt3ko_il7ko/04_render_qc_selection_report.R
+  selection_runner: processing/scmulti_flt3ko_il7ko/run_qc_selection.sh
+  create_source_bundle: processing/scmulti_flt3ko_il7ko/05_create_source_bundle.R
+  source_bundle_runner: processing/scmulti_flt3ko_il7ko/run_create_source_bundle.sh

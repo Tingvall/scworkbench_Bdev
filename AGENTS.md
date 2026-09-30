@@ -6,7 +6,7 @@ These instructions apply to the entire repository.
 
 This repository develops the B cell development use case for scWorkbench.
 The analyses described in `README.md` cover cytokine stimulation Parse data
-and IL7KO/FLT3KO single-cell multiome data, including mapping to a reference
+and IL7KO/FLT3LKO single-cell multiome data, including mapping to a reference
 B cell development dataset.
 
 For the Bdev reference, use the existing `Bdev@meta.data$pt` field as

@@ -1,0 +1,129 @@
+---
+title: "FLT3LKO and IL7KO multiome: QC downstream-use selection"
+subtitle: "All cells retained; analysis-universe eligibility marked by user-selected thresholds"
+output:
+  github_document:
+    toc: true
+params:
+  selection_dir: null
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, fig.height = 6, dpi = 160)
+suppressPackageStartupMessages({ library(data.table); library(ggplot2); library(jsonlite); library(knitr) })
+root <- normalizePath(params$selection_dir, mustWork = TRUE)
+selection <- fread(cmd = paste("gzip -cd", shQuote(file.path(root, "cell_qc_selection.tsv.gz"))))
+sample_summary <- fread(file.path(root, "sample_selection_summary.tsv"))
+criterion_summary <- fread(file.path(root, "criterion_selection_summary.tsv"))
+thresholds <- fromJSON(file.path(root, "thresholds.json"), simplifyVector = FALSE)
+validation <- fromJSON(file.path(root, "validation.json"), simplifyVector = TRUE)
+sample_levels <- c("FLT3LKO_BM_WT", "FLT3LKO_BM_KO", "IL7KO_BM_WT", "IL7KO_BM_KO")
+sample_summary[, library_id := factor(library_id, levels = sample_levels)]
+setorder(sample_summary, library_id)
+criterion_labels <- c(
+  pass_rna_umi_gt_1000 = "RNA UMI > 1,000",
+  pass_genes_gt_500 = "Detected genes > 500",
+  pass_mito_lt_20 = "Mitochondrial RNA < 20%",
+  pass_atac_fragments_gt_1000 = "ATAC fragments > 1,000",
+  pass_tss_gt_2 = "TSS enrichment > 2",
+  pass_nucleosome_lt_2 = "Nucleosome signal < 2"
+)
+sample_colors <- c(FLT3LKO_BM_WT = "#4E79A7", FLT3LKO_BM_KO = "#E15759", IL7KO_BM_WT = "#59A14F", IL7KO_BM_KO = "#B07AA1")
+```
+
+# Selection rule
+
+All `r format(validation$input_cells, big.mark = ",")` cells remain present. A cell is marked `qc_use_downstream = TRUE` only when all six strict criteria are satisfied:
+
+1. RNA UMI > 1,000
+2. detected genes > 500
+3. mitochondrial RNA percentage < 20
+4. ATAC fragments > 1,000
+5. TSS enrichment > 2
+6. nucleosome signal < 2
+
+Cells failing any criterion are marked `retained_not_selected`; they were not deleted.
+
+# Downstream analysis universe
+
+```{r sample-table}
+display <- sample_summary[, .(
+  Library = library_id, Target = knockout_target, Genotype = genotype,
+  `All retained` = cells_retained, `Use downstream` = cells_use_downstream,
+  `Retained, not selected` = cells_retained_not_selected,
+  `Use downstream (%)` = round(percent_use_downstream, 1)
+)]
+kable(display, format = "pipe")
+```
+
+```{r selection-bars}
+plot_data <- melt(
+  sample_summary,
+  id.vars = "library_id",
+  measure.vars = c("cells_use_downstream", "cells_retained_not_selected"),
+  variable.name = "status", value.name = "cells"
+)
+plot_data[, status := factor(
+  status,
+  levels = c("cells_use_downstream", "cells_retained_not_selected"),
+  labels = c("Use downstream", "Retained, not selected")
+)]
+ggplot(plot_data, aes(library_id, cells, fill = status)) +
+  geom_col(position = "fill", width = 0.75) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  scale_fill_manual(values = c("Use downstream" = "#3B8C6E", "Retained, not selected" = "#D9D9D9")) +
+  labs(x = NULL, y = "Fraction of retained cells", fill = NULL) +
+  theme_bw(base_size = 11) + theme(axis.text.x = element_text(angle = 25, hjust = 1), panel.grid.minor = element_blank())
+```
+
+# Criterion-level results
+
+```{r criteria-table}
+criterion_display <- criterion_summary[library_id != "ALL"]
+criterion_display[, library_id := factor(library_id, levels = sample_levels)]
+criterion_display[, Criterion := unname(criterion_labels[criterion])]
+setorder(criterion_display, criterion, library_id)
+kable(
+  criterion_display[, .(
+    Library = library_id, Criterion, Pass = cells_pass, Fail = cells_fail,
+    `Pass (%)` = round(percent_pass, 1)
+  )],
+  format = "pipe"
+)
+```
+
+```{r failure-plot}
+criterion_display[, fail_percent := 100 - percent_pass]
+ggplot(criterion_display, aes(Criterion, fail_percent, fill = library_id)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.72) +
+  scale_fill_manual(values = sample_colors, drop = FALSE) +
+  labs(x = NULL, y = "Cells failing criterion (%)", fill = "Library") +
+  theme_bw(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1), panel.grid.minor = element_blank(), legend.position = "bottom")
+```
+
+# Retained artifacts and validation
+
+The complete `cell_qc_selection.tsv.gz` contains one row for every input cell, the six criterion flags, the combined downstream-use flag, and semicolon-separated failure reasons. `downstream_cell_ids.txt` defines the future analysis-universe cell set; `retained_not_selected_cell_ids.txt` records its complement.
+
+```{r validation-table}
+checks <- data.frame(
+  Check = c(
+    "Physical cell filtering performed", "Input cells", "Rows retained",
+    "Unique cell IDs", "Cells marked for downstream use",
+    "Cells retained but not selected", "Partition complete", "Cell order preserved",
+    "Missing combined selection flags"
+  ),
+  Value = c(
+    as.character(validation$physical_cell_filtering_performed),
+    format(validation$input_cells, big.mark = ","), format(validation$retained_rows, big.mark = ","),
+    format(validation$unique_cell_ids, big.mark = ","), format(validation$cells_use_downstream, big.mark = ","),
+    format(validation$cells_retained_not_selected, big.mark = ","),
+    as.character(validation$partition_is_complete), as.character(validation$cell_order_preserved),
+    validation$missing_selection_flags
+  )
+)
+kable(checks, format = "pipe")
+```
+
+The selection is a staging artifact. When the scWorkbench source bundle is created, all cells will be imported, and `qc_use_downstream = TRUE` will become the explicit accepted analysis-universe cell set.

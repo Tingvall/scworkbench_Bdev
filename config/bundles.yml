@@ -51,12 +51,15 @@ bundles:
 
   scmulti_flt3ko_il7ko:
     role: source_analysis
-    status: planned
+    status: accepted
     config: config/scmulti_flt3ko_il7ko.yml
-    source_dataset: scmulti_flt3ko_il7ko
+    source_dataset: scmulti_flt3lko_il7ko
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/bundle
     parents: []
-    accepted_state: null
+    accepted_state:
+      bundle_state_fingerprint: c102c6b3c00a022ea108889924cc2094e6cebfefb534a76aa730dd982b73723b
+      recipient_validation_fingerprint: 91a26f713d93f58242d61cfe9757115e778b5115a180dcac406b3adc9d7b4d46
+    validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/validation.json
 
   bdev_integrated:
     role: derived_integration
