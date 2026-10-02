@@ -12,7 +12,8 @@ bundle:
    query and validation dataset.
 4. `bdev_integrated`: a derived integration bundle with `bdev_reference` as
    the reference. Its current cytokine phase uses the accepted Bdev and Parse
-   parents; the KO parent is reserved for a later phase after acceptance.
+   parents; a separate staged KO-mapping derivative uses accepted Bdev and KO
+   parents without modifying either source bundle.
 
 The three parent bundles remain independent and read-only during integration.
 All joint state is written to `bdev_integrated`.
@@ -366,4 +367,172 @@ Execution phases and validation boundaries are documented in:
 
 Source selections and operation parameters are recorded after inspecting each
 input and confirming the applicable scWorkbench interfaces inside the supplied
-image. Future KO mapping parameters remain unset.
+image. KO fragments have now been quantified over 97,788 exact-reciprocal
+Bdev-reference peaks for the accepted 23,252-cell query set. PeakVI projection
+was contract-tested on deterministic 256-cell reference and 256-cell query
+subsets: the frozen-model projection, model-bound latent union, and display
+UMAP all passed without promotion. The full GPU reference fit and frozen-model
+projection of all 23,252 KO cells are now complete in an unpromoted durable
+session; the 49,975-cell joint latent space and display UMAP passed dimension,
+ordering, finite-value, and no-refit checks. Mapping QC and any downstream
+label or pseudotime transfer were kept as a separate review stage.
+
+The subsequent Bdev-restricted mapping QC and transfer is now complete and
+unpromoted. Exact k=15/30/50 RANN searches were used because the registered
+scWorkbench neighbor operation cannot perform the required reference-restricted
+search at this scale. Five-fold Bdev calibration gave k=30 cluster accuracy
+0.800 (balanced 0.787) and pseudotime Spearman correlation 0.990. Of 23,252 KO
+cells, 20,595 are supported, 1,876 borderline, and 781 out-of-reference by the
+held-out Bdev distance calibration. The report is
+`intermediate_objects/bdev_integrated/reports/ko_mapping_qc_v1_20260930/REPORT.md`;
+no results have been promoted into a bundle.
+
+A subsequent report-only visualization places supported and borderline KO
+query cells onto the unchanged native Bdev `umap.atac` coordinates using the
+distance-weighted mean of their 30 exact Bdev-restricted PeakVI neighbors.
+k=15/50 coordinates and neighbor-UMAP dispersion are retained as sensitivity
+diagnostics; the 781 out-of-reference cells are withheld from the primary
+display. Results are under
+`intermediate_objects/bdev_integrated/reports/ko_mapping_reference_umap_v1_20261001/`.
+
+The two-image positive-signal follow-up combines the accepted Bdev score and
+driver trajectories with that reference-anchored projection and query WT/KO
+score trajectories for Flt3L and IL-7. Query RNA counts use the same accepted
+combined flattened-rank formula, with complete 45/45 and 20/20 feature coverage
+respectively. Every trajectory panel includes dashed BB1/BB2 boundaries, and
+low-support query windows remain explicit gaps. The report is under
+`intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_signal_v1_20261001/`.
+
+The v2 display revision keeps the accepted positive-score UMAP at a larger
+display size with its scale on the right and retains the Bdev score trajectory,
+removes the driver-gene panel, and places
+the WT/KO mapped-pseudotime cell distribution directly below the Bdev
+trajectory. That distribution is the fraction of supported/borderline cells
+within each genotype, displayed as a centered three-bin rolling mean over 100
+underlying bins, not a cytokine score. The two rows have equal height; panels B
+and D share the same horizontal span, with deliberate whitespace around A, and
+both retain dashed BB1/BB2 boundaries. C restores the v1 point styling and
+omits its redundant genotype legend; A uses prominent colored points so its
+score remains visible. The two revised
+figures are under
+`intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_v2_20261001/`;
+the v1 report remains preserved for provenance.
+
+The v3 report preserves v2 and enlarges panel C's projected points with
+v1-like styling. Panel D corrects for the nonuniform Bdev pseudotime density:
+within each centered three-bin window, the query fraction is divided by the
+fraction of the 12,642 Bdev cells with defined `pt` in the same bins. A ratio of
+1 therefore means that query and Bdev reference densities match. Results are
+under
+`intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_bdev_normalized_v3_20261001/`.
+
+The v4 six-panel revision adds `Flt3` or `Il7r` expression on native Bdev
+`umap.atac` and its mean `SCT_data` trajectory in the exact saved 5%-wide,
+1%-step windows. The v3 panels move to C--F. All trajectory panels B, D, and F
+share identical horizontal placement and pseudotime limits and retain dashed
+BB1/BB2 boundaries. Results are under
+`intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/`;
+v3 remains preserved.
+
+The follow-up region-wise RNA comparison extracts the maximal WT intervals in
+v4 panel F whose Bdev-normalized rolling fraction is strictly above 1. It marks
+WT and KO query cells in one Flt3L interval and two separate IL-7 intervals,
+then runs native scWorkbench Wilcoxon DE on staged log1p-CP10K RNA. The result
+is unpromoted and available under
+`intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/`.
+Because there is one sample per genotype for each cytokine, these are
+descriptive cell-level contrasts and not biological-replicate-level inference.
+The report highlights the exact Flt3L and two IL-7 pseudotime intervals used
+for DE as shaded regions over the WT/KO normalized trajectory distributions.
+The report also contains region-specific WT/KO violins for significant genes
+with absolute effect above 0.2. WT-higher and KO-higher genes are clearly
+separated and capped at the 10 most significant genes per direction and region.
+It also includes one two-panel violin figure comparing all four samples using
+B- and T-lineage gene sets from supplementary `Table S1B`. The aggregate score
+is mean log1p-CP10K expression across exactly mapped genes (246 B-lineage and
+233 T-lineage genes); source membership and mapping coverage are exported.
+The same report shows all four samples for the accepted Parse-derived Flt3L and
+IL-7 UP/DOWN signatures in a single four-panel violin figure. All 105 signature
+genes map exactly, and the per-cell score is mean log1p-CP10K expression across
+each profile's members.
+All-four-sample trajectory profiles are included for B/T lineage scores and
+Flt3L-UP/IL-7-UP signals. They retain unsupported intervals as gaps and mark
+BB1/BB2 with dashed lines.
+
+The Ebf1 enhancer follow-up uses the exact two IL-7 enriched-trajectory cell
+assignments from that report and separately compares IL-7 WT with KO across
+all 259 Bdev peaks overlapping ±3 Mb around the GRCm38/mm10 Ebf1 TSS. Native
+scWorkbench cell-level Wilcoxon tests on the Bdev peak-count matrix identify
+23 significant peaks in IL-7 peak 1 (21 WT-higher, 2 KO-higher) and 128 in
+IL-7 peak 2 (127 WT-higher, 1 KO-higher) at within-region BH-adjusted P < 0.05.
+Four and one supplied peaks, respectively, had no finite test statistic. The
+unpromoted report and complete tables are under
+`intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_da_v1_20261001/`.
+These remain descriptive cell-level results because each genotype has one
+sample.
+
+A follow-up combined ATAC track figure displays those ten most significant
+IL-7 peak-2 loci at ±5 kb resolution. Flt3L WT/KO and IL-7 WT/KO are all
+restricted to the same IL-7 peak-2 pseudotime interval. Fragment-multiplicity-
+weighted Tn5 insertions are shown in 25-bp bins with a centered 125-bp rolling
+mean and sample-specific total-fragment normalization. The report is under
+`intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_atac_tracks_v1_20261001/`.
+
+The differential-accessibility calculation was subsequently repeated after
+native scWorkbench per-cell log1p-CP10K normalization across the complete
+97,788-peak Bdev matrix. IL-7 peak 1 retains all 23 raw-count significant peaks;
+IL-7 peak 2 retains 121 of 128, with no normalized-only additions. Region 01
+remains the most significant normalized peak, although its effect estimate is
+reduced from 0.145 to 0.070. Full normalized and raw-versus-normalized results
+are under
+`intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_lognorm_da_v1_20261001/`.
+
+The ATAC track figure was then revised to show the ten normalized,
+BH-significant IL-7 peak-2 regions with higher accessibility in IL-7 WT than
+IL7KO. Selection uses only the IL-7 comparison; all four samples are displayed
+for context. The normalized-ranked v2 figure is under
+`intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_lognorm_atac_tracks_v2_20261002/`,
+and the raw-ranked v1 is preserved.
+
+The current v3 ATAC tracks correct the earlier display-normalization mismatch:
+each deduplicated fragment record is counted once, the multiplicity/read-support
+column is ignored, and coverage is normalized within each cell by its complete
+Bdev peak-matrix depth before log1p transformation and averaging across all
+cells. The matrix-aligned report is under
+`intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_matrix_aligned_atac_tracks_v3_20261002/`.
+The v1/v2 figures are retained for provenance but superseded for biological
+interpretation.
+
+The saved RNA log1p-CP10K matrix and complete 33,696-gene scWorkbench
+Wilcoxon tables for the same exact IL-7 peak-2 cells were reused without
+repeating normalization or differential testing. Four separate violin panels
+show the top ten WT-higher and KO-higher genes for FLT3L WT versus FLT3LKO and
+IL-7 WT versus IL7KO, ranked within direction by genome-wide BH-adjusted P.
+The unpromoted report and selection table are under
+`intermediate_objects/bdev_integrated/reports/il7_peak2_top_de_genes_v1_20261002/`.
+These remain descriptive cell-level comparisons because each group contains
+one biological sample.
+
+A subsequent effect-size-filtered report replaces the native scWorkbench
+effect statistic with standard
+`log2((mean linear CP10K WT + 1)/(mean linear CP10K KO + 1))` for filtering,
+while retaining the saved native Wilcoxon P values and genome-wide BH
+adjustment. Requiring adjusted P < 0.05 and at least a 1.5-fold change retains
+14 IL-7 WT-higher, 13 IL7KO-higher, 83 FLT3L WT-higher, and 96 FLT3LKO-higher
+genes in the same exact IL-7 peak-2 cells. Paginated violin plots and the full
+206-gene table are under
+`intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/`.
+
+The current shared-enrichment analysis defines one region per cytokine from
+maximal contiguous pseudotime bins whose Bdev-normalized rolling cell fraction
+is strictly above 1 in both WT and KO. FLT3L uses bins 19--26
+(`pt` -25.397 to -22.919); IL-7 is restricted to its original peak 2 and uses
+bins 21--31 (`pt` -24.777 to -21.370). The saved log1p-CP10K RNA matrix was
+reused and new native scWorkbench Wilcoxon tests evaluated all 33,696 genes in
+each changed cell set. With genome-wide BH-adjusted P < 0.05 and
+`|log2FC| >= log2(1.5)`, 187 FLT3L genes pass (92 WT-higher, 95 KO-higher) and
+24 IL-7 genes pass (13 WT-higher, 11 KO-higher). The report includes the
+selected-region plot, new volcano plot, full normalized-count/DEG tables, and
+up to 20 most significant cutoff-passing genes in each direction as separate
+WT-higher and KO-higher violin figures:
+`intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/`.

@@ -9,8 +9,7 @@ active_phase: competitor_aware_cytokine_pseudotime
 run_id: cytokine_pt_20260923T2231Z
 latest_run_id: competitor_aware_pt_all33_20260925
 runtime_registry_entry: bdev_integrated
-future_parents:
-  - scmulti_flt3ko_il7ko
+future_parents: []
 
 bundle:
   path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/bundle
@@ -104,6 +103,308 @@ competitor_aware_cytokine_analysis:
   inference: descriptive
   promotion: none_pending_review
 
+ko_mapping_phase:
+  status: mapping_qc_complete_unpromoted
+  bundle_id: bdev_integrated_ko_mapping_v1
+  bundle_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/bundle
+  reference_parent: bdev_reference
+  query_parent: scmulti_flt3ko_il7ko
+  matrix: ATAC_bdev_mm10_peaks
+  features: 97788
+  reference_cells: 26723
+  query_cells: 23252
+  reference_pseudotime_field: reference_pt
+  reference_pseudotime_source: exact_bdev_metadata_pt
+  creation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_bundle_v1_20260930/creation.json
+  recipient_validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_bundle_v1_20260930/recipient_validation.json
+  peakvi_smoke_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_peakvi_smoke_v1_20260930/smoke.json
+  peakvi_smoke_promoted: false
+  full_mapping_status: complete_unpromoted
+  full_mapping_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_peakvi_full_v1_20260930/mapping.json
+  full_mapping_session: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/sessions/peakvi_full_mapping_v1
+  mapping_qc_status: complete_unpromoted
+  mapping_qc_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_qc_v1_20260930/REPORT.md
+  mapping_qc_metrics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_qc_v1_20260930/metrics.json
+  reference_umap_projection_status: complete_unpromoted_report_only
+  reference_umap_projection_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_reference_umap_v1_20261001/REPORT.md
+  reference_umap_projection_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_reference_umap_v1_20261001/completion.json
+  reference_umap_projection:
+    display_space: bdev_reference_umap.atac_unchanged
+    neighbor_space: peakvi.full.joint
+    neighbor_pool: bdev_reference_only
+    primary_k: 30
+    sensitivity_k: [15, 30, 50]
+    weighting: exp_negative_squared_distance_scaled_by_kth_distance
+    displayed_query_cells: 22471
+    out_of_reference_withheld: 781
+    promotion: false
+  positive_cytokine_report_status: complete_unpromoted_report_only
+  positive_cytokine_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_signal_v1_20261001/REPORT.html
+  positive_cytokine_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_signal_v1_20261001/completion.json
+  positive_cytokine_report_parameters:
+    cytokines: [Flt3L, IL-7]
+    direction: positive
+    score: combined_flattened_rank
+    rank_cutoff: 1500
+    alpha: 0.5
+    query_pseudotime: peakvi_bdev_neighbor_mapped_pt
+    query_window_min_cells_per_genotype: 20
+    bb_boundaries: dashed
+    promotion: false
+  positive_cytokine_distribution_report_status: complete_unpromoted_report_only
+  positive_cytokine_distribution_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_v2_20261001/REPORT.html
+  positive_cytokine_distribution_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_v2_20261001/completion.json
+  positive_cytokine_distribution_report_parameters:
+    display_revision: v2
+    cytokines: [Flt3L, IL-7]
+    panels: [positive_score_umap, positive_score_trajectory, reference_anchored_projection, query_cell_distribution]
+    query_distribution: centered_three_bin_rolling_mean_of_fraction_within_genotype
+    underlying_bins: 100
+    layout: equal_height_rows_B_and_D_share_horizontal_span_with_whitespace_around_A
+    query_cells: supported_and_borderline
+    bb_boundaries: dashed_in_trajectory_panels
+    promotion: false
+  positive_cytokine_bdev_normalized_report_status: complete_unpromoted_report_only
+  positive_cytokine_bdev_normalized_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_bdev_normalized_v3_20261001/REPORT.html
+  positive_cytokine_bdev_normalized_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_bdev_normalized_v3_20261001/completion.json
+  positive_cytokine_bdev_normalized_report_parameters:
+    display_revision: v3
+    query_distribution: centered_three_bin_query_fraction_divided_by_centered_three_bin_bdev_fraction
+    underlying_bins: 100
+    bdev_denominator_cells_with_defined_pt: 12642
+    ratio_reference: 1
+    projection_points: enlarged_v1_like
+    query_cells: supported_and_borderline
+    promotion: false
+  positive_cytokine_gene_expression_report_status: complete_unpromoted_report_only
+  positive_cytokine_gene_expression_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/REPORT.html
+  positive_cytokine_gene_expression_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/completion.json
+  positive_cytokine_gene_expression_report_parameters:
+    display_revision: v4
+    gene_expression_panels: {Flt3L: Flt3, IL-7: Il7r}
+    expression_matrix: SCT_data
+    expression_umap: umap.atac
+    expression_trajectory: mean_in_saved_aligned_5_percent_windows
+    panel_order: [gene_expression_umap, gene_expression_trajectory, positive_score_umap, positive_score_trajectory, reference_anchored_projection, bdev_normalized_query_density]
+    aligned_trajectory_panels: [B, D, F]
+    promotion: false
+  wt_enriched_peak_de_status: complete_unpromoted_report_only
+  wt_enriched_peak_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/REPORT.html
+  wt_enriched_peak_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/completion.json
+  wt_enriched_peak_de_parameters:
+    source_panel: v4_panel_F
+    region_rule: maximal_contiguous_WT_bins_with_bdev_normalized_rolling_fraction_strictly_above_1
+    regions: [Flt3l_peak1, Il7_peak1, Il7_peak2]
+    region_highlight_figure: figures/wt_enriched_de_pseudotime_regions.png
+    query_cells: supported_and_borderline_with_finite_mapped_pt
+    rna_source_bundle: scmulti_flt3ko_il7ko
+    normalization: log1p_cp10k
+    operation: de_wilcox
+    group_a: WT
+    group_b: KO
+    min_pct: 0.01
+    p_adjust_method: BH
+    violin_gene_filter: BH_adjusted_P_below_0.05_and_absolute_avg_log1p_fc_strictly_above_0.2
+    violin_maximum_genes_per_region_and_direction: 10
+    violin_directions_displayed_separately: true
+    violin_cap_ranking: within_direction_smallest_BH_adjusted_P_then_largest_absolute_effect
+    lineage_gene_source_url: https://ars.els-cdn.com/content/image/1-s2.0-S2589004225011162-mmc2.xlsx
+    lineage_gene_source_sheet: Table S1B
+    lineage_gene_source_sha256: 1190244c4718f8af3cb91f8d882c4936f200c452222a8b7e9db6ad6584d62fb3
+    lineage_score: arithmetic_mean_log1p_cp10k_across_exactly_mapped_unique_genes
+    lineage_mapped_genes: {B_lineage: 246, T_lineage: 233}
+    lineage_cell_set: set:qc_use_downstream
+    lineage_samples: [FLT3LKO_BM_WT, FLT3LKO_BM_KO, IL7KO_BM_WT, IL7KO_BM_KO]
+    lineage_score_implementation: explicitly_approved_report_only_calculation_outside_native_terminal_operation
+    aggregate_score_trajectory:
+      pseudotime: mapped_pt
+      query_cells: supported_and_borderline_with_finite_mapped_pt
+      underlying_bins: 100
+      smoothing: centered_5_bin_cell_weighted_mean
+      minimum_cells_per_window: 20
+      boundaries: BB1_BB2_dashed_at_source_pt_medians
+      lineage_panels: [B_lineage, T_lineage]
+      cytokine_panels: [Flt3L_UP, IL-7_UP]
+      samples: [FLT3LKO_BM_WT, FLT3LKO_BM_KO, IL7KO_BM_WT, IL7KO_BM_KO]
+    parse_cytokine_aggregate_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_refined_ucell_v1_20260925/passing_gene_membership.tsv
+    parse_cytokine_aggregate_profiles: [Flt3L_UP, Flt3L_DOWN, IL-7_UP, IL-7_DOWN]
+    parse_cytokine_aggregate_mapped_genes: {Flt3L_UP: 45, Flt3L_DOWN: 20, IL-7_UP: 20, IL-7_DOWN: 20}
+    parse_cytokine_aggregate_score: arithmetic_mean_log1p_cp10k_across_exactly_mapped_signature_genes
+    parse_cytokine_aggregate_cell_set: set:qc_use_downstream
+    biological_replicates_per_group: 1
+    inference: descriptive_cell_level_only
+    promotion: false
+  ebf1_enhancer_il7_da_status: complete_unpromoted_report_only
+  ebf1_enhancer_il7_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_da_v1_20261001/REPORT.html
+  ebf1_enhancer_il7_da_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_da_v1_20261001/completion.json
+  ebf1_enhancer_il7_da_parameters:
+    gene: Ebf1
+    gene_id: ENSMUSG00000057098
+    genome: GRCm38_mm10
+    tss_1based: "chr11:44617317"
+    window: plus_minus_3000000_bp
+    matrix: ATAC_bdev_mm10_peaks_counts
+    peaks_supplied_per_region: 259
+    regions: [Il7_peak1, Il7_peak2]
+    cell_assignments_source: wt_enriched_peak_de_report
+    query_cells: exact_saved_supported_and_borderline_assignments
+    operation: de_wilcox
+    group_a: WT
+    group_b: KO
+    min_pct: 0
+    p_adjust_method: BH_separately_within_region_among_finite_tests
+    inference: descriptive_cell_level_only_one_sample_per_genotype
+    promotion: false
+  ebf1_peak2_atac_tracks_status: complete_unpromoted_report_only
+  ebf1_peak2_atac_tracks_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_atac_tracks_v1_20261001/REPORT.html
+  ebf1_peak2_atac_tracks_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_atac_tracks_v1_20261001/completion.json
+  ebf1_peak2_atac_tracks_parameters:
+    source_region: Il7_peak2
+    pseudotime_bounds: [-24.7772972161497, -20.1315539881216]
+    samples: [FLT3LKO_BM_WT, FLT3LKO_BM_KO, IL7KO_BM_WT, IL7KO_BM_KO]
+    sample_cell_counts: {FLT3LKO_BM_WT: 4656, FLT3LKO_BM_KO: 3226, IL7KO_BM_WT: 2021, IL7KO_BM_KO: 1360}
+    loci: top_10_smallest_BH_adjusted_P_from_Il7_peak2_Ebf1_DA
+    coordinate_build: GRCm39_exact_reciprocal_mapping_from_Bdev_mm10
+    zoom_flank_bp: 5000
+    bin_width_bp: 25
+    smoothing: centered_5_bin_125_bp_rolling_mean
+    signal: fragment_multiplicity_weighted_Tn5_insertion_endpoints
+    normalization: per_million_total_Cell_Ranger_ATAC_fragments_within_sample_selected_cells
+    implementation: explicitly_approved_report_only_outside_scworkbench
+    promotion: false
+  ebf1_enhancer_il7_lognorm_da_status: complete_unpromoted_report_only
+  ebf1_enhancer_il7_lognorm_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_lognorm_da_v1_20261001/REPORT.html
+  ebf1_enhancer_il7_lognorm_da_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_lognorm_da_v1_20261001/completion.json
+  ebf1_enhancer_il7_lognorm_da_parameters:
+    source_matrix: ATAC_bdev_mm10_peaks
+    normalization_operation: matrix_log_normalize
+    normalization: log1p_count_divided_by_per_cell_total_across_97788_Bdev_peaks_times_10000
+    normalized_matrix: ATAC_bdev_mm10_peaks_log1p_cp10k_ebf1_da_v1
+    regions: [Il7_peak1, Il7_peak2]
+    peaks_supplied_per_region: 259
+    differential_operation: de_wilcox
+    min_pct: 0
+    p_adjust_method: BH_separately_within_region_among_finite_tests
+    significant_peaks: {Il7_peak1: 23, Il7_peak2: 121}
+    raw_significant_peaks: {Il7_peak1: 23, Il7_peak2: 128}
+    inference: descriptive_cell_level_only_one_sample_per_genotype
+    promotion: false
+  ebf1_peak2_lognorm_atac_tracks_status: complete_unpromoted_report_only
+  ebf1_peak2_lognorm_atac_tracks_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_lognorm_atac_tracks_v2_20261002/REPORT.html
+  ebf1_peak2_lognorm_atac_tracks_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_lognorm_atac_tracks_v2_20261002/completion.json
+  ebf1_peak2_lognorm_atac_tracks_parameters:
+    ranking_source: normalized_Il7_peak2_WT_vs_KO
+    selection: significant_WT_higher_then_smallest_BH_adjusted_P
+    loci: 10
+    displayed_samples: [FLT3LKO_BM_WT, FLT3LKO_BM_KO, IL7KO_BM_WT, IL7KO_BM_KO]
+    selection_samples: [IL7KO_BM_WT, IL7KO_BM_KO]
+    display_signal_normalization: Tn5_insertions_per_million_total_Cell_Ranger_ATAC_fragments
+    original_raw_ranked_v1_preserved: true
+    superseded_for_interpretation_by: ebf1_peak2_matrix_aligned_atac_tracks
+    promotion: false
+  ebf1_peak2_matrix_aligned_atac_tracks_status: complete_unpromoted_report_only
+  ebf1_peak2_matrix_aligned_atac_tracks_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_matrix_aligned_atac_tracks_v3_20261002/REPORT.html
+  ebf1_peak2_matrix_aligned_atac_tracks_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_peak2_matrix_aligned_atac_tracks_v3_20261002/completion.json
+  ebf1_peak2_matrix_aligned_atac_tracks_parameters:
+    ranking_source: normalized_Il7_peak2_WT_vs_KO
+    selection: significant_WT_higher_then_smallest_BH_adjusted_P
+    fragment_counting: one_per_deduplicated_fragment_record_multiplicity_ignored
+    normalization: within_cell_fragment_coverage_divided_by_full_97788_Bdev_peak_total_times_10000_then_log1p
+    aggregation: mean_over_all_sample_cells_including_zeros
+    display_bins_bp: 25
+    smoothing: centered_5_bin_125_bp_rolling_mean
+    displayed_samples: [FLT3LKO_BM_WT, FLT3LKO_BM_KO, IL7KO_BM_WT, IL7KO_BM_KO]
+    current_interpretive_track_version: true
+    promotion: false
+  il7_peak2_top_de_genes_status: complete_unpromoted_report_only
+  il7_peak2_top_de_genes_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_top_de_genes_v1_20261002/REPORT.html
+  il7_peak2_top_de_genes_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_top_de_genes_v1_20261002/completion.json
+  il7_peak2_top_de_genes_parameters:
+    cell_definition: exact_supported_or_borderline_cells_in_Il7_peak2_mapped_pseudotime_interval
+    comparisons: [FLT3L_WT_vs_FLT3LKO, IL7_WT_vs_IL7KO]
+    source_normalized_matrix: RNA_log1p_cp10k_il7_peak2_il7r_v1
+    source_tests: [de_flt3l, de_il7]
+    genes_tested_per_comparison: 33696
+    selection: top_10_per_effect_direction_by_genomewide_BH_adjusted_P_then_raw_P_then_absolute_effect
+    plots: four_separate_violin_panels
+    repeated_normalization_or_testing: false
+    inference: descriptive_cell_level_only_one_sample_per_group
+    promotion: false
+  il7_peak2_fc_filtered_de_genes_status: complete_unpromoted_report_only
+  il7_peak2_fc_filtered_de_genes_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/REPORT.html
+  il7_peak2_fc_filtered_de_genes_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/completion.json
+  il7_peak2_fc_filtered_de_genes_parameters:
+    cell_definition: exact_supported_or_borderline_cells_in_Il7_peak2_mapped_pseudotime_interval
+    comparisons: [FLT3L_WT_vs_FLT3LKO, IL7_WT_vs_IL7KO]
+    standard_log2fc: log2((mean_linear_CP10K_WT_plus_1)/(mean_linear_CP10K_KO_plus_1))
+    minimum_absolute_log2fc: 0.584962500721156
+    minimum_absolute_fold_change: 1.5
+    maximum_genomewide_bh_adjusted_p: 0.05
+    retained_genes: {FLT3L_WT_higher: 83, FLT3LKO_higher: 96, IL7_WT_higher: 14, IL7KO_higher: 13}
+    plots: paginated_violin_panels_maximum_20_genes_per_page
+    repeated_normalization_or_testing: false
+    inference: descriptive_cell_level_only_one_sample_per_group
+    promotion: false
+  shared_enriched_peak_rna_de_status: complete_unpromoted_report_only
+  shared_enriched_peak_rna_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/REPORT.html
+  shared_enriched_peak_rna_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/completion.json
+  shared_enriched_peak_rna_de_parameters:
+    region_rule: maximal_contiguous_bins_with_both_WT_and_KO_Bdev_normalized_rolling_fraction_strictly_above_1
+    il7_restriction: original_Il7_peak2
+    regions:
+      Flt3l_shared_peak1: {bins: [19, 26], pt: [-25.3967296465534, -22.9189999249385], WT_cells: 4394, KO_cells: 3342}
+      Il7_shared_peak2: {bins: [21, 31], pt: [-24.7772972161497, -21.3704188489291], WT_cells: 1912, KO_cells: 1355}
+    genes_tested_per_comparison: 33696
+    normalization_recomputed: false
+    normalized_matrix: RNA_log1p_cp10k_wt_enriched_peak_de_v1
+    standard_log2fc: log2((mean_linear_CP10K_WT_plus_1)/(mean_linear_CP10K_KO_plus_1))
+    cutoffs: {genomewide_BH_adjusted_p: 0.05, minimum_absolute_log2fc: 0.584962500721156, minimum_absolute_fold_change: 1.5}
+    passing_genes:
+      Flt3l_shared_peak1: {total: 187, WT_higher: 92, KO_higher: 95}
+      Il7_shared_peak2: {total: 24, WT_higher: 13, KO_higher: 11}
+    violin_selection: maximum_20_most_significant_cutoff_passing_genes_per_direction_and_comparison
+    violin_layout: separate_figure_per_direction
+    figure_colours: {WT: '#D55E00', FLT3L_KO: '#0072B2', IL7_KO: '#009E73'}
+    violin_facet_annotation: BH_adjusted_p
+    volcano_gene_labels: BH_adjusted_p_below_0.05_and_absolute_log2fc_at_least_1
+    targeted_gene_violins: [Flt3, Il7r]
+    aggregate_signature_violins:
+      parse_cytokine_up: [Flt3L_UP, IL7_UP]
+      lineage: [B_lineage, T_lineage]
+      test: two_sided_cell_level_Wilcoxon
+      p_adjustment: BH_jointly_across_8_tests
+    inference: descriptive_cell_level_only_one_sample_per_group
+    promotion: false
+  mapping_qc:
+    method: exact_RANN_Bdev_restricted_neighbors
+    primary_k: 30
+    sensitivity_k: [15, 30, 50]
+    reference_cv_folds: 5
+    cluster_accuracy: 0.799985031620701
+    cluster_balanced_accuracy: 0.787168597104777
+    phase_accuracy: 0.755528945103469
+    phase_balanced_accuracy: 0.535626851768107
+    pseudotime_spearman: 0.989960765849429
+    supported_query_cells: 20595
+    borderline_query_cells: 1876
+    out_of_reference_query_cells: 781
+    promotion: false
+  monitoring:
+    gpu_metrics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/monitoring/peakvi_full_mapping_v1/gpu_metrics.tsv
+    courtesy_events: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/monitoring/peakvi_full_mapping_v1/courtesy_events.log
+    low_duty_events: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/monitoring/peakvi_full_mapping_v1/low_duty_cycle_events.log
+  full_mapping_parameters:
+    latent_dimensions: 20
+    hidden_layers: 2
+    hidden_width: 256
+    dropout: 0.2
+    maximum_epochs: 500
+    early_stopping: true
+    learning_rate: 0.001
+    seed: 1729
+    gpu: true
+    batch_key: null
+
 reports_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports
 workflow: processing/integration
 figures: figure_scripts/bdev_integrated
@@ -119,3 +420,46 @@ processing:
   competitor_aware_score: processing/integration/06_score_competitor_aware_signatures.R
   competitor_aware_report: figure_scripts/bdev_integrated/05_competitor_aware_sliding_window_report.R
   competitor_aware_runner: processing/integration/run_competitor_aware_trajectory.sh
+  ko_mapping_create: processing/integration/07_create_ko_mapping_bundle.R
+  ko_mapping_smoke: processing/integration/08_peakvi_mapping_smoke.R
+  ko_mapping_runner: processing/integration/run_ko_mapping.sh
+  ko_mapping_gpu_benchmark: processing/integration/09_peakvi_full_reference_benchmark.R
+  ko_mapping_gpu_benchmark_runner: processing/integration/run_peakvi_gpu_benchmark.sh
+  ko_mapping_full: processing/integration/10_peakvi_full_mapping.R
+  ko_mapping_full_runner: processing/integration/run_peakvi_full_mapping.sh
+  ko_mapping_low_duty_controller: processing/integration/run_peakvi_low_duty_share.sh
+  ko_mapping_qc: processing/integration/11_peakvi_mapping_qc.R
+  ko_mapping_qc_runner: processing/integration/run_peakvi_mapping_qc.sh
+  ko_mapping_reference_umap_report: figure_scripts/bdev_integrated/06_peakvi_reference_umap_projection.R
+  ko_mapping_reference_umap_runner: processing/integration/run_peakvi_reference_umap_projection.sh
+  ko_positive_cytokine_report: figure_scripts/bdev_integrated/07_ko_cytokine_positive_signal_report.R
+  ko_positive_cytokine_report_runner: processing/integration/run_ko_cytokine_positive_signal_report.sh
+  ko_positive_cytokine_distribution_report: figure_scripts/bdev_integrated/08_ko_cytokine_positive_distribution_report.R
+  ko_positive_cytokine_distribution_report_runner: processing/integration/run_ko_cytokine_positive_distribution_report.sh
+  ko_wt_enriched_peak_de: processing/integration/12_wt_enriched_peak_de.R
+  ko_lineage_gene_extractor: processing/integration/extract_lineage_gene_sets.py
+  ko_wt_enriched_peak_de_runner: processing/integration/run_wt_enriched_peak_de.sh
+  ko_ebf1_enhancer_il7_da: processing/integration/13_ebf1_enhancer_il7_da.R
+  ko_ebf1_enhancer_il7_da_runner: processing/integration/run_ebf1_enhancer_il7_da.sh
+  ko_ebf1_peak2_atac_tracks: processing/integration/14_ebf1_peak2_atac_tracks.R
+  ko_ebf1_peak2_atac_tracks_runner: processing/integration/run_ebf1_peak2_atac_tracks.sh
+  ko_ebf1_enhancer_il7_lognorm_da: processing/integration/15_ebf1_enhancer_il7_lognorm_da.R
+  ko_ebf1_enhancer_il7_lognorm_da_runner: processing/integration/run_ebf1_enhancer_il7_lognorm_da.sh
+  ko_ebf1_peak2_lognorm_atac_tracks_runner: processing/integration/run_ebf1_peak2_lognorm_atac_tracks.sh
+  ko_ebf1_peak2_matrix_aligned_atac_tracks_runner: processing/integration/run_ebf1_peak2_matrix_aligned_atac_tracks.sh
+  ko_il7_peak2_top_de_genes_report: figure_scripts/bdev_integrated/09_il7_peak2_top_de_genes.R
+  ko_il7_peak2_top_de_genes_runner: processing/integration/run_il7_peak2_top_de_genes.sh
+  ko_il7_peak2_fc_filtered_de_genes_report: figure_scripts/bdev_integrated/10_il7_peak2_fc_filtered_de_genes.R
+  ko_il7_peak2_fc_filtered_de_genes_runner: processing/integration/run_il7_peak2_fc_filtered_de_genes.sh
+  ko_shared_enriched_peak_rna_de: processing/integration/17_shared_enriched_peak_rna_de.R
+  ko_shared_enriched_peak_rna_de_runner: processing/integration/run_shared_enriched_peak_rna_de.sh
+  ko_shared_enriched_peak_violin_top2_update: processing/integration/18_update_shared_enriched_violin_top2_per_direction.R
+  ko_shared_enriched_peak_violin_top2_update_runner: processing/integration/run_update_shared_enriched_violin_top2.sh
+  ko_shared_enriched_peak_violin_top20_by_direction_update: processing/integration/19_update_shared_enriched_violin_top20_by_direction.R
+  ko_shared_enriched_peak_violin_top20_by_direction_update_runner: processing/integration/run_update_shared_enriched_violin_top20_by_direction.sh
+  ko_shared_enriched_plot_annotation_update: processing/integration/20_update_shared_enriched_plot_annotations.R
+  ko_shared_enriched_plot_annotation_update_runner: processing/integration/run_update_shared_enriched_plot_annotations.sh
+  ko_shared_enriched_flt3_il7r_plots: processing/integration/21_add_shared_region_flt3_il7r_plots.R
+  ko_shared_enriched_flt3_il7r_plots_runner: processing/integration/run_add_shared_region_flt3_il7r_plots.sh
+  ko_shared_enriched_aggregate_signature_plots: processing/integration/22_add_shared_region_aggregate_signature_plots.R
+  ko_shared_enriched_aggregate_signature_plots_runner: processing/integration/run_add_shared_region_aggregate_signature_plots.sh

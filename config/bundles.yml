@@ -12,8 +12,8 @@ bundles:
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/bundle
     parents: []
     accepted_state:
-      bundle_state_fingerprint: 5f40fbeb9a1f386bc0eee09230115b334be98c6b7a011c10cfe13efb75c544cd
-      recipient_validation_fingerprint: d0547bf04bc928030c64629bf5149f2daf3b1f64e44a9ec99e3b1feb5d9e95c2
+      bundle_state_fingerprint: 1027f6390c6b853acc2bf40d3fae9abb59393f4256cb39285685eb2b2973f7ec
+      recipient_validation_fingerprint: e8291159c9472770275b73e5563f1477a01d19b775b3c44037ed89a43849b83b
 
   parse_cytokines:
     role: source_analysis
@@ -60,6 +60,11 @@ bundles:
       bundle_state_fingerprint: c102c6b3c00a022ea108889924cc2094e6cebfefb534a76aa730dd982b73723b
       recipient_validation_fingerprint: 91a26f713d93f58242d61cfe9757115e778b5115a180dcac406b3adc9d7b4d46
     validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/validation.json
+    mapping_preparation:
+      status: bdev_peak_quantification_complete
+      reference: bdev_reference
+      matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/prepared/bdev_peak_quantification_v1_20260930/ATAC_bdev_mm10_peaks_ko_counts
+      validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/bdev_peak_quantification_v1_20260930/validation.json
 
   bdev_integrated:
     role: derived_integration
@@ -74,8 +79,38 @@ bundles:
       - parse_cytokines
       - parse_cytokines_rest_only
     active_phase: competitor_aware_cytokine_pseudotime
-    future_parents:
-      - scmulti_flt3ko_il7ko
+    future_parents: []
+    staged_derivatives:
+      ko_mapping_v1:
+        status: mapping_qc_complete_unpromoted
+        bundle_id: bdev_integrated_ko_mapping_v1
+        bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/ko_mapping_v1/bundle
+        reference: bdev_reference
+        parents:
+          - bdev_reference
+          - scmulti_flt3ko_il7ko
+        bundle_state_fingerprint: 68507e76b152839a5f93283a3e227d98ab3ec4eaf7804337090cfa9401aacef1
+        recipient_validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_bundle_v1_20260930/recipient_validation.json
+        smoke_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_peakvi_smoke_v1_20260930/smoke.json
+        full_mapping_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_peakvi_full_v1_20260930/mapping.json
+        mapping_qc_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_qc_v1_20260930/REPORT.md
+        mapping_qc_metrics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_qc_v1_20260930/metrics.json
+        reference_umap_projection_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_reference_umap_v1_20261001/REPORT.md
+        reference_umap_projection_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_mapping_reference_umap_v1_20261001/completion.json
+        positive_cytokine_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_signal_v1_20261001/REPORT.html
+        positive_cytokine_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_signal_v1_20261001/completion.json
+        positive_cytokine_distribution_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_v2_20261001/REPORT.html
+        positive_cytokine_distribution_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_v2_20261001/completion.json
+        positive_cytokine_bdev_normalized_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_bdev_normalized_v3_20261001/REPORT.html
+        positive_cytokine_bdev_normalized_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_positive_distribution_bdev_normalized_v3_20261001/completion.json
+        positive_cytokine_gene_expression_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/REPORT.html
+        positive_cytokine_gene_expression_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/completion.json
+        il7_peak2_top_de_genes_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_top_de_genes_v1_20261002/REPORT.html
+        il7_peak2_top_de_genes_report_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_top_de_genes_v1_20261002/completion.json
+        il7_peak2_fc_filtered_de_genes_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/REPORT.html
+        il7_peak2_fc_filtered_de_genes_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/completion.json
+        shared_enriched_peak_rna_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/REPORT.html
+        shared_enriched_peak_rna_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/completion.json
     runtime:
       r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
       scworkbench_version: 0.1.0.9004

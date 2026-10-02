@@ -98,6 +98,38 @@ qc:
     report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/REPORT.md
     validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/validation.json
 
+mapping_preparation:
+  status: bdev_peak_quantification_complete
+  reference_bundle: bdev_reference
+  reference_genome: mm10/GRCm38
+  query_genome: mm39/GRCm39
+  canonical_feature_identity: Bdev peaks_counts mm10 feature IDs
+  lookup_coordinates: unique exact-reciprocal mm39 liftOver intervals
+  parent_bundles_modified: false
+  lift_over:
+    input_peaks: 97846
+    accepted_peaks: 97788
+    retained_fraction: 0.999407231772377
+    excluded_forward_multimapped: 50
+    excluded_reverse_not_exact: 8
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/bdev_peak_liftover_v1_20260930/completion.json
+  quantification:
+    query_cell_set: set:qc_use_downstream
+    query_cells: 23252
+    features: 97788
+    storage_type: uint32_t
+    nonzero_features: 97788
+    zero_cells: 0
+    matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/prepared/bdev_peak_quantification_v1_20260930/ATAC_bdev_mm10_peaks_ko_counts
+    completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/prepared/bdev_peak_quantification_v1_20260930/completion.json
+  validation:
+    status: passed
+    spearman_vs_total_atac_fragments: 0.993738271935528
+    median_fragment_capture_fraction: 0.716534417592952
+    bdev_parent_fingerprint_unchanged: true
+    ko_parent_fingerprint_unchanged: true
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/bdev_peak_quantification_v1_20260930/validation.json
+
 reports:
   source_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929
   completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/completion.json
@@ -112,3 +144,7 @@ processing:
   selection_runner: processing/scmulti_flt3ko_il7ko/run_qc_selection.sh
   create_source_bundle: processing/scmulti_flt3ko_il7ko/05_create_source_bundle.R
   source_bundle_runner: processing/scmulti_flt3ko_il7ko/run_create_source_bundle.sh
+  prepare_bdev_peak_universe: processing/scmulti_flt3ko_il7ko/06_prepare_bdev_peak_universe.R
+  quantify_bdev_peaks_in_ko: processing/scmulti_flt3ko_il7ko/07_quantify_bdev_peaks_in_ko.R
+  validate_bdev_peak_quantification: processing/scmulti_flt3ko_il7ko/08_validate_bdev_peak_quantification.R
+  bdev_peak_quantification_runner: processing/scmulti_flt3ko_il7ko/run_bdev_peak_quantification.sh
