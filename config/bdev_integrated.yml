@@ -375,6 +375,171 @@ ko_mapping_phase:
       p_adjustment: BH_jointly_across_8_tests
     inference: descriptive_cell_level_only_one_sample_per_group
     promotion: false
+  il7_responsive_peak_global_status: complete_unpromoted_report_only
+  il7_responsive_peak_global_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_global_v1_20261002/REPORT.md
+  il7_responsive_peak_global_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_global_v1_20261002/completion.json
+  il7_responsive_peak_global_parameters:
+    discovery_dataset: bdev_reference
+    region: {id: Il7_shared_peak2, pt: [-24.7772972161497, -21.3704188489291], cells: 971}
+    il7_signal: arithmetic_mean_log1p_cp10k_over_20_parse_il7_up_genes
+    peak_matrix: peaks_counts
+    peak_normalization: native_scworkbench_log1p_cp10k
+    shared_peak_universe: 97788
+    adequately_detected_peaks_tested: 80264
+    association: partial_spearman_rank_residuals_adjusted_for_natural_spline_pt_df3_and_rank_log1p_peak_depth
+    candidate_rule: adjusted_BH_below_0.05_and_adjusted_rho_positive_and_raw_rho_positive
+    candidates: 80
+    high_confidence_rule: candidate_rule_and_adjusted_rho_at_least_0.1
+    high_confidence_candidates: 80
+    query_comparison: IL7_WT_vs_IL7KO_in_exact_shared_peak2_cells
+    query_cells: {WT: 1912, IL7KO: 1355}
+    query_peak_normalization: native_scworkbench_log1p_cp10k
+    query_da: native_scworkbench_de_wilcox
+    globally_validated_rule: bdev_candidate_and_query_BH_below_0.05_and_standard_log2fc_WT_over_IL7KO_positive
+    globally_validated_peaks: 51
+    motif_analysis:
+      sets: [bdev_responsive, globally_validated]
+      source: exact_read_only_Bdev_peaks_JASPAR_match_matrix
+      motifs: 746
+      background: deterministic_up_to_5x_controls_matched_on_accessibility_GC_and_sequence_length_deciles
+      test: one_sided_fisher_with_BH
+      significant_motifs: {bdev_responsive: 16, globally_validated: 6}
+      used_for_ebf1_selection: false
+    inference: descriptive_cell_level_only_one_sample_per_genotype_for_query_DA
+    promotion: false
+  ebf1_il7_responsive_enhancers_status: complete_unpromoted_report_only
+  ebf1_il7_responsive_enhancers_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_il7_responsive_enhancers_v1_20261002/REPORT.md
+  ebf1_il7_responsive_enhancers_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_il7_responsive_enhancers_v1_20261002/completion.json
+  ebf1_il7_responsive_enhancers_parameters:
+    upstream_global_report: il7_responsive_peak_global_v1_20261002
+    genome: GRCm38_mm10
+    ebf1_tss_1based: 44617317
+    window_bp: 3000000
+    selection: globally_validated_peak_intersecting_ebf1_tss_plus_or_minus_3mb
+    motif_requirement: none
+    bdev_responsive_peaks_in_window: 0
+    candidates: 0
+    promotion: false
+  il7_responsive_peak_annotation_status: complete_unpromoted_report_only
+  il7_responsive_peak_annotation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_annotation_v1_20261002/REPORT.md
+  il7_responsive_peak_annotation_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_annotation_v1_20261002/completion.json
+  il7_responsive_peak_annotation_parameters:
+    peak_set: 51_globally_validated_il7_responsive_peaks
+    annotation_source: exact_Bdev_peaks_Signac_annotation_GRCm38_mm10
+    closest_gene: minimum_interval_distance_to_any_annotated_transcript_TSS
+    significance_order: query_IL7_WT_vs_IL7KO_BH_adjusted_p_then_raw_p
+    promoter_rule: peak_within_2000_bp_of_any_annotated_transcript_TSS
+    enhancer_label: putative_enhancer_when_no_TSS_within_2000_bp
+    classifications: {promoter: 4, putative_enhancer: 47}
+    promotion: false
+  il7_responsive_peak_local_deg_status: complete_unpromoted_report_only
+  il7_responsive_peak_local_deg_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_local_deg_v1_20261002/REPORT.md
+  il7_responsive_peak_local_deg_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_local_deg_v1_20261002/completion.json
+  il7_responsive_peak_local_deg_parameters:
+    peaks: 51_globally_validated_il7_responsive_peaks
+    window: transcript_TSS_within_plus_or_minus_3000000_bp_of_peak_center
+    deg_source: exact_Il7_shared_peak2_WT_vs_IL7KO_full_DEG_table
+    significance: genomewide_BH_adjusted_p_below_0.05
+    reported_log2fc: log2_mean_linear_CP10K_IL7KO_plus_1_over_WT_plus_1
+    direction_labels: [IL7KO_higher, WT_higher]
+    significant_gene_universe: 4614
+    significant_genes_with_bdev_tss: 4179
+    significant_genes_without_bdev_tss: 435
+    peak_gene_pairs: 815
+    unique_local_significant_genes: 726
+    peaks_with_at_least_one_local_significant_gene: 50
+    peaks_without_local_significant_gene: [chr6-108192063-108193284]
+    pair_directions: {IL7KO_higher: 146, WT_higher: 669}
+    inference: descriptive_cell_level_only_one_sample_per_genotype
+    promotion: false
+  il7_responsive_peak_linked_gene_volcano_status: complete_unpromoted_report_only
+  il7_responsive_peak_linked_gene_volcano_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_linked_gene_volcano_v1_20261002/REPORT.md
+  il7_responsive_peak_linked_gene_volcano_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_linked_gene_volcano_v1_20261002/completion.json
+  il7_responsive_peak_linked_gene_volcano_parameters:
+    genes: 726_unique_significant_genes_linked_to_51_peak_windows
+    x_axis: IL7KO_over_WT_standard_log2fc
+    y_axis: negative_log10_genomewide_BH_adjusted_p
+    labels: 50_largest_absolute_IL7KO_over_WT_log2fc_genes
+    colours: {WT_higher: '#D55E00', IL7KO_higher: '#009E73'}
+    fold_reference: absolute_log2fc_log2_1.5
+    violin_artifacts_removed: true
+    promotion: false
+  il7_responsive_peak_linked_top20_bdev_umap_status: complete_unpromoted_report_only
+  il7_responsive_peak_linked_top20_bdev_umap_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_linked_top20_bdev_umap_v1_20261002/REPORT.md
+  il7_responsive_peak_linked_top20_bdev_umap_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_linked_top20_bdev_umap_v1_20261002/completion.json
+  il7_responsive_peak_linked_top20_bdev_umap_parameters:
+    genes: 20_largest_absolute_log2fc_per_direction
+    directions: [WT_higher, IL7KO_higher]
+    expression: Bdev_SCT_data
+    embedding: Bdev_umap.atac
+    display_scaling: per_gene_positive_cell_p99
+    colours: {WT_higher: '#D55E00', IL7KO_higher: '#009E73'}
+    bdev_sct_coverage: 40_plotted_genes
+    omitted_higher_ranked_genes: [Apol7c]
+    substitution_rule: next_ranked_gene_present_in_Bdev_SCT_data
+    bdev_bundle_unchanged: true
+    promotion: false
+  flt3l_responsive_peak_global_status: complete_unpromoted_report_only
+  flt3l_responsive_peak_global_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_global_v1_20261002/REPORT.md
+  flt3l_responsive_peak_global_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_global_v1_20261002/completion.json
+  flt3l_responsive_peak_global_parameters:
+    discovery_region: Flt3l_shared_peak1
+    discovery_signal: mean_log1p_CP10K_Flt3L_UP_signature
+    association: partial_Spearman_adjusted_for_pt_and_ATAC_depth
+    candidate_rule: adjusted_BH_below_0.05_and_positive_adjusted_and_raw_rho
+    validation: WT_higher_in_FLT3LKO_vs_WT_candidate_peak_DA_with_BH_below_0.05
+    motif_analysis: matched_background_JASPAR_enrichment_for_responsive_and_validated_sets
+    bdev_cells: 939
+    peaks_tested: 79933
+    candidates: 940
+    high_confidence_candidates: 940
+    validation_cells: {WT: 4394, FLT3LKO: 3342}
+    globally_validated_wt_higher_peaks: 229
+    significant_motifs: {responsive: 77, validated: 36}
+    promotion: false
+  flt3l_responsive_peak_annotation_status: complete_unpromoted_report_only
+  flt3l_responsive_peak_annotation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_annotation_v1_20261002/REPORT.md
+  flt3l_responsive_peak_annotation_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_annotation_v1_20261002/completion.json
+  flt3l_responsive_peak_annotation_parameters:
+    peaks: 229
+    promoter_rule: peak_within_2000_bp_of_any_annotated_transcript_TSS
+    classifications: {promoter: 43, putative_enhancer: 186}
+    promotion: false
+  flt3l_responsive_peak_local_deg_status: complete_unpromoted_report_only
+  flt3l_responsive_peak_local_deg_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_local_deg_v1_20261002/REPORT.md
+  flt3l_responsive_peak_local_deg_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_local_deg_v1_20261002/completion.json
+  flt3l_responsive_peak_local_deg_parameters:
+    window: transcript_TSS_within_plus_or_minus_3000000_bp_of_peak_center
+    significance: genomewide_BH_adjusted_p_below_0.05
+    deg_comparison: FLT3LKO_vs_WT_in_Flt3l_shared_peak1
+    peak_gene_pairs: 6346
+    unique_putative_target_genes: 3924
+    pair_directions: {WT_higher: 4810, FLT3LKO_higher: 1536}
+    promotion: false
+  flt3l_responsive_peak_linked_top20_bdev_umap_status: complete_unpromoted_report_only
+  flt3l_responsive_peak_linked_top20_bdev_umap_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_linked_top20_bdev_umap_v1_20261002/REPORT.md
+  flt3l_responsive_peak_linked_top20_bdev_umap_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_linked_top20_bdev_umap_v1_20261002/completion.json
+  flt3l_responsive_peak_linked_top20_bdev_umap_parameters:
+    genes: 20_largest_absolute_log2fc_per_direction_present_in_Bdev_SCT_data
+    directions: [WT_higher, FLT3LKO_higher]
+    expression: Bdev_SCT_data
+    embedding: Bdev_umap.atac
+    colours: {WT_higher: '#D55E00', FLT3LKO_higher: '#0072B2'}
+    higher_ranked_genes_missing_from_Bdev_SCT_data: 0
+    bdev_bundle_unchanged: true
+    promotion: false
+  flt3l_responsive_peak_linked_gene_volcano_status: complete_unpromoted_report_only
+  flt3l_responsive_peak_linked_gene_volcano_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_linked_gene_volcano_v1_20261002/REPORT.md
+  flt3l_responsive_peak_linked_gene_volcano_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_responsive_peak_linked_gene_volcano_v1_20261002/completion.json
+  flt3l_responsive_peak_linked_gene_volcano_parameters:
+    genes: 3924_unique_significant_genes_linked_to_229_peak_windows
+    x_axis: FLT3LKO_over_WT_standard_log2fc
+    y_axis: negative_log10_genomewide_BH_adjusted_p
+    labels: 50_largest_absolute_FLT3LKO_over_WT_log2fc_genes
+    colours: {WT_higher: '#D55E00', FLT3LKO_higher: '#0072B2'}
+    fold_reference: absolute_log2fc_log2_1.5
+    direction_counts: {WT_higher: 2925, FLT3LKO_higher: 999}
+    promotion: false
   mapping_qc:
     method: exact_RANN_Bdev_restricted_neighbors
     primary_k: 30
@@ -463,3 +628,21 @@ processing:
   ko_shared_enriched_flt3_il7r_plots_runner: processing/integration/run_add_shared_region_flt3_il7r_plots.sh
   ko_shared_enriched_aggregate_signature_plots: processing/integration/22_add_shared_region_aggregate_signature_plots.R
   ko_shared_enriched_aggregate_signature_plots_runner: processing/integration/run_add_shared_region_aggregate_signature_plots.sh
+  il7_responsive_peak_global: processing/integration/23_il7_responsive_peak_global.R
+  ebf1_il7_responsive_enhancers: processing/integration/24_ebf1_il7_responsive_enhancers.R
+  il7_responsive_peak_global_runner: processing/integration/run_il7_responsive_peak_global.sh
+  il7_responsive_peak_annotation: processing/integration/25_annotate_il7_validated_peaks.R
+  il7_responsive_peak_annotation_runner: processing/integration/run_annotate_il7_validated_peaks.sh
+  il7_responsive_peak_local_deg: processing/integration/26_il7_peak_local_deg_windows.R
+  il7_responsive_peak_local_deg_runner: processing/integration/run_il7_peak_local_deg_windows.sh
+  il7_responsive_peak_linked_gene_volcano: processing/integration/27_plot_il7_peak_linked_gene_volcano.R
+  il7_responsive_peak_linked_gene_volcano_runner: processing/integration/run_plot_il7_peak_linked_gene_volcano.sh
+  il7_responsive_peak_linked_top20_bdev_umap: processing/integration/28_plot_il7_peak_linked_top20_bdev_umap.R
+  il7_responsive_peak_linked_top20_bdev_umap_runner: processing/integration/run_plot_il7_peak_linked_top20_bdev_umap.sh
+  flt3l_responsive_peak_global: processing/integration/29_flt3l_responsive_peak_global.R
+  flt3l_responsive_peak_annotation: processing/integration/30_annotate_flt3l_validated_peaks.R
+  flt3l_responsive_peak_local_deg: processing/integration/31_flt3l_peak_local_deg_windows.R
+  flt3l_responsive_peak_linked_top20_bdev_umap: processing/integration/32_plot_flt3l_peak_linked_top20_bdev_umap.R
+  flt3l_responsive_elements_runner: processing/integration/run_flt3l_responsive_elements.sh
+  flt3l_responsive_peak_linked_gene_volcano: processing/integration/33_plot_flt3l_peak_linked_gene_volcano.R
+  flt3l_responsive_peak_linked_gene_volcano_runner: processing/integration/run_plot_flt3l_peak_linked_gene_volcano.sh
