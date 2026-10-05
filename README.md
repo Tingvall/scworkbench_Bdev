@@ -1,7 +1,7 @@
 # scWorkbench B-cell development use case
 
 This repository contains the B-cell development workflows for the scWorkbench
-paper. It has three independently processed datasets and one derived integration
+paper. It has four independently processed datasets and one derived integration
 bundle:
 
 1. `bdev_reference`: the reference B-cell development Seurat/Signac state and
@@ -10,12 +10,14 @@ bundle:
    cytokine response gene sets.
 3. `scmulti_flt3ko_il7ko`: IL7KO/FLT3LKO RNA and ATAC multiome data used as a
    query and validation dataset.
-4. `bdev_integrated`: a derived integration bundle with `bdev_reference` as
+4. `gse259355_tcf3_prob`: bulk pro-B ATAC-seq after acute E2A/TCF3 depletion,
+   used to identify TCF3-dependent accessible regions.
+5. `bdev_integrated`: a derived integration bundle with `bdev_reference` as
    the reference. Its current cytokine phase uses the accepted Bdev and Parse
    parents; a separate staged KO-mapping derivative uses accepted Bdev and KO
    parents without modifying either source bundle.
 
-The three parent bundles remain independent and read-only during integration.
+The source bundles remain independent and read-only during integration.
 All joint state is written to `bdev_integrated`.
 
 ## Repository organization
@@ -26,6 +28,7 @@ processing/
   bdev_reference/             Reference import and validation
   parse_cytokines/            Parse inspection, processing, and validation
   scmulti_flt3ko_il7ko/       KO multiome inspection, processing, and validation
+  gse259355_tcf3_prob/         TCF3-depletion bulk ATAC processing and DESeq2 DA
   integration/                Bdev-centered derived integration
 figure_scripts/<bundle_id>/   Reproducible reports and final figures
 figure_outputs/<bundle_id>/   Generated, Git-ignored outputs
@@ -326,6 +329,25 @@ reviewed score report. Recipient validation completed with only the two
 expected external-source trust-boundary warnings. The promotion receipt and
 validation are under
 `intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929/`.
+
+## GSE259355 TCF3-depletion bulk ATAC bundle
+
+The six selected bone-marrow pro-B libraries comprise three untreated controls
+and three acute E2A/TCF3-depleted samples (two 6-hour and one 8-hour). After
+paired-end mm10 alignment, duplicate/blacklist filtering, MACS3 peak calling,
+and featureCounts quantification, the merged universe contains 84,088 peaks.
+The replicate-aware DESeq2 comparison tested 84,083 peaks and identified 7,432
+at BH-adjusted P < 0.05: 6,096 had lower accessibility after depletion and are
+classified as TCF3-dependent, while 1,336 had higher accessibility.
+
+The raw 84,088-by-6 consensus-peak count matrix and sample metadata are in the
+accepted `gse259355_tcf3_prob` scWorkbench bundle. Its columns are explicitly
+recorded as bulk ATAC libraries rather than single cells. Recipient validation
+passed with only the expected external-source trust-boundary warnings. The
+DESeq2 report is under
+`intermediate_objects/gse259355_tcf3_prob/reports/tcf3_depleted_vs_control_da_v1/`,
+and bundle validation evidence is under
+`intermediate_objects/gse259355_tcf3_prob/reports/source_bundle_v1/`.
 
 ## Cytokine signatures along Bdev pseudotime
 

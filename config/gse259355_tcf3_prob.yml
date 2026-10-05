@@ -1,0 +1,62 @@
+schema_version: 1
+bundle_id: gse259355_tcf3_prob
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob
+role: source_analysis
+status: accepted
+
+source:
+  dataset_id: GSE259355
+  bioproject: PRJNA1081365
+  publication_doi: 10.1038/s41590-024-01933-7
+  organism: Mus musculus
+  genome: GRCm38/mm10
+  assay: bulk_ATAC_seq
+  biological_population: bone_marrow_pro_B_cells
+  perturbation: acute_E2A_TCF3_AID_degradation
+  comparison: TCF3_depleted_vs_control
+  samples: 6
+  controls: 3
+  depleted: 3
+  caveat: two depleted samples are labelled 6h and one is labelled 8h in GEO
+
+analysis:
+  status: complete
+  completed_utc: 2026-10-05 17:36:16 UTC
+  method: DESeq2
+  design: "~ condition"
+  log2fc_definition: TCF3_depleted_over_control
+  tcf3_dependent_direction: negative
+  multiple_testing: Benjamini_Hochberg
+  significance: padj_below_0.05
+  outside_scworkbench_authorization: user_approved_2026-10-04
+  outside_scworkbench_reason: scWorkbench_has_no_replicate_aware_bulk_ATAC_differential_model
+  consensus_peaks: 84088
+  tested_peaks: 84083
+  significant_padj_below_0.05: 7432
+  tcf3_dependent_lower_after_depletion: 6096
+  higher_after_tcf3_depletion: 1336
+
+accepted_state:
+  completed_utc: 2026-10-05 17:39:53 UTC
+  matrix_id: ATAC_consensus_peak_counts
+  libraries: 6
+  consensus_peaks: 84088
+  bundle_state_fingerprint: 620e693116af6a5ef18b9b1b53849a63ae0ce7357b5ef62bbf3462504ba3f9ab
+  recipient_validation_fingerprint: b7a11b2eac6b5b17d093bf6e01c420c83f758ac8014330f8ff1a0ff35241984f
+  validation_status: ok_with_warnings
+
+paths:
+  raw_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/datasets/gse259355_tcf3_prob
+  work_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/work
+  prepared_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/prepared
+  report_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/reports/tcf3_depleted_vs_control_da_v1
+  bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/bundle
+  runtime: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/runtime
+  bundle_validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/reports/source_bundle_v1/validation.json
+
+processing:
+  sample_manifest: processing/gse259355_tcf3_prob/gse259355_tcf3_prob_samples.tsv
+  prepare_counts: processing/gse259355_tcf3_prob/01_prepare_atac_counts.sh
+  differential_accessibility: processing/gse259355_tcf3_prob/02_deseq2_differential_accessibility.R
+  create_bundle: processing/gse259355_tcf3_prob/03_create_source_bundle.R
+  runner: processing/gse259355_tcf3_prob/run_tcf3_da.sh

@@ -17,6 +17,7 @@ dataset_ids=(
   bdev_reference
   parse_cytokines
   scmulti_flt3ko_il7ko
+  gse259355_tcf3_prob
   bdev_integrated
 )
 
@@ -37,6 +38,7 @@ Each dataset has one directory directly under `intermediate_objects/`:
 | `bdev_reference` | Reference | `bdev_reference/bundle/` |
 | `parse_cytokines` | Parse cytokine analysis | `parse_cytokines/bundle/` |
 | `scmulti_flt3ko_il7ko` | KO multiome source analysis | Prepared object pending |
+| `gse259355_tcf3_prob` | Pro-B TCF3-depletion bulk ATAC source analysis | Accepted bundle and DESeq2 report complete |
 | `bdev_integrated` | Bdev-centered integration | Bundle pending |
 
 Within each dataset directory:

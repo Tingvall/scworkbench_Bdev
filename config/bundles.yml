@@ -66,6 +66,19 @@ bundles:
       matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/prepared/bdev_peak_quantification_v1_20260930/ATAC_bdev_mm10_peaks_ko_counts
       validation: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scmulti_flt3ko_il7ko/reports/bdev_peak_quantification_v1_20260930/validation.json
 
+  gse259355_tcf3_prob:
+    role: source_analysis
+    status: accepted
+    config: config/gse259355_tcf3_prob.yml
+    source_dataset: GSE259355
+    bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/bundle
+    parents: []
+    accepted_state:
+      bundle_state_fingerprint: 620e693116af6a5ef18b9b1b53849a63ae0ce7357b5ef62bbf3462504ba3f9ab
+      recipient_validation_fingerprint: b7a11b2eac6b5b17d093bf6e01c420c83f758ac8014330f8ff1a0ff35241984f
+    analysis_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/reports/tcf3_depleted_vs_control_da_v1
+    validation_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/gse259355_tcf3_prob/reports/source_bundle_v1/validation.json
+
   bdev_integrated:
     role: derived_integration
     status: working
