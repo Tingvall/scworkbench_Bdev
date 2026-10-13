@@ -166,3 +166,250 @@ uses native `cell_vector_family_calibrate` with `method="zscore"`,
 `center=FALSE`, and `scale=FALSE` as an identity materialization, verifies all
 promoted values exactly, records one atomic promotion receipt, and runs full
 recipient-level validation.
+
+`15_rna_atac_latent_progress.R` compares developmental movement in the imported
+RNA `pca` and ATAC `lsi` spaces. It retains only cells with non-missing source
+`pt`, orders those cells without changing `pt`, and calculates centroids in
+full 200-cell sliding windows with a 20-cell stride. Consecutive-centroid
+Euclidean distances are accumulated separately for each modality and divided
+by the modality endpoint, producing relative distances from 0 to 1. The figure
+plots ATAC relative distance against RNA relative distance, includes the
+`y = x` reference, and highlights the windows nearest the existing `bb_up`
+`up1`/`up2` median pseudotimes as BB1/BB2. The exact window membership, raw and
+standardized distances, ordered trajectory cells, and diagnostics accompany
+the PNG/PDF. `run_15_rna_atac_latent_progress.sh` executes the terminal custom
+analysis and registers its script and principal outputs as an scWorkbench
+analysis capsule; no source coordinates, metadata, or missing values are
+changed.
+
+`16_rna_atac_latent_progress_w30_s5.R` repeats that analysis with 30-cell
+windows and a 5-cell stride. In addition to the relative-distance scatter, it
+calculates the local centered finite-difference slope of RNA relative distance
+with respect to ATAC relative distance. The slope figure uses a log10 y-axis,
+marks slope 1 as matched local progress, shades the full source pseudotime
+ranges of `bb_up` `up1`/`up2`, and marks their medians as BB1/BB2. Exact raw
+slopes and BB ranges are retained in tables. Run and register the result with
+`run_16_rna_atac_latent_progress_w30_s5.sh`.
+
+`17_preliminary_smoothed_slope_gene_expression.R` is an explicitly preliminary,
+read-only sensitivity display built on the 30-cell/5-cell windows. It overlays
+a robust LOESS curve on log10 local slope and adds same-figure panels for Ebf1,
+Pax5, and Ezh2 mean `SCT_data` expression with the same smoothing span. Raw
+window values remain in exported tables and BB1/BB2 source ranges are shaded.
+The runner intentionally skips capsule registration and full-bundle validation;
+use it only for preliminary review.
+
+`18_preliminary_slope_turning_regions_umap.R` finds sign changes in the centered
+finite-difference derivative of that smoothed log10 slope. It reports all
+candidate extrema, retains those with at least 1.10-fold prominence relative to
+both adjacent extrema, and defines each highlighted region as the exact source
+30-cell window at the selected extremum. Matching colors mark those windows on
+the slope, Ebf1/Pax5/Ezh2 curves, and the existing Bdev `umap.atac`. The runner
+is read-only and intentionally omits capsule registration and full validation.
+
+`19_preliminary_turning_summary_ebf1_ezh2.R` presents the same selected T1–T4
+windows with the smoothed slope, Ebf1, and Ezh2 vertically aligned on one
+pseudotime axis. A companion RNA-versus-ATAC relative-distance panel marks the
+turning windows on the trajectory, and `umap.atac` highlights their exact cells.
+Pax5 is intentionally omitted. This remains a read-only preliminary display.
+
+`20_preliminary_modality_ratio_umap_five_genes.R` extends that display with
+Nipbl, Mau2, and Wapl. For each trajectory cell, the UMAP color is the mean
+`log2(smoothed delta-RNA/delta-ATAC)` over every overlapping window containing
+the cell. Red indicates RNA-faster, blue ATAC-faster, and white equal local
+progress; non-trajectory cells are gray. T1–T4 cells are outlined and labeled.
+The current expanded version also includes Ctcf, Eed, Tcf7, and Lef1. Tcf7 uses
+a recorded Gaussian-LOESS fallback because robust LOESS fails numerically on
+its low, sparse window-mean trajectory; all other genes retain robust LOESS.
+
+`21_preliminary_slope_gene_set_signals.R` places the same smoothed RNA/ATAC
+slope above four aligned aggregate trajectories: B-lineage, T-lineage,
+Flt3L-UP, and IL-7-UP. Scores are arithmetic means of Bdev `SCT_data` across
+the accepted memberships, summarized in the same 30-cell/5-cell windows and
+smoothed with robust LOESS. Explicit Bdev mapping retains 236/246 B-lineage,
+214/233 T-lineage, 45/45 Flt3L-UP, and 20/20 IL-7-UP genes; missing IDs are
+exported rather than silently discarded.
+
+`22_preliminary_lsi1_sensitivity.R` repeats the ATAC path calculation with
+LSI1 excluded while holding RNA coordinates, trajectory cells, window
+membership, pseudotime, stride, and smoothing fixed. It overlays the full-LSI
+and LSI2–50 RNA-versus-ATAC paths and slopes, exports every paired window, and
+uses the existing T1–T4 windows only as fixed visual references rather than
+re-calling them.
+
+`23_preliminary_tsix_expression.R` makes a separate two-panel Tsix figure from
+the read-only Bdev bundle. One panel maps positive-cell `SCT_data` expression
+to the existing `umap.atac`, with positive values clipped at their 99th
+percentile for display. The other shows a robust-LOESS curve of 30-cell means
+at 5-cell stride along the preserved Bdev `pt`. Both panels mark the fixed
+T1–T4 windows from the RNA–ATAC distance analysis; the windows are not
+re-called. The report also includes a standalone UMAP with no T1–T4 overlay;
+it uses a conventional linear white-to-crimson expression scale from zero to
+the positive-cell p99 so higher-expressing cells are easy to locate. Run it
+with `run_23_preliminary_tsix_expression.sh`. A second standalone pseudotime
+figure replaces T1–T4 with the exact source BB1/BB2 pseudotime ranges and
+median lines, and fixes the expression y-axis minimum at zero.
+
+`24_preliminary_log2_modality_ratio.R` displays the saved smoothed local
+progression slope explicitly as `log2(delta RNA / delta ATAC)`, centered at
+zero for matched progression. A secondary axis shows the exact inverse
+`log2(delta ATAC / delta RNA)`, which is the negative of the primary curve and
+not a separately fitted signal. T1–T4 remain fixed visual references. The
+report also records a proposal for direct and inverse gene-pattern screens.
+
+`25_preliminary_modality_gene_pattern_screen.R` implements the two proposed
+screens across sufficiently detected, variable Bdev `SCT_data` genes. The
+state approach correlates 30-cell window-mean expression with the saved log2
+RNA/ATAC target; the change approach correlates the centered expression
+derivative with that target. Both use one fixed centered smoother spanning 8%
+of ordered windows before scoring. Negative scores are the exact ATAC-faster inverse
+interpretation. Circular shifts preserve trajectory autocorrelation, pooled
+null tails provide empirical P values, and BH correction is applied separately
+per approach. This remains descriptive because feature-fold cross-fitting of
+the RNA latent trajectory is not part of this preliminary screen.
+
+`26_preliminary_state_top20_separate_figures.R` makes separate faceted figures
+for the top 20 RNA-faster state genes and the top 20 ATAC-faster inverse state
+genes. Each gene panel shows its fixed 8%-window-smoothed mean plus the smoothed
+within-window cell-level IQR and the matching RNA/ATAC or inverse ATAC/RNA
+target. A companion figure shows Angpt1, Adgrl4, Gcnt2, and Mecom in two tiers:
+expression with IQR above and the screened expression derivative against the
+RNA-faster target below.
+
+`27_preliminary_modality_turn_pattern_screen.R` replaces whole-trajectory
+state similarity with an event-focused up/down screen. It requires a gene to
+have p95-p05 smoothed `SCT_data` range of at least 0.50, weights agreement over
+the strongest 30% of RNA/ATAC target changes, and separately checks the two
+flanks of each fixed T1-T4 turn. Selection requires six of eight matching
+flanks and at least two complete turns, so long flat portions cannot dominate
+the ranking. Direct RNA/ATAC and inverse ATAC/RNA results, every per-turn
+decision, amplitude-cutoff sensitivity, and separate top-20 figures with
+within-window IQR are exported by
+`run_27_preliminary_modality_turn_pattern_screen.sh`.
+
+`28_preliminary_epigenetic_pattern_candidates.R` plots the chromatin and
+cohesin-associated candidates highlighted from the event-focused screen.
+Separate direct and inverse figures overlay each standardized gene trajectory
+and its smoothed within-window IQR on the appropriate modality target. A third
+figure audits Nipbl/Mau2, core cohesin-associated factors, and PRC2 genes.
+Every facet explicitly states `PASS` or `NOT PASS` and gives the p95-p05 range,
+matched T1-T4 flanks, and complete-turn count. Run it with
+`run_28_preliminary_epigenetic_pattern_candidates.sh`.
+
+`29_preliminary_inverse_cohesin_turn_audit.R` replots eleven
+cohesin-associated genes against the inverse ATAC/RNA target. The trajectory
+figure marks every T1-T4 pre/post flank with a green pass or red fail dot; its
+companion heatmap shows all eight flank calls and four complete-turn calls
+explicitly. Wapl is highlighted as the principal inverse near-hit, passing
+both flanks at T2 and T3 plus the T4 pre-flank. Run it with
+`run_29_preliminary_inverse_cohesin_turn_audit.sh`.
+
+`30_preliminary_t1_t3_continuous_gene_screen.R` performs an unbiased
+genome-wide continuous shape ranking after excluding T4. Its raw score is 60%
+target-change-weighted derivative cosine across the complete T1-T3 interval
+and 40% cosine of the six T1-T3 flank changes. No flank or complete-turn call
+is used as a cutoff. Low-amplitude or heterogeneous profiles are instead
+smoothly downweighted using the p95-p05 range and conservative cell-level
+spread derived from exact within-window IQR and SD. It exports all 11,745 gene
+scores, separate direct/inverse top-100 tables, top-20 IQR figures, prior-gene
+scores, and a Nipbl rank diagnostic. Run it with
+`run_30_preliminary_t1_t3_continuous_gene_screen.sh`.
+
+`31_preliminary_turn_local_balanced_gene_screen.R` removes full-trajectory
+similarity from the ranking and scores the six T1-T3 pre/post flanks locally.
+Each flank combines target-change-weighted derivative shape and oriented
+endpoint change, with smooth amplitude and exact within-window IQR/SD
+precision weights. Pre/post flanks contribute equally within a turn, and T1,
+T2, and T3 contribute equally with penalties for imbalance, preventing one
+strong peak from dominating the result. The top-20 direct and inverse figures
+display the complete pseudotime range while shading the scored +/-100-window
+regions; T4 is shown only as unscored context. Run it with
+`run_31_preliminary_turn_local_balanced_gene_screen.sh`.
+
+`32_preliminary_inverse_hits_depth_diagnostic.R` compares the inverse top 20
+with total RNA (`nCount_RNA`) and total ATAC (`nCount_peaks`) along the same
+trajectory. It exports a two-panel total-signal plot with cell-level IQR and a
+20-panel overlay of each gene, total RNA, and total ATAC. Both display the full
+pseudotime range and shade the fixed +/-100-window T1-T3 regions. The companion
+table reports full-path, scored-region, cell-level, and pseudotime-residual
+correlations to distinguish shared developmental trends from residual depth
+association. Run it with
+`run_32_preliminary_inverse_hits_depth_diagnostic.sh`.
+
+`33_preliminary_ratio_total_signal_explained.R` quantifies how much of the
+log2 RNA/ATAC ratio is associated with smoothed log-total RNA and ATAC. It
+reports in-sample level R2, contiguous-block prediction, derivative R2 in the
+fixed T1-T3 neighborhoods, per-turn derivative fits, and leave-one-turn-out
+shape prediction. Figures show the full pseudotime range, the fitted and
+residual ratio, and the local residual derivative with the same shaded
++/-100-window regions. Run it with
+`run_33_preliminary_ratio_total_signal_explained.sh`.
+
+`34_preliminary_residual_ratio_bb_gene_stack.R` makes two full-pseudotime,
+vertically aligned figures headed respectively by the total-signal-adjusted
+RNA/ATAC ratio and adjusted ratio derivative. Ebf1, Ezh2, Nipbl, and Wapl are
+stacked underneath with smoothed within-window cell-level IQR. Every panel
+shades the exact source `bb_up` BB1/BB2 pseudotime ranges and marks their
+medians. Run it with
+`run_34_preliminary_residual_ratio_bb_gene_stack.sh`.
+
+`35_preliminary_residual_ratio_umap.R` projects the full-path residual
+log2 RNA/ATAC ratio onto the existing `umap.atac`. Window residuals are
+linearly interpolated from window-center rank to each cell's exact trajectory
+rank, avoiding the five-cell stripes produced by membership-mean projection;
+the original membership mean remains in the exported comparison table. The
+blue-white-red scale is centered at zero; both an absolute-p99-clipped figure
+and an unclipped figure using the observed maximum absolute value are
+exported. Cells outside the trajectory are gray. Run it with
+`run_35_preliminary_residual_ratio_umap.sh`.
+
+`36_preliminary_residual_ratio_weighted_gene_screen.R` screens all detected
+`SCT_data` genes for direct and inverse up/down agreement with the corrected ratio
+without using BB or T-region boundaries. It conditionally removes each gene's
+RNA-depth component after controlling for preserved Bdev pseudotime. Every
+pseudotime window is scored, with a nonzero weight floor and extra continuous
+weight assigned from the corrected ratio's magnitude, slope, and curvature.
+The ratio and gene curves receive the same 3% smoother. Slopes are normalized
+by each curve's own scale and tanh-clipped before comparison, so magnitude is
+allowed to differ. Eight equal-interest trajectory segments and a smooth
+between-segment consistency penalty reduce one-feature hits. It exports
+complete scores, top-100 tables, and separate top-20 plots with cell-level IQR. Run it with
+`run_36_preliminary_residual_ratio_weighted_gene_screen.sh`.
+
+`37_preliminary_residual_ratio_full_direction_matches.R` applies the literal
+full-pattern audit to that screen and retains genes whose normalized slope has
+the requested direction in every one of the eight balanced trajectory
+segments. It exports the complete direct and inverse concordant sets and plots
+them over the standardized target with adjusted-expression IQR. Run it with
+`run_37_preliminary_residual_ratio_full_direction_matches.sh`.
+
+`38_preliminary_adjusted_cohesin_prc2_profiles.R` plots the corrected ratio
+above full-pseudotime, RNA-depth-adjusted expression for the prior cohesin and
+PRC2 audit sets. Ebf1 appears in both figures. Ratio and expression use the
+same 3% trajectory smoother, expression is standardized so magnitude may
+differ, and ribbons show adjusted-expression cell-level IQR. Panel labels give
+direct and inverse agreement counts across the eight balanced trajectory
+segments. Run it with
+`run_38_preliminary_adjusted_cohesin_prc2_profiles.sh`.
+
+`39_preliminary_adjusted_selected_genes_bb.R` makes a compact two-column
+landscape figure containing the corrected ratio and only Ebf1, Tcf3, Stat5a,
+Stat5b, Ezh2, Nipbl, and Wapl. Expression uses the same conditional RNA-depth
+adjustment and matched 3% smoothing as the direction screen, ribbons show
+cell-level adjusted-expression IQR, and every panel shades the exact source
+BB1/BB2 ranges and marks their medians. Run it with
+`run_39_preliminary_adjusted_selected_genes_bb.sh`.
+
+`40_preliminary_nipbl_wapl_ezh2_umap.R` maps Nipbl, Wapl, and Ezh2 `SCT_data`
+onto the existing `umap.atac`. Each panel uses a white-to-crimson scale
+normalized to that gene's positive-cell p99, clips higher values for display,
+and draws higher-expression cells last. Absolute p99 values and detection
+fractions remain in the subtitles and exported scale table. Run it with
+`run_40_preliminary_nipbl_wapl_ezh2_umap.sh`.
+
+`41_preliminary_cox6a1_cox6a2_ube2c_umap.R` maps Cox6a1, Cox6a2, and Ube2c
+`SCT_data` onto the existing Bdev `umap.atac`. It uses the same gene-specific
+white-to-crimson zero-to-positive-cell-p99 display and draws high-expression
+cells last. The uncapped cell-level values, color thresholds, PNG, and PDF are
+written to a separate read-only report. Run it with
+`run_41_preliminary_cox6a1_cox6a2_ube2c_umap.sh`.

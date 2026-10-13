@@ -3,11 +3,11 @@ bundle_id: bdev_integrated
 storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated
 role: derived_integration
 status: working
-review_status: awaiting_user_review
-review_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/competitor_aware_pt_all33_20260925/trajectory_review/REPORT.html
-active_phase: competitor_aware_cytokine_pseudotime
-run_id: cytokine_pt_20260923T2231Z
-latest_run_id: competitor_aware_pt_all33_20260925
+review_status: residual_ucell_go_trajectory_selected_as_default
+review_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/summary_figures/significant_region_residual_ucell_kmeans_k25_20_20/figure_report/FIGURE_REPORT.pdf
+active_phase: go_trajectory_residual_ucell
+run_id: go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012
+latest_run_id: go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012
 runtime_registry_entry: bdev_integrated
 future_parents: []
 
@@ -35,6 +35,190 @@ preflight_gate:
 reference_inputs:
   default_umap: umap.atac
   pseudotime_artifact_id: cell_vector_20260914_162517_7q4y8xbb
+
+default_bdev_mapping_analysis:
+  status: complete_selected_default_report_only
+  scope: current_default_at_time_of_record
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_cutoff025_mapping_report_v4_20261012/CUTOFF025_MAPPING_REPORT.pdf
+  receipt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_cutoff025_mapping_report_v4_20261012/receipt.json
+  reference: bdev_reference
+  latent_model: Bdev_only_PeakVI_frozen_before_query_projection
+  projection_mode: transform_without_refit
+  base_mapping_gate: existing_general_support_supported_or_borderline_with_finite_mapped_pt_and_reference_coordinates
+  trajectory_membership:
+    score: distance_weighted_fraction_of_30_Bdev_neighbors_with_defined_pt
+    calibration: leave_one_original_Bdev_sample_out_neighbor_mapping_in_frozen_latent
+    cutoff: 0.25
+    cutoff_basis: user_selected_current_default
+  pseudotime:
+    reference_source: exact_Bdev_metadata_pt
+    query_mapping: distance_weighted_median_of_defined_pt_Bdev_neighbors
+    preserve_reference_values_and_missing_entries: true
+  enrichment_peak_calling:
+    bins: 100
+    smoothing: centered_3_bin_rolling_fraction
+    density: retained_query_conditional_fraction_divided_by_Bdev_rolling_fraction
+    background: genotype_specific_binwise_q95_from_1000_Bdev_multinomial_draws_matching_retained_cell_count
+    primary_regions: consecutive_WT_bins_above_WT_specific_background
+    retain_KO_regions_and_pt_bins: true
+    seed: 1729
+    artifacts:
+      WT_regions: wt_enrichment_regions_cutoff025.tsv
+      KO_regions: ko_above_background_regions_cutoff025.tsv
+      KO_pt_bins: ko_above_background_pt_bins_cutoff025.tsv
+  signal_overlay:
+    source: default_cytokine_trajectory_analysis
+    method: Bdev_residual_UCell_permutation_supported_positive_regions
+    role: highlight_only_not_used_to_call_mapped_enrichment
+  bundle_mutation: false
+
+default_go_trajectory_analysis:
+  status: complete_selected_default
+  user_label: residual_ucell_based_gsea
+  method: trajectory_dynamic_range_permutation_not_preranked_gsea
+  run_id: go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/REPORT.md
+  completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/completion.json
+  score: native_compatible_ucell_rna_counts_max_rank_1500_residualized_for_log1p_nFeature_RNA_natural_spline_df4
+  pseudotime_source: exact_bdev_metadata_pt
+  windows: {width_fraction: 0.05, step_fraction: 0.01, minimum_cells: 20, retained: 97}
+  inference: {statistic: peak_to_trough_window_median_range, permutations: 1000, seed: 314159, groupwise_bh_q: 0.01, positive_region_trajectory_wide_p: 0.01}
+  groups: [bp, mf, cc]
+  accepted_clustering:
+    directory: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/summary_figures/significant_region_residual_ucell_kmeans_k25_20_20
+    input: significant_region_only_per_set_0_1_profiles
+    method: euclidean_kmeans
+    k: {bp: 25, mf: 20, cc: 20}
+    report_pdf: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/summary_figures/significant_region_residual_ucell_kmeans_k25_20_20/figure_report/FIGURE_REPORT.pdf
+  bundle_mutation: false
+  promotion: report_default_only_bundle_unchanged
+
+default_cytokine_trajectory_analysis:
+  status: complete_selected_default
+  method: residual_ucell_trajectory_dynamic_range_permutation
+  run_id: cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/REPORT.md
+  completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/completion.json
+  gene_sets: 38_accepted_competitor_aware_cytokine_signatures
+  score_source: native_scworkbench_ucell_rna_counts_max_rank_1500
+  adjustment: lm_ucell_on_natural_spline_log1p_nFeature_RNA_df4_without_pseudotime
+  pseudotime_source: exact_bdev_metadata_pt
+  windows: {width_fraction: 0.05, step_fraction: 0.01, minimum_cells: 20, expected_retained: 97}
+  inference: {statistic: peak_to_trough_window_median_range, permutations: 1000, seed: 314159, bh_q: 0.01, positive_region_trajectory_wide_p: 0.01}
+  results: {tested: 38, dynamically_significant: 32, permutation_supported_positive_peaks: 56, merged_positive_regions: 34}
+  mapped_density_region_comparison:
+    directory: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/summary_figures/mapped_density_enriched_vs_bdev_residual_regions
+    density: bdev_normalized_centered_three_bin_rolling_cell_fraction
+    mapped_enriched_rule: both_WT_and_KO_strictly_above_Bdev_ratio_1
+    bdev_regions: residual_ucell_permutation_supported_positive_regions
+  existing_raw_ucell_permutation:
+    run_id: cytokine_ucell_dynamic_range_perm1000_v1_20261012
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_dynamic_range_perm1000_v1_20261012/REPORT.md
+    role: historical_raw_score_comparison
+  existing_residual_diagnostic:
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_dynamic_range_perm1000_v1_20261012/diagnostics/rna_feature_residualization_curve_comparison/REPORT.md
+    residual_model: lm_ucell_on_natural_spline_log1p_nFeature_RNA_df4
+    permutation_calls_recomputed: false
+    role: shape_and_complexity_diagnostic_only
+  bundle_mutation: false
+
+default_wt_ko_preranked_gsea_design:
+  status: complete_unpromoted_report_only_outside_scworkbench
+  run_id: flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012/REPORT.md
+  diagnostics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012/diagnostics.json
+  region_policy: mapped_shared_enrichment
+  rationale: preserve_within_region_WT_KO_coverage_and_avoid_conflating_blocked_KO_progression_with_within_state_expression
+  region_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/shared_enriched_pt_regions.tsv
+  density_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_cytokine_gene_expression_bdev_normalized_v4_20261001/query_mapped_pt_cell_distribution.tsv
+  regions:
+    Flt3l_shared_peak1: {comparison: FLT3LKO_vs_FLT3L_WT, pt: [-25.3967296465534, -22.9189999249385], WT_cells: 4394, KO_cells: 3342}
+    Il7_shared_peak2: {comparison: IL7KO_vs_IL7_WT, pt: [-24.7772972161497, -21.3704188489291], WT_cells: 1912, KO_cells: 1355}
+  bdev_residual_ucell_regions_role: biological_context_not_WT_KO_test_regions
+  bdev_region_coverage_audit:
+    Flt3l_early: {pt: [-23.0738580325394, -21.52527695653], WT_cells: 672, KO_cells: 35}
+    Flt3l_late: {pt: [-16.2601012980982, -14.7115202220889], WT_cells: 11, KO_cells: 6}
+    Il7: {pt: [-21.8349931717319, -19.6669796653188], WT_cells: 274, KO_cells: 20}
+  within_region_design: pseudotime_bin_matched_KO_minus_WT_gene_ranking
+  ranking_statistic: Bdev_density_weighted_mean_of_binwise_log2_mean_CP10K_KO_plus_1_over_WT_plus_1
+  gene_set_collections: [Hallmark, GO_BP, GO_MF, GO_CC, Cytokine]
+  results:
+    Flt3L:
+      ranked_detected_genes: 22324
+      fdr_below_0.05: {Hallmark: 21, GO_BP: 92, GO_MF: 45, GO_CC: 70, Cytokine: 2}
+      hallmark_direction: {KO_higher: 2, WT_higher: 19}
+      sensitivity: {gene_rank_spearman: 0.91449784653322, hallmark_NES_spearman: 0.987803121248499}
+    IL7:
+      ranked_detected_genes: 21730
+      fdr_below_0.05: {Hallmark: 7, GO_BP: 71, GO_MF: 32, GO_CC: 49, Cytokine: 5}
+      hallmark_direction: {KO_higher: 2, WT_higher: 5}
+      sensitivity: {gene_rank_spearman: 0.970271578002172, hallmark_NES_spearman: 0.990972388955582}
+  interpretation: descriptive_within_measured_samples_one_biological_sample_per_genotype
+
+default_wt_ko_dynamic_change_gsea:
+  status: complete_unpromoted_report_only_outside_scworkbench
+  run_id: flt3l_il7_ko_vs_wt_dynamic_change_gsea_v1_20261012
+  source_run: flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_dynamic_change_gsea_v1_20261012/REPORT.md
+  diagnostics: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_dynamic_change_gsea_v1_20261012/diagnostics.json
+  region_policy: mapped_shared_enrichment
+  question: gene_sets_that_increase_in_WT_but_fail_to_increase_in_KO
+  primary_statistic: (WT_late_minus_WT_early)_minus_(KO_late_minus_KO_early)
+  expression_scale: log2_mean_linear_CP10K_plus_1_per_bin_and_genotype
+  endpoint_policy: first_and_last_two_bins_with_at_least_20_cells_per_genotype
+  terminal_sparse_bin_sensitivity: literal_first_and_last_two_region_bins
+  gene_set_collections: [Hallmark, GO_BP, GO_MF, GO_CC, Cytokine]
+  results:
+    Flt3L:
+      fdr_below_0.05: {Hallmark: 15, GO_BP: 254, GO_MF: 35, GO_CC: 55, Cytokine: 4}
+      hallmark_direction: {WT_stronger_change: 4, KO_stronger_change: 11}
+      strict_WT_induction_examples: [HALLMARK_E2F_TARGETS, HALLMARK_UNFOLDED_PROTEIN_RESPONSE]
+      hallmark_terminal_sensitivity_NES_spearman: 0.885426170468187
+    IL7:
+      fdr_below_0.05: {Hallmark: 17, GO_BP: 3, GO_MF: 5, GO_CC: 2, Cytokine: 1}
+      hallmark_direction: {WT_stronger_change: 16, KO_stronger_change: 1}
+      strict_WT_induction_examples: [HALLMARK_TNFA_SIGNALING_VIA_NFKB, HALLMARK_ESTROGEN_RESPONSE_EARLY]
+      hallmark_terminal_sensitivity_NES_spearman: 0.696230492196879
+  classification_guard: positive_GSEA_is_called_failed_induction_only_if_member_gene_summary_increases_in_WT_and_increases_less_in_KO
+  focused_go_report:
+    run_id: flt3l_il7_ko_vs_wt_dynamic_change_top_go_v1_20261012
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_dynamic_change_top_go_v1_20261012/REPORT.md
+    policy: test_all_GO_terms_but_report_at_most_5_strict_WT_induction_attenuated_in_KO_terms_per_BP_MF_CC_and_comparison
+    all_comparison_specific_GO_tests: 10540
+    Flt3L_strict_hits: {GO_BP: 7, GO_MF: 1, GO_CC: 5}
+    IL7_strict_hits: {GO_BP: 0, GO_MF: 0, GO_CC: 0}
+    fdr_supported_curves:
+      run_id: flt3l_il7_ko_vs_wt_fdr_supported_go_curves_v1_20261012
+      report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_fdr_supported_go_curves_v1_20261012/REPORT.md
+      figure: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_fdr_supported_go_curves_v1_20261012/fdr_supported_go_dynamic_curves.pdf
+      terms: 8
+      selection: primary_and_terminal_sensitivity_FDR_below_0.05_positive_NES_and_strict_WT_induction_attenuated_in_KO
+  failure_to_silence_go_report:
+    run_id: flt3l_il7_ko_vs_wt_go_failure_to_silence_v1_20261012
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_go_failure_to_silence_v1_20261012/REPORT.md
+    criterion: primary_FDR_below_0.05_negative_NES_WT_change_below_0_and_KO_change_above_WT_change
+    reporting: at_most_5_terms_per_BP_MF_CC_and_comparison
+    Flt3L_strict_hits: {GO_BP: 196, GO_MF: 29, GO_CC: 41}
+    Flt3L_terminal_sensitivity_supported_strict_hits: {GO_BP: 93, GO_MF: 9, GO_CC: 21}
+    IL7_strict_hits: {GO_BP: 0, GO_MF: 0, GO_CC: 0}
+    reported_top_terms: 15
+    reported_top_terms_terminal_sensitivity_supported: 13
+  individual_gene_divergence:
+    run_id: flt3l_il7_ko_vs_wt_individual_gene_divergence_v1_20261012
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_individual_gene_divergence_v1_20261012/REPORT.md
+    directions: [WT_induction_attenuated_in_KO, failure_to_silence_in_KO]
+    consistency: same_sign_definition_required_for_primary_and_sparse_terminal_endpoint_policies
+    ranking: minimum_absolute_differential_change_across_primary_and_sensitivity_policies
+    top_report_genes_per_direction_and_comparison: 20
+    top_curve_genes_per_direction_and_comparison: 12
+    curve_line: log2_mean_linear_CP10K_plus_1_centered_to_mean_expression_early_baseline
+    curve_ribbon: cell_level_IQR_log2_CP10K_plus_1_centered_to_cell_median_early_baseline
+    curve_ribbon_role: distribution_not_confidence_interval
+    direction_consistent_gene_counts:
+      Flt3L: {WT_induction_attenuated_in_KO: 3989, failure_to_silence_in_KO: 3845}
+      IL7: {WT_induction_attenuated_in_KO: 4040, failure_to_silence_in_KO: 3795}
+    gene_level_inference: descriptive_no_P_values_or_FDR_one_biological_sample_per_genotype
+  interpretation: descriptive_within_measured_samples_one_biological_sample_per_genotype
 
 parse_inputs:
   bundle_id: parse_cytokines
@@ -188,6 +372,115 @@ ko_mapping_phase:
     panel_order: [gene_expression_umap, gene_expression_trajectory, positive_score_umap, positive_score_trajectory, reference_anchored_projection, bdev_normalized_query_density]
     aligned_trajectory_panels: [B, D, F]
     promotion: false
+  il7_early_mapping_peak_diagnostic_status: complete_unpromoted_report_only
+  il7_early_mapping_peak_diagnostic_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_early_mapping_peak_diagnostic_v2_20261012/REPORT.md
+  il7_early_mapping_peak_diagnostic_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_early_mapping_peak_diagnostic_v2_20261012/completion.json
+  il7_early_mapping_peak_diagnostic_parameters:
+    target: Il7
+    regions: [Il7_peak1, Il7_peak2]
+    finding: Il7_peak1_is_off_trajectory_T_lineage_cluster18_forced_to_defined_pt_start
+    reference_cluster18_cells: 447
+    reference_cluster18_defined_pt_cells: 0
+    query_peak1_cluster18_fraction: {WT: 0.989541832669323, KO: 0.952215032354405}
+    query_peak1_T_score_above_B_score_fraction: {WT: 0.982818725099601, KO: 0.963165754106521}
+    mapping_distance_comparison: all_reference_neighbors_vs_defined_pt_reference_neighbors
+    source_bundle_preserved: true
+    promotion: false
+  bdev_trajectory_support_mapping_comparison_status: complete_unpromoted_report_only
+  bdev_trajectory_support_mapping_comparison_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_trajectory_support_mapping_comparison_v2_20261012/REPORT.md
+  bdev_trajectory_support_mapping_comparison_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_trajectory_support_mapping_comparison_v2_20261012/completion.json
+  bdev_trajectory_support_mapping_comparison_parameters:
+    latent_model: Bdev_only_PeakVI_frozen_before_query_projection
+    projection_mode: transform_without_refit
+    calibration: leave_one_Bdev_original_sample_out_reference_neighbor_mapping
+    trajectory_truth: finite_Bdev_pt_vs_missing_Bdev_pt
+    score: distance_weighted_fraction_of_30_Bdev_neighbors_with_defined_pt
+    held_out_auc: 0.838375260225431
+    balanced_cutoff: {threshold: 0.688574149286113, sensitivity: 0.787533618098402, specificity: 0.725019529862936}
+    conservative_cutoff: {threshold: 0.876320807314325, target_specificity: 0.90, sensitivity: 0.508305647840532, observed_specificity: 0.899936084084937}
+    density_comparison_denominator: fixed_current_mapped_cells_per_target_and_genotype
+    query_current_mapping_retained_fraction:
+      balanced_range: [0.0469734580866909, 0.124848810643731]
+      conservative_range: [0.031124689707848, 0.0694799086144335]
+    finding: early_Il7_and_Flt3l_enrichment_removed_but_only_small_query_fraction_retained_Il7_WT_peak_near_minus22_to_minus20_persists
+    source_bundles_preserved: true
+    promotion: false
+  bdev_sample_weighted_trajectory_gate_status: complete_unpromoted_report_only
+  bdev_sample_weighted_trajectory_gate_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_sample_weighted_trajectory_gate_v2d_20261012/REPORT.md
+  bdev_sample_weighted_trajectory_gate_receipt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_sample_weighted_trajectory_gate_v2d_20261012/receipt.json
+  bdev_sample_weighted_trajectory_gate_parameters:
+    parent_calibration: bdev_trajectory_support_mapping_comparison_v2_20261012
+    primary_weighting: sqrt_on_trajectory_cells_per_Bdev_sample_within_truth_class
+    sensitivity_weighting: equal_Bdev_sample_within_truth_class
+    pooled_cutoff: 0.688574149286113
+    equal_sample_cutoff: 0.607281698192579
+    sqrt_on_reliability_cutoff: 0.623237373726582
+    auc: {pooled_cell: 0.838, equal_sample_weighted: 0.874, sqrt_on_reliability_weighted: 0.873}
+    cutoff_comparison_figure: figures/cutoff_comparison.pdf
+    density_comparison_denominator: fixed_current_mapped_cells_per_target_and_genotype
+    finding: early_Il7_and_Flt3l_enrichment_remain_removed_later_Il7_WT_peak_persists
+    latent_model_refit: false
+    source_bundles_preserved: true
+    promotion: false
+  bdev_trajectory_cutoff_sweep_status: complete_unpromoted_report_only
+  bdev_trajectory_cutoff_sweep_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_trajectory_cutoff_sweep_v4_20261012/REPORT.md
+  bdev_trajectory_cutoff_sweep_receipt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_trajectory_cutoff_sweep_v4_20261012/receipt.json
+  bdev_trajectory_cutoff_sweep_parameters:
+    primary_cutoff: 0.623237373726582
+    tested_cutoffs: [0.623237373726582, 0.60, 0.55, 0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.10, 0]
+    density_denominator: fixed_current_mapped_cells_per_target_and_genotype
+    lowest_cutoff_without_Flt3l_WT_enrichment: 0.40
+    first_tested_cutoff_with_Flt3l_WT_enrichment: 0.35
+    early_Il7_peak_remains_removed_through_cutoff: 0.10
+    all_cutoff_enrichment_figure: figures/all_cutoff_enrichment_curves.pdf
+    bdev_support_umap_figure: figures/bdev_trajectory_support_umap.pdf
+    bdev_cutoff_inclusion_umap_figure: figures/bdev_cells_included_by_cutoff.pdf
+    mapped_wt_ko_cutoff_umap_figure: figures/mapped_wt_ko_by_bdev_cutoff.pdf
+    bdev_cutoff_inclusion_counts:
+      cutoff_0.5: {all: 17523, fraction: 0.655727276129177, t_cluster18: 17}
+      cutoff_0.4: {all: 19318, fraction: 0.722897878232234, t_cluster18: 24}
+      cutoff_0.3: {all: 21081, fraction: 0.788871009991393, t_cluster18: 32}
+      cutoff_0.2: {all: 22611, fraction: 0.846125060809041, t_cluster18: 48}
+      cutoff_0.1: {all: 24065, fraction: 0.90053511955993, t_cluster18: 93}
+    t_lineage_cluster: 18
+    t_lineage_cluster_cells: 447
+    t_lineage_cluster_defined_pt_cells: 0
+    t_lineage_cluster_median_support: 0.0291610581534982
+    t_lineage_cluster_fraction_at_primary_cutoff: 0.0246085011185682
+    source_bundles_preserved: true
+    promotion: false
+  bdev_cutoff025_mapping_report_status: complete_unpromoted_report_only
+  bdev_cutoff025_mapping_report_pdf: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_cutoff025_mapping_report_v4_20261012/CUTOFF025_MAPPING_REPORT.pdf
+  bdev_cutoff025_mapping_report_receipt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_cutoff025_mapping_report_v4_20261012/receipt.json
+  bdev_cutoff025_mapping_report_parameters:
+    trajectory_support_cutoff: 0.25
+    trajectory_support_cutoff_basis: user_selected
+    held_out_bdev_sensitivity: 0.98077835785477
+    held_out_bdev_specificity: 0.325474043036716
+    t_cluster18_q90_support: 0.215246329604084
+    t_cluster18_excluded_fraction: 0.910514541387025
+    enrichment_region_threshold: genotype_specific_binwise_q95_from_1000_Bdev_background_multinomial_draws_matching_retained_n_primary_WT_regions
+    ko_above_background_regions: ko_above_background_regions_cutoff025.tsv
+    ko_above_background_pt_bins: ko_above_background_pt_bins_cutoff025.tsv
+    ko_above_background_pt_intervals:
+      Flt3l: [[-25.3967296465535, -22.9189999249385]]
+      Il7: [[-26.0161620769572, -21.0607026337273]]
+    enrichment_region_seed: 1729
+    bdev_signal_region_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012/significant_positive_regions.tsv
+    bdev_signal_regions:
+      Flt3l_UP: [[-23.0738580325394, -21.52527695653], [-16.2601012980982, -14.7115202220889]]
+      Il7_UP: [[-21.8349931717319, -19.6669796653188]]
+    retained_query_cells:
+      Flt3l_WT: 1207
+      Flt3l_KO: 1087
+      Il7_WT: 1625
+      Il7_KO: 590
+    figures:
+      bdev_support: figures/bdev_support_and_threshold.pdf
+      retained_query_umap: figures/retained_wt_ko_umap_cutoff025.pdf
+      pt_enrichment_with_bdev_signal_regions: figures/wt_ko_pt_enrichment_bdev_signal_regions_cutoff025.pdf
+    source_bundles_preserved: true
+    promotion: false
   wt_enriched_peak_de_status: complete_unpromoted_report_only
   wt_enriched_peak_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/REPORT.html
   wt_enriched_peak_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/completion.json
@@ -233,6 +526,182 @@ ko_mapping_phase:
     parse_cytokine_aggregate_cell_set: set:qc_use_downstream
     biological_replicates_per_group: 1
     inference: descriptive_cell_level_only
+    promotion: false
+  bdev_selected_motif_pt_heatmaps_status: complete_unpromoted_report_only
+  bdev_selected_motif_pt_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_selected_motif_pt_heatmaps_v1_20261010_run5/REPORT.md
+  bdev_selected_motif_pt_heatmaps_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    motif_source: exact_read_only_bdev_jaspar_match_matrix
+    accessibility_matrix: ATAC_bdev_mm10_peaks
+    reference_pseudotime: exact_bdev_metadata_pt
+    query_pseudotime: peakvi_bdev_neighbor_mapped_pt
+    motif_selection: top_30_temporal_sd_across_bdev_bins_only
+    background_expectation_center_scale_and_order: bdev_only
+    query_role: display_only_after_bdev_selection
+    minimum_cells_per_displayed_pseudobulk: 20
+    sparse_bins: displayed_as_missing
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    downstream_export: all_746_Bdev_eligible_motifs_with_nonzero_temporal_SD
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  bdev_directional_motif_trajectory_adjusted_wt_ko_status: complete_unpromoted_report_only
+  bdev_directional_motif_trajectory_adjusted_wt_ko_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_strong_directional_motif_trajectory_adjusted_wt_ko_v1_20261010/REPORT.md
+  bdev_directional_motif_trajectory_adjusted_wt_ko_parameters:
+    source: bdev_selected_motif_pt_heatmaps_v1_20261010_run5
+    motif_universe: all_746_Bdev_eligible_motifs_per_region
+    strong_Bdev_directional_pattern:
+      minimum_absolute_last_third_minus_first_third_change_Bdev_SD: 1.5
+      minimum_absolute_spearman_with_Bdev_pseudotime: 0.6
+      direction_agreement_required: true
+    retained_motifs: {Flt3l_peak1_up: 134, Flt3l_peak1_down: 161, Il7_peak2_up: 149, Il7_peak2_down: 42}
+    trajectory_adjustment: matched_bin_WT_minus_KO_weighted_to_Bdev_cell_distribution
+    descriptive_difference_flag: {minimum_absolute_effect_Bdev_SD: 0.5, minimum_Bdev_weighted_sign_consistency: 0.7}
+    uncertainty: leave_one_pseudotime_bin_out_stability_interval
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  top_adjusted_wt_ko_motif_heatmaps_status: complete_unpromoted_report_only
+  top_adjusted_wt_ko_motif_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/top_adjusted_wt_ko_motif_heatmaps_v1_20261010/REPORT.md
+  top_adjusted_wt_ko_motif_heatmaps_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    source_scores: bdev_strong_directional_motif_trajectory_adjusted_wt_ko_v1_20261010
+    selection: top_20_positive_and_top_20_negative_adjusted_WT_minus_KO_effects_per_region
+    panels: [Bdev, WT, KO, matched_bin_WT_minus_KO]
+    units: Bdev_temporal_SD
+    activity_display_clip: 2.5
+    difference_display_clip: region_specific_p98_capped_between_1_and_6
+    strong_difference_annotation: star
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  single_cell_30nn_top_adjusted_motif_heatmaps_status: complete_unpromoted_report_only
+  single_cell_30nn_top_adjusted_motif_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/single_cell_30nn_top_adjusted_motif_heatmaps_v1_20261010_run4/REPORT.md
+  single_cell_30nn_top_adjusted_motif_heatmaps_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    source_selection: top_adjusted_wt_ko_motif_heatmaps_v1_20261010
+    focal_axis: every_Bdev_cell_in_region_ordered_by_preserved_pt
+    smoothing: 30_nearest_pseudotime_cells_independently_within_Bdev_WT_KO
+    alignment: common_Bdev_focal_cell_pseudotimes
+    displayed_coverage: largest_contiguous_interval_where_both_WT_and_KO_30NN_radius_at_most_0.25_pt
+    retained_focal_cells: {Flt3l_peak1: 1303, Il7_peak2: 936}
+    retained_pt_ranges: {Flt3l_peak1: [-25.9875013490699, -23.1307157740818], Il7_peak2: [-24.7764642564826, -21.7129119047539]}
+    full_axis_values_and_support_audit_exported: true
+    scaling: Bdev_30NN_smoothed_trajectory_mean_and_SD_per_motif
+    panels: [Bdev, WT, KO, matched_position_WT_minus_KO]
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  selected_motif_bdev_umap_query_violins_status: complete_unpromoted_report_only
+  selected_motif_bdev_umap_query_violins_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/selected_motif_bdev_umap_query_violins_v2_20261010/REPORT.md
+  selected_motif_bdev_umap_query_violins_parameters:
+    motifs: {SNAI2: MA0745.2, TCF3: MA0522.3, RUNX1: MA0002.2, SREBF2: MA0596.1, STAT5A_STAT5B: MA0519.1}
+    bdev_umap:
+      matrix: native_chromvar_data
+      space: umap.atac
+      scale: motif_specific_symmetric_absolute_p99_blue_white_red
+    query_violins:
+      regions: [Flt3l_peak1, Il7_peak2]
+      values: per_cell_chromVAR_deviation
+      calibration: region_specific_Bdev_defined_accessible_peaks_background_and_expectation
+      violin_distribution: raw
+      annotation: matched_bin_WT_minus_KO_weighted_to_Bdev_distribution
+      minimum_cells_per_matched_bin: 20
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  tcf3_ebf1_zeb_stat5_runx1_composite_status: complete_unpromoted_report_only
+  tcf3_ebf1_zeb_stat5_runx1_composite_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/tcf3_ebf1_zeb_stat5_runx1_composite_v1_20261010/REPORT.md
+  tcf3_ebf1_zeb_stat5_runx1_composite_parameters:
+    motifs: {TCF3: MA0522.3, EBF1: MA0154.4, ZEB1_ZEB2_proxy: MA0103.3, STAT5A_STAT5B: MA0519.1, RUNX1: MA0002.2}
+    zeb2_note: no_ZEB2_entry_in_746_motif_set_ZEB1_used_as_explicit_family_proxy
+    layout: row_aligned_Bdev_UMAP_left_Flt3L_and_IL7_WT_KO_violins_right
+    bdev_umap: native_chromvar_data_on_umap.atac
+    query_violin_calibration: region_specific_Bdev_defined_accessible_peaks_background_and_expectation
+    adjusted_annotation: matched_bin_WT_minus_KO_weighted_to_Bdev_distribution
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  selected_tf_motif_pt_curves_status: complete_unpromoted_report_only
+  selected_tf_motif_pt_curves_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/selected_tf_motif_pt_curves_v1_20261009/REPORT.md
+  selected_tf_motif_pt_curves_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    requested_tfs: [EBF1, PAX5, TCF3, CEBP, HLF, BACH2, LEF1]
+    selected_motifs: {EBF1: MA0154.4, PAX5: MA0014.3, TCF3: MA0522.3, CEBP: MA0838.1, HLF: MA0043.3, BACH2: MA1101.2, LEF1: MA0768.1}
+    selection_rule: highest_mean_bdev_temporal_sd_across_both_regions_among_matching_jaspar_motifs
+    same_motifs_in_both_regions: true
+    line_colors: {Bdev: black, WT: red, KO: blue}
+    minimum_cells_per_displayed_pseudobulk: 20
+    sparse_bins: gaps
+    y_axis: bdev_centered_and_scaled_chromvar_deviation_with_free_range_per_motif
+    query_role: display_only_after_bdev_selection_and_calibration
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  bdev_variable_gene_expression_pt_heatmaps_status: complete_unpromoted_report_only
+  bdev_variable_gene_expression_pt_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_variable_gene_expression_pt_heatmaps_v1_20261009_run4/REPORT.md
+  bdev_variable_gene_expression_pt_heatmaps_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    common_gene_universe: 30063
+    normalization: native_scworkbench_full_matrix_log1p_cp10k
+    selection: top_30_temporal_sd_of_bdev_pseudotime_bin_mean_expression_per_region
+    eligibility: common_gene_at_least_10_bdev_region_counts_and_positive_mean_in_at_least_3_bdev_bins
+    selection_centering_scaling_and_row_order: bdev_only
+    query_role: display_only_after_bdev_selection
+    all_nonempty_bins_calculated: true
+    low_cell_highlight_threshold: 20
+    low_cell_highlight: black_border_and_cross
+    zero_cell_bins: gray
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    display_clip_bdev_sd: 3
+    exported_values_clipped: false
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  query_vs_bdev_gene_expression_diff_heatmaps_status: complete_unpromoted_report_only
+  query_vs_bdev_gene_expression_diff_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/query_vs_bdev_gene_expression_diff_heatmaps_v1_20261009_run2/REPORT.md
+  query_vs_bdev_gene_expression_diff_heatmaps_parameters:
+    source_gene_selection: bdev_variable_gene_expression_pt_heatmaps_v1_20261009_run4
+    comparisons: [WT_minus_Bdev, KO_minus_Bdev]
+    matching: same_pseudotime_bin
+    units: bdev_temporal_standard_deviations
+    positive_value: query_higher_than_bdev
+    negative_value: bdev_higher_than_query
+    all_calculable_bins_included: true
+    low_cell_highlight_threshold: 20
+    low_cell_highlight: black_border_and_cross_if_either_constituent_is_low
+    noncalculable_bins: gray
+    display_clip_bdev_sd: 3
+    exported_values_clipped: false
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    promotion: false
+  ko_specific_gene_expression_diff_heatmaps_status: complete_unpromoted_report_only
+  ko_specific_gene_expression_diff_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_specific_bdev_variable_gene_expression_diff_heatmaps_v1_20261009/REPORT.md
+  ko_specific_gene_expression_diff_heatmaps_parameters:
+    regions: [Flt3l_peak1, Il7_peak2]
+    common_gene_universe: 30063
+    normalization: native_scworkbench_full_matrix_log1p_cp10k
+    selection: Bdev_variable_genes_ranked_by_reliability_weighted_mean_absolute_KO_minus_Bdev_difference_minus_WT_minus_Bdev_difference
+    bdev_variability_filter:
+      metric: temporal_SD_across_Bdev_pseudotime_bin_means
+      base_eligibility: Bdev_maximum_bin_mean_at_least_0.1_and_at_least_3_nonzero_Bdev_bins
+      retained_tail: top_25_percent_per_region
+      thresholds: {Flt3l_peak1: 0.0649655507385616, Il7_peak2: 0.0924976376868199}
+      retained_genes: {Flt3l_peak1: 2270, Il7_peak2: 2483}
+    primary_thresholds: {ko_mean_absolute_difference_minimum: 0.2, ko_to_wt_difference_ratio_minimum: 1.5, maximum_bin_mean_expression_minimum: 0.1}
+    reliability_weight: geometric_mean_of_bdev_and_query_cell_count_fractions_capped_at_20
+    all_nonempty_bins_used: true
+    low_cell_bins: downweighted_not_excluded_and_marked
+    top_genes_per_region: 30
+    panels: [Bdev_expression, WT_minus_Bdev, KO_minus_Bdev]
+    bdev_expression_scale: raw_mean_log1p_cp10k_region_specific_p99_display_cap
+    difference_display_unit: raw_mean_log1p_cp10k_difference
+    difference_display_clip: 2
+    exported_values_clipped: false
+    technical_gene_filtering: none_unbiased_screen
+    biological_replicates_per_genotype: 1
+    inference: descriptive
     promotion: false
   ebf1_enhancer_il7_da_status: complete_unpromoted_report_only
   ebf1_enhancer_il7_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_enhancer_il7_enriched_pt_da_v1_20261001/REPORT.html
@@ -374,6 +843,24 @@ ko_mapping_phase:
       test: two_sided_cell_level_Wilcoxon
       p_adjustment: BH_jointly_across_8_tests
     inference: descriptive_cell_level_only_one_sample_per_group
+    promotion: false
+  flt3l_il7_ko_vs_wt_hallmark_gsea_status: complete_unpromoted_report_only_outside_scworkbench
+  flt3l_il7_ko_vs_wt_hallmark_gsea_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_hallmark_gsea_v1_20261010_run2/REPORT.md
+  flt3l_il7_ko_vs_wt_hallmark_gsea_parameters:
+    outside_scworkbench_reason: pathway_enrich_is_hypergeometric_ORA_not_preranked_GSEA
+    user_approved_outside_analysis: true
+    source_de_report: ko_shared_enriched_peak_rna_de_v1_20261002
+    comparisons: [FLT3LKO_vs_FLT3L_WT, IL7KO_vs_IL7_WT]
+    ranking_universe: all_genes_with_nonzero_mean_CP10K_in_WT_or_KO
+    ranking_statistic: negative_stored_standard_log2fc_equals_KO_over_WT
+    positive_NES: KO_higher
+    negative_NES: WT_higher
+    gene_sets: {source: msigdbr, database: Mouse_MSigDB_2026.1.Mm, collection: MH_Hallmark, sets: 50}
+    method: {implementation: fgseaMultilevel_1.34.2, min_size: 15, max_size: 500, eps: 0, seed: 1729, processes: 1}
+    ranked_detected_genes: {Flt3L: 22324, Il7: 21730}
+    fdr_below_0.05: {Flt3L_total: 20, Flt3L_KO_higher: 4, Flt3L_WT_higher: 16, Il7_total: 3, Il7_KO_higher: 2, Il7_WT_higher: 1}
+    biological_replicates_per_genotype: 1
+    inference: descriptive_no_biological_replicate_level_inference
     promotion: false
   il7_responsive_peak_global_status: complete_unpromoted_report_only
   il7_responsive_peak_global_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_responsive_peak_global_v1_20261002/REPORT.md
@@ -597,6 +1084,14 @@ processing:
   ko_mapping_qc_runner: processing/integration/run_peakvi_mapping_qc.sh
   ko_mapping_reference_umap_report: figure_scripts/bdev_integrated/06_peakvi_reference_umap_projection.R
   ko_mapping_reference_umap_runner: processing/integration/run_peakvi_reference_umap_projection.sh
+  bdev_trajectory_support_mapping_comparison: processing/integration/81_bdev_trajectory_support_mapping_comparison.R
+  bdev_trajectory_support_mapping_comparison_runner: processing/integration/run_81_bdev_trajectory_support_mapping_comparison.sh
+  bdev_sample_weighted_trajectory_gate: processing/integration/82_bdev_sample_weighted_trajectory_gate.R
+  bdev_sample_weighted_trajectory_gate_runner: processing/integration/run_82_bdev_sample_weighted_trajectory_gate.sh
+  bdev_trajectory_cutoff_sweep: processing/integration/83_bdev_trajectory_cutoff_sweep.R
+  bdev_trajectory_cutoff_sweep_runner: processing/integration/run_83_bdev_trajectory_cutoff_sweep.sh
+  bdev_cutoff025_mapping_report: processing/integration/84_bdev_cutoff025_mapping_report.R
+  bdev_cutoff025_mapping_report_runner: processing/integration/run_84_bdev_cutoff025_mapping_report.sh
   ko_positive_cytokine_report: figure_scripts/bdev_integrated/07_ko_cytokine_positive_signal_report.R
   ko_positive_cytokine_report_runner: processing/integration/run_ko_cytokine_positive_signal_report.sh
   ko_positive_cytokine_distribution_report: figure_scripts/bdev_integrated/08_ko_cytokine_positive_distribution_report.R
@@ -618,6 +1113,31 @@ processing:
   ko_il7_peak2_fc_filtered_de_genes_runner: processing/integration/run_il7_peak2_fc_filtered_de_genes.sh
   ko_shared_enriched_peak_rna_de: processing/integration/17_shared_enriched_peak_rna_de.R
   ko_shared_enriched_peak_rna_de_runner: processing/integration/run_shared_enriched_peak_rna_de.sh
+  flt3l_il7_ko_vs_wt_hallmark_gsea: processing/integration/52_flt3l_il7_ko_vs_wt_hallmark_gsea.R
+  flt3l_il7_ko_vs_wt_hallmark_gsea_runner: processing/integration/run_52_flt3l_il7_ko_vs_wt_hallmark_gsea.sh
+  default_go_trajectory_residual_ucell: processing/integration/65_go_ucell_median_permutation.R
+  default_go_trajectory_residual_ucell_runner: processing/integration/run_73_go_ucell_rna_feature_residual_dynamic_range.sh
+  default_go_trajectory_clustering: figure_scripts/bdev_integrated/32_significant_region_residual_ucell_kmeans.R
+  default_go_trajectory_clustering_runner: figure_scripts/bdev_integrated/run_36_significant_region_residual_ucell_kmeans_k25_20_20.sh
+  default_go_trajectory_report: figure_scripts/bdev_integrated/37_significant_region_cluster_figure_report.R
+  default_go_trajectory_report_runner: figure_scripts/bdev_integrated/run_37_significant_region_cluster_figure_report.sh
+  default_go_trajectory_pdf_runner: figure_scripts/bdev_integrated/run_38_cluster_figure_report_pdf.sh
+  default_cytokine_trajectory_residual_ucell: processing/integration/66_cytokine_ucell_dynamic_range.R
+  default_cytokine_trajectory_residual_ucell_runner: processing/integration/run_74_cytokine_ucell_rna_feature_residual_dynamic_range.sh
+  mapped_density_enriched_vs_bdev_residual_regions: figure_scripts/bdev_integrated/39_mapped_density_enriched_vs_bdev_residual_regions.R
+  mapped_density_enriched_vs_bdev_residual_regions_runner: figure_scripts/bdev_integrated/run_39_mapped_density_enriched_vs_bdev_residual_regions.sh
+  mapped_enrichment_pseudotime_matched_gsea: processing/integration/75_mapped_enrichment_pseudotime_matched_gsea.R
+  mapped_enrichment_pseudotime_matched_gsea_runner: processing/integration/run_75_mapped_enrichment_pseudotime_matched_gsea.sh
+  mapped_enrichment_dynamic_change_gsea: processing/integration/76_mapped_enrichment_dynamic_change_gsea.R
+  mapped_enrichment_dynamic_change_gsea_runner: processing/integration/run_76_mapped_enrichment_dynamic_change_gsea.sh
+  mapped_enrichment_dynamic_go_top_summary: processing/integration/77_summarize_dynamic_go_top_terms.R
+  mapped_enrichment_dynamic_go_top_summary_runner: processing/integration/run_77_summarize_dynamic_go_top_terms.sh
+  mapped_enrichment_go_failure_to_silence_summary: processing/integration/78_summarize_go_failure_to_silence.R
+  mapped_enrichment_go_failure_to_silence_summary_runner: processing/integration/run_78_summarize_go_failure_to_silence.sh
+  mapped_enrichment_individual_gene_divergence: processing/integration/79_individual_gene_divergent_trajectories.R
+  mapped_enrichment_individual_gene_divergence_runner: processing/integration/run_79_individual_gene_divergent_trajectories.sh
+  mapped_enrichment_fdr_supported_go_curves: figure_scripts/bdev_integrated/40_fdr_supported_go_dynamic_curves.R
+  mapped_enrichment_fdr_supported_go_curves_runner: figure_scripts/bdev_integrated/run_40_fdr_supported_go_dynamic_curves.sh
   ko_shared_enriched_peak_violin_top2_update: processing/integration/18_update_shared_enriched_violin_top2_per_direction.R
   ko_shared_enriched_peak_violin_top2_update_runner: processing/integration/run_update_shared_enriched_violin_top2.sh
   ko_shared_enriched_peak_violin_top20_by_direction_update: processing/integration/19_update_shared_enriched_violin_top20_by_direction.R

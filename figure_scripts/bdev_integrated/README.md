@@ -1,6 +1,44 @@
 # Integrated Bdev reports
 
-`05_competitor_aware_sliding_window_report.R` is the current report source. It
+For GO trajectory results, the default display is the significant-region-only
+residual-UCell clustering from
+`run_36_significant_region_residual_ucell_kmeans_k25_20_20.sh`, with BP=25,
+MF=20, and CC=20. `run_37_significant_region_cluster_figure_report.sh` composes
+the heatmaps, centroid curves, and biological summaries;
+`run_38_cluster_figure_report_pdf.sh` renders the link-free PDF. Earlier cluster
+resolutions and raw-UCell/original-z comparisons remain diagnostic outputs.
+
+The matching residual-UCell trajectory inference for all 38 cytokine signatures
+is complete in
+`cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012`.
+Use its significance and region tables for new cytokine figures. The residual
+curves stored under the earlier raw-UCell run remain diagnostic comparisons and
+must not supply residual-UCell significance annotations.
+
+`39_mapped_density_enriched_vs_bdev_residual_regions.R` compares the mapped
+WT/KO Bdev-normalized density curves with two independently defined interval
+types: shared WT-and-KO density enrichment and Bdev residual-UCell cytokine
+activity. The plot, exact bounds, and overlap table are written beneath the
+default residual-UCell cytokine run by
+`run_39_mapped_density_enriched_vs_bdev_residual_regions.sh`.
+
+The completed mapped-enrichment WT-versus-KO GSEA report is under
+`flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012/`. Its `figures/`
+directory contains aligned Hallmark, GO BP/MF/CC, and cytokine-signature NES
+heatmaps. Blue denotes KO-higher enrichment, red denotes WT-higher enrichment,
+and stars show collection-specific FDR thresholds. These figures use
+pseudotime-bin-matched, Bdev-density-weighted gene ranks and are descriptive
+because each genotype has one biological sample.
+
+`40_fdr_supported_go_dynamic_curves.R` plots the eight strict
+WT-induction/KO-attenuation GO terms that remain FDR-significant when the sparse
+terminal bin is included. Member-gene log2 expression is centered separately
+to each genotype's early baseline, and the sparse terminal bin is shown with
+an open point. Run with `run_40_fdr_supported_go_dynamic_curves.sh`; output is
+under `flt3l_il7_ko_vs_wt_fdr_supported_go_curves_v1_20261012/`.
+
+`05_competitor_aware_sliding_window_report.R` is the current cytokine-signature
+report source. It
 uses the unpromoted native UCell session created by
 `processing/integration/06_score_competitor_aware_signatures.R` and profiles all
 33 accepted competitor-aware full signatures. Bdev gene coverage is retained
@@ -42,10 +80,10 @@ is linked from the sliding-window report for comparison.
 Only the report directory is writable during this stage; every bundle and
 session is mounted read-only. The earlier report is
 `intermediate_objects/bdev_integrated/reports/cytokine_pt_20260923T2231Z/sliding_window_review/REPORT.html`
-under mirrored storage. The latest report is
+under mirrored storage. The latest cytokine-signature report is
 `intermediate_objects/bdev_integrated/reports/competitor_aware_pt_all33_20260925/trajectory_review/REPORT.html`.
-The integration remains working and unaccepted pending user review. The latest
-scoring session and trajectory review perform no promotion.
+That cytokine-signature result remains unaccepted pending separate user review;
+its scoring session and trajectory review perform no promotion.
 
 `06_peakvi_reference_umap_projection.R` is the report-only KO mapping display.
 It reads the native Bdev `umap.atac` through `wb_space()` and reuses the exact

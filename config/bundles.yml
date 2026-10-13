@@ -12,8 +12,9 @@ bundles:
     bundle_dir: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/bundle
     parents: []
     accepted_state:
-      bundle_state_fingerprint: 1027f6390c6b853acc2bf40d3fae9abb59393f4256cb39285685eb2b2973f7ec
-      recipient_validation_fingerprint: e8291159c9472770275b73e5563f1477a01d19b775b3c44037ed89a43849b83b
+      bundle_state_fingerprint: 43918bc3fe79b5d7d0dad3a5b7aebc7450e63f16e41e843edd2c20cd3866f988
+      recipient_validation_fingerprint: null
+      validation_status: capsule_registered_recipient_ready_full_revalidation_incomplete
 
   parse_cytokines:
     role: source_analysis
@@ -124,6 +125,18 @@ bundles:
         il7_peak2_fc_filtered_de_genes_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/il7_peak2_fc1p5_bh05_de_genes_v1_20261002/completion.json
         shared_enriched_peak_rna_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/REPORT.html
         shared_enriched_peak_rna_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/completion.json
+      ebf1_putative_enhancers_three_way_v2:
+        status: report_complete_unpromoted
+        parents:
+          - bdev_reference
+          - gse259355_tcf3_prob
+        report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_putative_enhancers_three_way_v2_20261005/REPORT.html
+        completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_putative_enhancers_three_way_v2_20261005/completion.json
+        tcf3_peak_umap_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_tcf3_peaks_bdev_umap_v3_20261005/REPORT.html
+        tcf3_peak_umap_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_tcf3_peaks_bdev_umap_v3_20261005/completion.json
+        tcf3_coverage_placseq_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/tcf3_ebf1_coverage_placseq_tracks_v4_20261005/REPORT.html
+        tcf3_coverage_placseq_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/tcf3_ebf1_coverage_placseq_tracks_v4_20261005/completion.json
+        external_interactions: GSE162858_230238_H3K4me3_FitHiChIP
     runtime:
       r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/parse_cytokines/work/signature_recovery_20260923T200125Z/runtime_v4/library
       scworkbench_version: 0.1.0.9004

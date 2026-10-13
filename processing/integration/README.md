@@ -187,6 +187,34 @@ completed report-only output is under
 `reports/ko_mapping_reference_umap_v1_20261001/`; no space was registered or
 promoted and the Bdev bundle fingerprint remained unchanged.
 
+### Current default Bdev mapping and enrichment regions
+
+At present, the default query-to-Bdev mapping uses the Bdev-only PeakVI model
+frozen before query projection; query cells are transformed without refitting.
+The existing general-support gate is applied first. Trajectory membership then
+requires a score of at least 0.25, where the score is the distance-weighted
+fraction of the 30 Bdev neighbors that have defined `pt`. This score was
+calibrated by leaving out each original Bdev sample in turn. Query pseudotime is
+the distance-weighted median of defined neighbor `pt` values. The exact
+`Bdev@meta.data$pt` values and their missing entries remain unchanged.
+
+Mapped enrichment is evaluated in 100 Bdev pseudotime bins. Within each target
+and genotype, the retained-query conditional cell fraction is smoothed with a
+centered three-bin rolling mean and divided by the corresponding Bdev rolling
+fraction. A genotype-specific background envelope is the bin-wise 95th
+percentile from 1,000 multinomial draws from the Bdev pseudotime distribution,
+matching that genotype's retained cell count (seed 1729). Consecutive WT bins
+above the WT-specific envelope define the primary enrichment peaks. KO
+intervals and individual pseudotime bins above the separately size-matched KO
+envelope are retained for possible later use, but do not redefine the primary
+WT peaks. Significant Bdev residual-UCell cytokine regions are display-only
+overlays and are not used in peak calling.
+
+Run `bash processing/integration/run_84_bdev_cutoff025_mapping_report.sh`. The
+current report and machine-readable WT/KO region artifacts are under
+`reports/bdev_cutoff025_mapping_report_v4_20261012/`. This is a report-only
+default and does not mutate or promote any source bundle.
+
 `figure_scripts/bdev_integrated/07_ko_cytokine_positive_signal_report.R`
 combines the reviewed mapping with the accepted positive Flt3L and IL-7 score
 state. It produces exactly two five-panel composite figures: accepted combined
@@ -268,6 +296,97 @@ Flt3L-UP, Flt3L-DOWN, IL-7-UP, and IL-7-DOWN profiles. All 105 signature genes
 map exactly to the KO RNA matrix. A single four-panel figure shows all four
 samples in every profile; exact memberships, per-cell scores, coverage, and
 sample summaries are exported.
+
+The default GO trajectory analysis is the completed residual-UCell
+dynamic-range permutation run produced by
+`run_73_go_ucell_rna_feature_residual_dynamic_range.sh`. It residualizes each
+native-compatible UCell score for `log1p(nFeature_RNA)` without pseudotime in
+the adjustment model, summarizes the unchanged Bdev `pt` trajectory in 97
+overlapping windows, and uses 1,000 permutations. The accepted downstream
+pattern resolution is BP=25, MF=20, and CC=20 via
+`figure_scripts/bdev_integrated/run_36_significant_region_residual_ucell_kmeans_k25_20_20.sh`.
+Prior gene-set runs are retained for sensitivity and provenance, not selected
+as the default.
+
+The same selected protocol is complete for the 38 cytokine signatures in
+`cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012`.
+For each signature, it fits
+`UCell ~ ns(log1p(nFeature_RNA), df=4)` without pseudotime, carries the per-cell
+residuals into the identical 5%-width/1%-step windows, and recomputes both the
+1,000-permutation peak-to-trough test and trajectory-wide positive-region test.
+The run finds 32 dynamically significant signatures, 56 supported positive
+peaks, and 34 merged positive regions. It is produced by
+`run_74_cytokine_ucell_rna_feature_residual_dynamic_range.sh`; native-score
+reconstruction and bundle-fingerprint checks passed. The earlier residual
+cytokine curves under
+`cytokine_ucell_dynamic_range_perm1000_v1_20261012/diagnostics/` validate curve
+shape and reduced RNA-complexity association only; their completion record
+explicitly sets `permutation_calls_changed` to false and remains historical.
+
+The predeclared WT-versus-KO GSEA region policy uses `Flt3l_shared_peak1` and
+`Il7_shared_peak2` from the mapped shared-enrichment report. These intervals
+retain thousands of mapped cells in both genotypes and will be matched by
+pseudotime bin before constructing KO-minus-WT gene ranks. Bdev residual-UCell
+cytokine regions are annotation context only: KO coverage falls to 35 versus
+672 WT cells in the early FLT3L region and 20 versus 274 WT cells in the IL-7
+region, consistent with failure to progress into those states. The late FLT3L
+region contains only 17 query cells in total. It must not be used for primary
+WT-versus-KO GSEA.
+
+`processing/integration/75_mapped_enrichment_pseudotime_matched_gsea.R`
+implements the completed analysis. It reads the retained scWorkbench
+log1p-CP10K matrix from the existing session stage without mutation, calculates
+WT and KO linear-CP10K means in each selected mapped-pseudotime bin, and ranks
+genes by the Bdev-density-weighted mean bin-wise KO-versus-WT log2FC. The report
+tests Hallmark, GO BP/MF/CC, and the 38 accepted cytokine signatures using
+`fgseaMultilevel`; BH adjustment is separate by comparison and collection.
+The runner is `run_75_mapped_enrichment_pseudotime_matched_gsea.sh`, and the
+completed output is
+`reports/flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012/`.
+Primary-versus-sparse-bin sensitivity correlations are 0.988 and 0.991 for
+Hallmark NES in FLT3L and IL-7, respectively. Source bundle fingerprints are
+unchanged and no results are promoted.
+
+`processing/integration/76_mapped_enrichment_dynamic_change_gsea.R` extends
+that matched-region analysis from an average KO-versus-WT effect to a
+genotype-by-pseudotime change contrast. For every detected gene it calculates
+`(WT late - WT early) - (KO late - KO early)` on bin-level
+log2(mean linear CP10K + 1), then runs preranked GSEA on Hallmark, GO BP/MF/CC,
+and cytokine sets. The primary endpoints are the first and last two bins with
+at least 20 cells in each genotype; a separate sensitivity analysis includes
+the sparse terminal bin. Gene-set curves center each genotype to its own early
+baseline. Positive GSEA is only classified as failed induction when the
+member-gene summary rises in WT and rises less in KO. The runner is
+`run_76_mapped_enrichment_dynamic_change_gsea.sh`; completed output is under
+`reports/flt3l_il7_ko_vs_wt_dynamic_change_gsea_v1_20261012/`.
+
+`77_summarize_dynamic_go_top_terms.R` keeps the complete BP/MF/CC testing in
+that parent run but produces a focused report with at most five significant
+terms per GO group and comparison. Reporting is restricted to terms whose
+member-gene summary rises in WT and rises less or declines in KO; each row also
+shows the sparse-terminal-bin sensitivity result. Run with
+`run_77_summarize_dynamic_go_top_terms.sh`. Output is under
+`reports/flt3l_il7_ko_vs_wt_dynamic_change_top_go_v1_20261012/`.
+
+`78_summarize_go_failure_to_silence.R` tests the reciprocal strict pattern in
+the same complete GO results: a term must decrease in WT, change upward
+relative to WT in KO, have negative differential-change NES, and pass FDR.
+The report shows at most five terms per BP/MF/CC group and plots curves for the
+reported terms that also pass sparse-terminal sensitivity. Run with
+`run_78_summarize_go_failure_to_silence.sh`; output is under
+`reports/flt3l_il7_ko_vs_wt_go_failure_to_silence_v1_20261012/`.
+
+`79_individual_gene_divergent_trajectories.R` applies both strict trajectory
+directions to individual genes. A gene must retain the sign definition under
+both the reliable-bin and sparse-terminal endpoint policies; genes are ranked
+by the smaller absolute divergence across the two. The report lists the top 20
+genes and plots the top 12 per direction and comparison. Plot lines retain the
+log2(mean CP10K + 1) trajectories used for selection, while ribbons show the
+cell-level log2(CP10K + 1) IQR. The ribbons describe expression heterogeneity,
+not confidence intervals. No gene-level P values are assigned because there is
+one biological sample per genotype. Run with
+`run_79_individual_gene_divergent_trajectories.sh`; output is under
+`reports/flt3l_il7_ko_vs_wt_individual_gene_divergence_v1_20261012/`.
 
 `processing/integration/13_ebf1_enhancer_il7_da.R` tests accessibility in all
 259 quantified Bdev peaks overlapping the GRCm38/mm10 Ebf1 TSS ±3 Mb window
@@ -371,3 +490,199 @@ Bdev pseudotime. The lineage figure contains B and T panels; the cytokine
 figure contains Flt3L-UP and IL-7-UP panels. Profiles use 100 underlying bins,
 a centered five-bin cell-weighted mean with at least 20 cells, explicit gaps
 for unsupported intervals, and dashed BB1/BB2 boundaries.
+
+`52_flt3l_il7_ko_vs_wt_hallmark_gsea.R` uses the complete shared-region DE
+tables for a user-approved analysis outside scWorkbench. This is necessary
+because the available scWorkbench `pathway_enrich` operation is hypergeometric
+over-representation analysis rather than preranked GSEA. Every gene with
+nonzero mean CP10K in WT or KO is ranked by KO-over-WT standard log2FC;
+positive NES therefore means KO-higher enrichment. `fgseaMultilevel` tests the
+50 mouse-native MSigDB 2026.1.Mm Hallmark sets, which are frozen with the
+report along with leading edges and full rankings. Run with
+`bash processing/integration/run_52_flt3l_il7_ko_vs_wt_hallmark_gsea.sh`.
+The completed unpromoted report is under
+`reports/flt3l_il7_ko_vs_wt_hallmark_gsea_v1_20261010_run2/`. Results remain
+descriptive because there is one biological sample per genotype.
+
+`34_ebf1_putative_enhancers_three_way.R` evaluates all 259 Bdev peaks in the
+mm10 Ebf1 TSS ±3 Mb window using three independent evidence routes. Route 1
+maps GSE259355 peaks with `abs(log2FC) > 1` and DESeq2 BH-adjusted P < 0.05 to
+the Bdev peak universe by direct interval overlap. Route 2 tests Ebf1
+log1p-CP10K expression against log1p-CP10K peak accessibility in the exact 971
+Bdev cells in `Il7_shared_peak2`; partial Spearman tests control for nonlinear
+source `pt`, RNA depth, and ATAC depth, with BH correction over the 259 local
+peaks. Route 3 selects GSE162858 230-238 H3K4me3 PLAC-seq interactions whose
+5-kb anchor contains the Ebf1 TSS and maps Bdev peaks to the opposite anchor
+after expanding each border by 20 kb. Run with
+`bash processing/integration/run_ebf1_putative_enhancers_three_way.sh`.
+
+The completed unpromoted report is under
+`reports/ebf1_putative_enhancers_three_way_v2_20261005/`. It retains a complete
+one-row-per-peak audit plus all one-to-many source mappings. Eight Bdev peaks
+have TCF3 differential-accessibility support, 63 have PLAC-seq support, and no
+peak has BH-significant partial correlation with Ebf1 expression in the
+restricted IL-7 interval. The distal union contains 64 putative enhancers; four
+are supported by both TCF3 loss and Ebf1-promoter contact, and none by all three
+routes. No parent bundle or result was promoted.
+
+`35_plot_ebf1_tcf3_peaks_bdev_umap.R` plots the eight route-1 peaks across all
+26,723 Bdev cells on the unchanged native `umap.atac` embedding. It reads the
+existing staged scWorkbench log1p-CP10K peak matrix and does not rerun
+normalization or modify the reference. Small gray points denote zero
+accessibility, while larger colored points show nonzero cells. Each peak's
+positive values are capped at its nonzero 99th percentile and scaled
+independently for the spatial display; the uncapped values are exported.
+Run with
+`bash processing/integration/run_plot_ebf1_tcf3_peaks_bdev_umap.sh`. The
+completed unpromoted report is under
+`reports/ebf1_tcf3_peaks_bdev_umap_v3_20261005/`. This v3 uses the revised
+±20 kb PLAC-seq classification and retains the larger nonzero-cell display;
+the earlier reports remain preserved.
+
+`36_tcf3_ebf1_coverage_placseq_tracks.R` creates normalized bulk ATAC coverage
+tracks for the six GSE259355 libraries. Each filtered paired-end BAM is
+normalized independently to fragment-span coverage per million filtered
+first-mate records, then the three replicate tracks are averaged with equal
+weight within control and TCF3-depleted conditions. The depleted mean retains
+the source design of two 6-hour and one 8-hour libraries. The full mm10 Ebf1
+TSS ±3 Mb figure uses 1-kb bins, a centered 5-kb rolling mean, and all 28
+230238 H3K4me3 PLAC-seq Ebf1-promoter links. A second figure shows ±10 kb
+around each of the eight TCF3-positive Bdev peaks using 50-bp bins and a
+centered 250-bp rolling mean. Condition-average 50-bp bedGraph tracks and all
+replicate-level values are exported. This user-approved report-only coverage
+calculation is outside scWorkbench because no registered coverage-track
+operation is available; no bundle is modified or promoted. Run with
+`bash processing/integration/run_tcf3_ebf1_coverage_placseq_tracks.sh`. The
+completed report is under
+`reports/tcf3_ebf1_coverage_placseq_tracks_v4_20261005/`. The v2 report added a
+coverage-plus-PLAC-seq view restricted to mm10 chr11:44-46 Mb; v3 displays
+the PLAC-seq arcs downward from their anchor baseline; v4 adds full-region and
+44-46 Mb layouts with control and depleted means in separate stacked tracks
+on a shared y-axis. The current in-place v4 display revision uses filled ATAC
+areas, halves the ATAC panel-height allocation, and omits the PLAC distal-anchor
+vertical bars. Earlier versions remain preserved.
+
+`42_bdev_selected_motif_pt_heatmaps.R` creates separate motif-accessibility
+heatmaps for `Flt3l_peak1` and `Il7_peak2`. For each region, the accessible
+peak universe, chromVAR background and expectation, top-30 temporal-variability
+selection, row ordering, centering, and scaling are all fixed from Bdev alone.
+The mapped WT and knockout pseudobulks are evaluated only afterward and cannot
+affect motif selection. Bins with fewer than 20 cells are blank, and the final
+panel is descriptive WT-minus-KO in Bdev standard-deviation units. The approved
+report-only workflow reads the exact pre-existing Bdev JASPAR match matrix
+because the bundles contain no registered motif library/match set; it does not
+modify or promote a bundle. Run with
+`bash processing/integration/run_42_bdev_selected_motif_pt_heatmaps.sh`. The
+completed output is under
+`reports/bdev_selected_motif_pt_heatmaps_v1_20261010_run5/`. The displayed
+heatmaps remain top-30 summaries, while run 5 also exports standardized
+trajectories for all 746 eligible motifs for unbiased downstream screening.
+
+`47_bdev_up_down_motif_trajectory_adjusted_wt_ko.R` screens all 746 eligible
+motifs rather than imposing a top-30 limit. A strong Bdev directional pattern
+requires an absolute last-third minus first-third change of at least 1.5 Bdev
+temporal SD, absolute Spearman correlation with Bdev pseudotime of at least
+0.6, and agreement between the two directions. WT-minus-KO is then calculated
+within matched mapped-pseudotime bins and averaged using the Bdev cell
+distribution, removing genotype occupancy differences along the interval.
+All passing motifs are exported and shown in paginated up/down figures.
+Leave-one-bin-out intervals measure trajectory-stratum stability, not
+biological-replicate uncertainty. Run with
+`bash processing/integration/run_47_bdev_up_down_motif_trajectory_adjusted_wt_ko.sh`.
+The completed report is under
+`reports/bdev_strong_directional_motif_trajectory_adjusted_wt_ko_v1_20261010/`.
+
+`48_top_adjusted_wt_ko_motif_heatmaps.R` visualizes the 20 largest positive
+and 20 largest negative trajectory-adjusted WT-minus-KO motif effects in each
+cytokine region. Each figure aligns Bdev, WT, KO, and matched-bin WT-minus-KO
+heatmaps across pseudotime. Values are in Bdev temporal-SD units, row labels
+show the adjusted effect, and stars mark motifs passing the prespecified
+effect and sign-consistency thresholds. Run with
+`bash processing/integration/run_48_top_adjusted_wt_ko_motif_heatmaps.sh`.
+The completed report is under
+`reports/top_adjusted_wt_ko_motif_heatmaps_v1_20261010/`.
+
+`51_single_cell_30nn_top_adjusted_motif_heatmaps.R` retains those same motif
+rows and their order but replaces pseudotime bins with one displayed column
+per Bdev cell, ordered by the preserved Bdev `pt`. At every Bdev focal
+pseudotime, Bdev, WT, and KO values are independently averaged over that
+group's 30 closest pseudotime cells; matched-position WT-minus-KO is then
+calculated on the common focal axis. Query positions outside each genotype's
+observed mapped-pseudotime support are audited. Figures retain only the largest
+contiguous interval where both WT and KO 30-neighbor radii are at most 0.25
+pseudotime units; full-axis values and support flags remain exported. Run with
+`bash processing/integration/run_51_single_cell_30nn_top_adjusted_motif_heatmaps.sh`.
+The completed report is under
+`reports/single_cell_30nn_top_adjusted_motif_heatmaps_v1_20261010_run4/`.
+
+`49_selected_motif_bdev_umap_query_violins.R` plots SNAI2 (MA0745.2), TCF3
+(MA0522.3), RUNX1 (MA0002.2), SREBF2 (MA0596.1), and STAT5A::STAT5B
+(MA0519.1). Bdev panels use native `chromvar_data` on the unchanged
+`umap.atac`, with motif-specific symmetric blue-white-red scales capped at the
+absolute p99 for display. Query-cell deviations are recomputed independently
+for Flt3L peak 1 and IL-7 peak 2 using region-specific Bdev-defined accessible
+peaks, background peaks, and expectation. Violin plots show raw per-cell WT
+and KO distributions; facet labels add matched-bin WT-minus-KO effects weighted
+to the Bdev pseudotime distribution. Run with
+`bash processing/integration/run_49_selected_motif_bdev_umap_query_violins.sh`.
+The completed report is under
+`reports/selected_motif_bdev_umap_query_violins_v2_20261010/`.
+
+`run_50_tcf3_ebf1_zeb_stat5_runx1_composite.sh` reuses the same read-only
+workflow for TCF3, EBF1, ZEB-family, STAT5A::STAT5B, and RUNX1. The single tall
+composite keeps every native Bdev UMAP in the left column and places the
+corresponding Flt3L and IL-7 WT/KO violins directly opposite on the right.
+Because the 746-motif set has no ZEB2 entry, ZEB1 (MA0103.3) is explicitly
+labeled as a ZEB-family proxy. The completed report is under
+`reports/tcf3_ebf1_zeb_stat5_runx1_composite_v1_20261010/`.
+
+`43_selected_tf_motif_pt_curves.R` plots Bdev (black), WT (red), and knockout
+(blue) motif-accessibility trajectories together for EBF1, PAX5, TCF3, CEBP,
+HLF, BACH2, and LEF1. One fixed motif is selected per requested TF/family by
+the highest mean Bdev temporal SD across `Flt3l_peak1` and `Il7_peak2`, so both
+cytokine figures use exactly the same seven motif IDs. Selection and chromVAR
+calibration remain Bdev-only, and bins with fewer than 20 cells are retained as
+gaps. Run with
+`bash processing/integration/run_43_selected_tf_motif_pt_curves.sh`. The
+completed output is under
+`reports/selected_tf_motif_pt_curves_v1_20261009/`.
+
+`44_bdev_variable_gene_expression_pt_heatmaps.R` mirrors the motif heatmap
+screen at the RNA level. It applies native scWorkbench full-matrix
+log1p-CP10K normalization to Bdev and reuses the identically normalized query
+matrix. For each of `Flt3l_peak1` and `Il7_peak2`, the top 30 genes are chosen
+independently by temporal SD across Bdev bin means; WT and KO never affect
+selection, clustering, centering, or scaling. Every nonempty bin is calculated,
+including bins with fewer than 20 cells. Those low-cell bins have a black
+border and cross, while zero-cell bins are gray. Run with
+`bash processing/integration/run_44_bdev_variable_gene_expression_pt_heatmaps.sh`.
+The completed output is under
+`reports/bdev_variable_gene_expression_pt_heatmaps_v1_20261009_run4/`.
+
+`45_query_vs_bdev_gene_expression_diff_heatmaps.R` reuses those fixed top-30
+gene lists and Bdev-scaled bin means to calculate matched-bin WT-minus-Bdev and
+KO-minus-Bdev heatmaps. Positive values indicate higher query expression and
+negative values higher Bdev expression. Every calculable bin is included; a
+black border and cross flags comparisons where either constituent bin has
+fewer than 20 cells, while gray denotes a noncalculable comparison. Run with
+`bash processing/integration/run_45_query_vs_bdev_gene_expression_diff_heatmaps.sh`.
+The completed output is under
+`reports/query_vs_bdev_gene_expression_diff_heatmaps_v1_20261009_run2/`.
+
+`46_ko_specific_gene_expression_diff_heatmaps.R` starts from all 30,063 common
+RNA features but restricts the candidate pool using Bdev alone. Within each
+region, genes must have a Bdev maximum bin mean of at least 0.1, expression in
+at least three Bdev bins, and temporal SD in the top quartile. The retained
+genes are then screened for large KO-minus-Bdev but small WT-minus-Bdev
+divergence in matched pseudotime bins. The selection score is the
+reliability-weighted mean absolute KO-minus-Bdev difference minus its WT
+counterpart. Primary hits require KO
+mean absolute difference of at least 0.2 log1p-CP10K and a KO/WT divergence
+ratio of at least 1.5. Every nonempty bin contributes; bins below 20 cells are
+down-weighted, not excluded, and remain marked in the heatmaps. No ribosomal,
+mitochondrial, or other technical-category filter is applied. Each figure puts
+the Bdev mean-expression heatmap beside the WT-minus-Bdev and KO-minus-Bdev
+heatmaps using the same genes, order, and pseudotime bins. Run with
+`bash processing/integration/run_46_ko_specific_gene_expression_diff_heatmaps.sh`.
+The completed output is under
+`reports/ko_specific_bdev_variable_gene_expression_diff_heatmaps_v1_20261009/`.

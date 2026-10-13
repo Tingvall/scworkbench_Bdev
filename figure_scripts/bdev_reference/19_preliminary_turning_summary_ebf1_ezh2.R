@@ -1,0 +1,233 @@
+#!/usr/bin/env Rscript
+
+options(stringsAsFactors = FALSE, warn = 1, width = 180)
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) != 6L) stop(paste(
+  "Usage: 19_preliminary_turning_summary_ebf1_ezh2.R",
+  "<bdev_bundle> <w30_s5_report> <smoothed_report> <turning_report>",
+  "<output_dir> <expected_bundle_fingerprint>"))
+bundle_dir <- normalizePath(args[[1L]], mustWork = TRUE)
+window_report <- normalizePath(args[[2L]], mustWork = TRUE)
+smoothed_report <- normalizePath(args[[3L]], mustWork = TRUE)
+turning_report <- normalizePath(args[[4L]], mustWork = TRUE)
+output_dir <- normalizePath(args[[5L]], mustWork = FALSE)
+expected_fingerprint <- args[[6L]]
+if (dir.exists(output_dir)) stop("Output already exists: ", output_dir)
+stage_dir <- paste0(output_dir, ".incomplete")
+if (dir.exists(stage_dir)) stop("Incomplete output already exists: ", stage_dir)
+dir.create(stage_dir, recursive = TRUE, showWarnings = FALSE)
+
+suppressPackageStartupMessages({
+  library(scworkbench)
+  library(ggplot2)
+  library(patchwork)
+  library(jsonlite)
+})
+
+read_tsv <- function(path) read.delim(path, check.names = FALSE,
+  stringsAsFactors = FALSE, na.strings = "NA")
+write_tsv <- function(x, path) write.table(x, path, sep = "\t", quote = TRUE,
+  row.names = FALSE, na = "NA")
+write_json <- function(x, path) jsonlite::write_json(x, path, pretty = TRUE,
+  auto_unbox = TRUE, digits = NA, null = "null", na = "null")
+
+required <- c(
+  file.path(window_report, "window_distance_and_slope.tsv"),
+  file.path(smoothed_report, "smoothed_slope_windows.tsv"),
+  file.path(smoothed_report, "ebf1_pax5_ezh2_window_expression.tsv"),
+  file.path(turning_report, "selected_turning_regions.tsv"),
+  file.path(turning_report, "selected_turning_region_cells.tsv"))
+stopifnot(all(file.exists(required)))
+
+distance <- read_tsv(required[[1L]])
+slope <- read_tsv(required[[2L]])
+expression <- read_tsv(required[[3L]])
+turning <- read_tsv(required[[4L]])
+turning_cells <- read_tsv(required[[5L]])
+stopifnot(identical(distance$window_id, slope$window_id),
+  nrow(turning) == 4L, !anyDuplicated(turning$window_id),
+  all(c("Ebf1", "Ezh2") %in% expression$gene),
+  all(table(turning_cells$region_id) == 30L))
+
+turning$region_id <- factor(turning$region_id,
+  levels = as.character(turning$region_id))
+region_colors <- c(T1 = "#0072B2", T2 = "#D55E00", T3 = "#009E73",
+  T4 = "#CC79A7")
+stopifnot(identical(levels(turning$region_id), names(region_colors)))
+turning_xy <- merge(turning[, c("window_id", "region_id", "pt")],
+  distance[, c("window_id", "atac_relative_distance",
+    "rna_relative_distance")], by = "window_id", sort = FALSE)
+turning_xy <- turning_xy[match(levels(turning$region_id),
+  as.character(turning_xy$region_id)), ]
+turning_xy$region_id <- factor(turning_xy$region_id,
+  levels = names(region_colors))
+
+bundle <- wb_open_bundle(bundle_dir, read_only = TRUE, validate = FALSE)
+on.exit(try(wb_close_bundle(bundle), silent = TRUE), add = TRUE)
+manifest <- wb_manifest(bundle)
+stopifnot(identical(manifest$bundle_id, "bdev_reference"),
+  identical(manifest$current_state$fingerprint, expected_fingerprint))
+cells <- as.character(wb_cells(bundle, "all"))
+space <- wb_space(bundle, "umap.atac", cells = cells)
+if (is.data.frame(space)) {
+  stopifnot(identical(as.character(space$cell_id), cells),
+    all(c("x", "y") %in% names(space)))
+  umap <- data.frame(cell_id = cells, x = as.numeric(space$x),
+    y = as.numeric(space$y), stringsAsFactors = FALSE)
+} else {
+  stopifnot(identical(rownames(space), cells), ncol(space) == 2L)
+  umap <- data.frame(cell_id = cells, x = as.numeric(space[, 1L]),
+    y = as.numeric(space[, 2L]), stringsAsFactors = FALSE)
+}
+highlight <- merge(umap,
+  turning_cells[, c("cell_id", "region_id", "interpretation")],
+  by = "cell_id", all = FALSE, sort = FALSE)
+highlight$region_id <- factor(highlight$region_id,
+  levels = names(region_colors))
+stopifnot(nrow(highlight) == 120L, all(is.finite(umap$x)),
+  all(is.finite(umap$y)))
+centroids <- aggregate(cbind(x, y) ~ region_id, highlight, median)
+
+turning_bands <- turning[, c("region_id", "pt_min", "pt_max")]
+shared_x <- range(slope$pt_median)
+base_pt_theme <- theme_classic(base_size = 10) +
+  theme(plot.title = element_text(face = "bold", size = 11),
+    plot.margin = margin(4, 8, 4, 4))
+
+slope_plot <- ggplot(slope, aes(pt_median, smoothed_local_slope)) +
+  geom_rect(data = turning_bands,
+    aes(xmin = pt_min, xmax = pt_max, fill = region_id),
+    ymin = -Inf, ymax = Inf, inherit.aes = FALSE, alpha = 0.20) +
+  geom_hline(yintercept = 1, linetype = "dotted", linewidth = 0.65,
+    color = "#4A4A4A") +
+  geom_line(color = "#4B1D82", linewidth = 1.05) +
+  geom_point(data = turning, aes(pt, smoothed_slope, color = region_id),
+    inherit.aes = FALSE, size = 2.3) +
+  geom_text(data = turning,
+    aes(pt, smoothed_slope, label = region_id, color = region_id),
+    inherit.aes = FALSE, vjust = -0.9, size = 3.2, fontface = "bold",
+    show.legend = FALSE) +
+  scale_x_continuous(limits = shared_x) +
+  scale_y_log10() +
+  scale_fill_manual(values = region_colors, guide = "none") +
+  scale_color_manual(values = region_colors, guide = "none") +
+  base_pt_theme +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()) +
+  labs(title = "A  RNA/ATAC local slope", y = "ΔRNA / ΔATAC\n(log10 scale)")
+
+make_gene_plot <- function(gene, panel, show_x = FALSE) {
+  gene_data <- expression[expression$gene == gene, , drop = FALSE]
+  p <- ggplot(gene_data, aes(pt_median, smoothed_mean_sct_data)) +
+    geom_rect(data = turning_bands,
+      aes(xmin = pt_min, xmax = pt_max, fill = region_id),
+      ymin = -Inf, ymax = Inf, inherit.aes = FALSE, alpha = 0.20) +
+    geom_line(color = if (gene == "Ebf1") "#0072B2" else "#CC79A7",
+      linewidth = 1) +
+    scale_x_continuous(limits = shared_x) +
+    scale_fill_manual(values = region_colors, guide = "none") +
+    base_pt_theme +
+    labs(title = paste0(panel, "  ", gene),
+      x = if (show_x) "Bdev pseudotime (window median pt)" else NULL,
+      y = "Smoothed mean\nSCT_data expression")
+  if (!show_x) p <- p + theme(axis.text.x = element_blank(),
+    axis.ticks.x = element_blank())
+  p
+}
+
+ebf1_plot <- make_gene_plot("Ebf1", "B")
+ezh2_plot <- make_gene_plot("Ezh2", "C", show_x = TRUE)
+
+xy_plot <- ggplot(distance,
+    aes(atac_relative_distance, rna_relative_distance)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted",
+    linewidth = 0.7, color = "#555555") +
+  geom_path(color = "#777777", linewidth = 0.65, alpha = 0.8) +
+  geom_point(data = turning_xy, aes(color = region_id), size = 3) +
+  geom_text(data = turning_xy,
+    aes(label = region_id, color = region_id), vjust = -1,
+    fontface = "bold", size = 3.3, show.legend = FALSE) +
+  scale_color_manual(values = region_colors, name = "Turning window") +
+  coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  theme_classic(base_size = 10) +
+  theme(plot.title = element_text(face = "bold", size = 11),
+    legend.position = "right") +
+  labs(title = "D  Relative progression trajectory",
+    subtitle = "Dotted line: equal RNA and ATAC progress",
+    x = "ATAC relative distance", y = "RNA relative distance")
+
+umap_plot <- ggplot(umap, aes(x, y)) +
+  geom_point(color = "#D7D7D7", size = 0.22, alpha = 0.7, stroke = 0) +
+  geom_point(data = highlight, aes(color = region_id), size = 0.9,
+    alpha = 0.98, stroke = 0) +
+  geom_label(data = centroids, aes(label = region_id, color = region_id),
+    fill = "white", linewidth = 0.18, fontface = "bold", size = 3,
+    show.legend = FALSE) +
+  scale_color_manual(values = region_colors, guide = "none") +
+  coord_equal() +
+  theme_void(base_size = 10) +
+  theme(plot.title = element_text(face = "bold", size = 11),
+    plot.subtitle = element_text(size = 9), legend.position = "right") +
+  labs(title = "E  Turning-window cells on Bdev umap.atac",
+    subtitle = "Gray: all Bdev cells; color: exact 30-cell turning windows")
+
+left_column <- slope_plot / ebf1_plot / ezh2_plot +
+  plot_layout(heights = c(1.08, 1, 1))
+right_column <- xy_plot / umap_plot + plot_layout(heights = c(1, 1.08))
+combined <- (left_column | right_column) +
+  plot_layout(widths = c(1.2, 1), guides = "collect") +
+  plot_annotation(
+    title = "Bdev RNA–ATAC progression turning windows",
+    subtitle = paste(
+      "Slope, Ebf1, and Ezh2 are aligned by pseudotime;",
+      "the same T1–T4 windows are marked in every view"),
+    caption = paste(
+      "Turning windows were selected previously from persistent zero-crossings",
+      "of the smoothed log-slope derivative. Preliminary, read-only, and unregistered."),
+    theme = theme(plot.title = element_text(face = "bold", size = 16),
+      plot.subtitle = element_text(size = 10.5),
+      plot.caption = element_text(size = 8.5))) &
+  theme(legend.position = "right")
+
+png_path <- file.path(stage_dir,
+  "turning_slope_ebf1_ezh2_xy_umap_w30_s5.png")
+pdf_path <- file.path(stage_dir,
+  "turning_slope_ebf1_ezh2_xy_umap_w30_s5.pdf")
+ggsave(png_path, combined, width = 14.5, height = 12, dpi = 320,
+  bg = "white")
+ggsave(pdf_path, combined, width = 14.5, height = 12,
+  device = cairo_pdf, bg = "white")
+
+write_tsv(turning, file.path(stage_dir, "selected_turning_regions.tsv"))
+write_tsv(turning_xy,
+  file.path(stage_dir, "selected_turning_points_rna_atac.tsv"))
+write_tsv(turning_cells,
+  file.path(stage_dir, "selected_turning_region_cells.tsv"))
+diagnostics <- list(status = "complete_preliminary_unregistered",
+  bundle_id = manifest$bundle_id,
+  bundle_fingerprint = expected_fingerprint,
+  source_window_report = window_report,
+  source_smoothed_report = smoothed_report,
+  source_turning_report = turning_report,
+  panels = c("smoothed RNA/ATAC slope", "Ebf1 SCT_data", "Ezh2 SCT_data",
+    "RNA versus ATAC relative distance", "umap.atac turning cells"),
+  turning_regions = nrow(turning), highlighted_cells_per_region = 30L,
+  pax5_included = FALSE, bundle_mutated = FALSE,
+  capsule_registered = FALSE)
+write_json(diagnostics, file.path(stage_dir, "diagnostics.json"))
+writeLines(c("# Preliminary Bdev turning-window summary", "",
+  "This presentation reuses the previously selected T1–T4 turning windows.",
+  "Slope, Ebf1, and Ezh2 are vertically aligned on the same pseudotime axis.",
+  "The RNA-versus-ATAC trajectory and Bdev umap.atac mark the same windows.",
+  "Pax5 is omitted. The Bdev bundle was opened read-only."),
+  file.path(stage_dir, "REPORT.md"))
+capture.output(sessionInfo(), file = file.path(stage_dir, "session_info.txt"))
+files <- list.files(stage_dir, full.names = TRUE)
+write_tsv(data.frame(file = basename(files),
+  size_bytes = unname(file.info(files)$size)),
+  file.path(stage_dir, "output_manifest.tsv"))
+
+wb_close_bundle(bundle)
+bundle <- NULL
+if (!file.rename(stage_dir, output_dir)) stop("Could not finalize output directory")
+cat("Completed preliminary turning summary at", output_dir, "\n")

@@ -525,6 +525,26 @@ cells. The matrix-aligned report is under
 The v1/v2 figures are retained for provenance but superseded for biological
 interpretation.
 
+The subsequent three-way Ebf1 enhancer screen evaluates all 259 Bdev peaks in
+the mm10 Ebf1 TSS ±3 Mb window. It combines GSE259355 TCF3-depletion peaks
+(`abs(log2FC) > 1`, BH-adjusted P < 0.05) mapped to Bdev peaks, Ebf1
+expression/accessibility partial Spearman tests in the exact 971 Bdev cells in
+`Il7_shared_peak2`, and GSE162858 230-238 H3K4me3 PLAC-seq promoter contacts
+with distal anchors expanded by 20 kb. Eight Bdev peaks have TCF3 support, 63
+have promoter-contact support, and none pass the correlation BH threshold. The
+distal union contains 64 putative enhancers; four have both TCF3 and PLAC-seq
+support. The complete 259-peak audit and one-to-many mappings are under
+`intermediate_objects/bdev_integrated/reports/ebf1_putative_enhancers_three_way_v2_20261005/`.
+
+Normalized GSE259355 coverage tracks were generated across the same Ebf1
+±3 Mb interval by normalizing each filtered paired-end library to fragment
+coverage CPM and then averaging the three replicates per condition with equal
+weight. The full-region figure includes all 28 230238 H3K4me3 PLAC-seq
+Ebf1-promoter links; a second figure shows ±10-kb views of all eight passing
+TCF3 peaks. Figures, 50-bp condition-average bedGraphs, replicate tracks, and
+normalization audits are under
+`intermediate_objects/bdev_integrated/reports/tcf3_ebf1_coverage_placseq_tracks_v4_20261005/`.
+
 The saved RNA log1p-CP10K matrix and complete 33,696-gene scWorkbench
 Wilcoxon tables for the same exact IL-7 peak-2 cells were reused without
 repeating normalization or differential testing. Four separate violin panels
@@ -558,3 +578,404 @@ selected-region plot, new volcano plot, full normalized-count/DEG tables, and
 up to 20 most significant cutoff-passing genes in each direction as separate
 WT-higher and KO-higher violin figures:
 `intermediate_objects/bdev_integrated/reports/ko_shared_enriched_peak_rna_de_v1_20261002/`.
+
+The full detected-gene rankings from those shared-coverage comparisons were
+also analyzed by user-approved preranked GSEA outside scWorkbench, whose
+available enrichment operation implements over-representation analysis rather
+than GSEA. KO-over-WT standard log2FC ranks were tested against the 50
+mouse-native MSigDB 2026.1.Mm Hallmark sets using `fgseaMultilevel`; positive
+NES denotes KO-higher enrichment. The frozen gene-set memberships, complete
+rankings, leading edges, tables, and figures are under
+`intermediate_objects/bdev_integrated/reports/flt3l_il7_ko_vs_wt_hallmark_gsea_v1_20261010_run2/`.
+
+The project default for GO trajectory gene-set analysis is now the completed
+RNA-feature-residualized UCell run
+`go_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012`. It uses the
+unchanged Bdev metadata `pt`, 5%-width/1%-step windows, the median residualized
+UCell score, 1,000 peak-to-trough dynamic-range permutations, groupwise BH
+q < 0.01, and trajectory-wide positive-region p < 0.01. This is the analysis
+referred to informally as residual-UCell-based GSEA; statistically it is a
+trajectory gene-set permutation analysis rather than preranked GSEA. The
+default pattern summary uses only supported regions and the reviewed k-means
+resolution BP=25, MF=20, and CC=20. The bundle was not mutated. Older raw-UCell,
+z-score, and lower-k reports remain comparison records rather than defaults.
+
+The same residual-UCell protocol has now been completed for the 38 accepted
+cytokine signatures: residualize each per-cell native UCell score for
+`log1p(nFeature_RNA)` using a four-degree-of-freedom natural spline without
+pseudotime, then rerun the 1,000-permutation trajectory dynamic-range and
+positive-region tests on those residual scores. The completed default run is
+`cytokine_ucell_rna_feature_residual_dynamic_range_perm1000_v1_20261012`:
+32/38 signatures are dynamically significant, with 56 supported positive
+peaks merged into 34 regions. Median absolute score correlation with
+`nFeature_RNA` decreased from 0.187 to 0.0483, and the bundle fingerprint was
+unchanged. The earlier cytokine run
+`cytokine_ucell_dynamic_range_perm1000_v1_20261012` tested raw UCell scores.
+Its residual-UCell follow-up is a curve/complexity diagnostic only and states
+that permutation calls were not recomputed; it and the raw-UCell calls are now
+historical comparisons rather than the default inference.
+
+For WT-versus-KO preranked GSEA, the selected test intervals are the mapped
+shared-enrichment regions, not the later Bdev residual-UCell activity regions.
+They retain substantial coverage in both genotypes: FLT3L has 4,394 WT and
+3,342 KO cells from `pt` -25.397 to -22.919; IL-7 has 1,912 WT and 1,355 KO
+cells from -24.777 to -21.370. By contrast, the early Bdev FLT3L residual
+region contains 672 WT but only 35 KO cells, and the Bdev IL-7 region contains
+274 WT but only 20 KO cells; the later FLT3L region has only 11 WT and 6 KO
+cells. These depleted later regions remain biological evidence consistent with
+blocked KO progression, but they are unsuitable for a balanced within-stage
+WT-versus-KO expression ranking. The completed analysis
+`flt3l_il7_ko_vs_wt_pseudotime_matched_gsea_v1_20261012` therefore uses
+pseudotime-bin-matched KO-minus-WT ranks within the mapped shared-enrichment
+intervals. Each bin contributes its KO-versus-WT log2 mean-CP10K effect with a
+Bdev-density weight. It tests mouse Hallmark, GO BP/MF/CC, and the 38 accepted
+cytokine signatures with `fgseaMultilevel` and collection-specific BH control.
+
+FLT3L yields 21 significant Hallmarks (19 WT-higher, 2 KO-higher); WT retains
+MYC/E2F, oxidative-phosphorylation, mTORC1, DNA-repair, and related biosynthetic
+programs. IL-7 yields seven significant Hallmarks (five WT-higher, two
+KO-higher); WT retains MYC/E2F/G2M and DNA-repair programs, while KO is higher
+for coagulation and KRAS-signaling-up annotations. Focused cytokine GSEA places
+IL-7-UP on the WT side in both comparisons and IL-7-DOWN on the IL7KO side.
+GO terms are more redundant and include broad shared-gene annotations, so they
+are secondary to Hallmark and leading-edge interpretation. Excluding bins with
+fewer than 20 cells in either genotype gives Hallmark NES correlations of 0.988
+for FLT3L and 0.991 for IL-7. Results remain descriptive because each genotype
+has one biological sample.
+
+The dynamic follow-up
+`flt3l_il7_ko_vs_wt_dynamic_change_gsea_v1_20261012` asks a different question:
+which programs change more from the early to late portion of the mapped region
+in WT than in KO. Genes are ranked by `(WT late - WT early) - (KO late - KO
+early)` using the first and last two bins with at least 20 cells in each
+genotype. The sparse terminal bin is reserved for sensitivity analysis.
+FLT3L has strict failed/attenuated-induction examples in E2F targets and the
+unfolded-protein response, with additional DNA-replication, repair, electron
+transport, and respiratory-chain GO terms. IL-7 has strict examples in TNFA
+signaling via NFKB and the early estrogen-response Hallmark. Many other
+positive differential-change enrichments reflect a stronger decline in KO
+rather than an absolute rise in WT; the report and curve labels keep those
+categories separate. Results are descriptive because there is one biological
+sample per genotype.
+
+All GO BP, MF, and CC terms were retained in the dynamic test (10,540
+comparison-specific tests). The focused top-GO report shows at most five
+strict WT-induction/KO-attenuation terms per GO group and comparison rather
+than presenting the full redundant inventory. It is stored under
+`flt3l_il7_ko_vs_wt_dynamic_change_top_go_v1_20261012`.
+Curves for the eight strict GO terms that also pass the sparse-terminal-bin
+sensitivity analysis are under
+`flt3l_il7_ko_vs_wt_fdr_supported_go_curves_v1_20261012`.
+The reciprocal failure-to-silence screen requires a WT decrease and a more
+upward KO change. Its compact top-five-per-GO-group report and sensitivity-
+supported curves are under
+`flt3l_il7_ko_vs_wt_go_failure_to_silence_v1_20261012`.
+
+The matched individual-gene screen is under
+`flt3l_il7_ko_vs_wt_individual_gene_divergence_v1_20261012`. It reports both
+WT-induction/KO-attenuation and failure-to-silence directions, requires the
+direction to survive the sparse-terminal sensitivity policy, and ranks genes
+by the smaller divergence across endpoint definitions. Curves show the
+mean-expression trajectory with cell-level IQR ribbons; the ribbons describe
+heterogeneity rather than inferential uncertainty. The gene ranking is
+descriptive because each genotype has one biological sample.
+
+A preliminary Bdev modality-timing follow-up uses the accepted 30-cell windows
+with 5-cell stride and the robust-LOESS-smoothed log10 RNA/ATAC progression
+slope. Centered derivative sign changes produced 24 candidate extrema; requiring
+at least 1.10-fold local prominence retained four exact 30-cell turning windows
+centered at `pt` -24.586, -15.130, -12.458, and -6.524. These regions are
+highlighted consistently on the slope, smoothed Ebf1/Pax5/Ezh2 expression, and
+the existing Bdev `umap.atac` embedding. The read-only, unregistered report is
+under
+`intermediate_objects/bdev_reference/reports/preliminary_slope_turning_regions_w30_s5_span008_20261008/`.
+
+The compact follow-up display omits Pax5; vertically aligns the slope, Ebf1,
+and Ezh2 panels; and adds the RNA-versus-ATAC trajectory beside a UMAP of the
+exact turning-window cells. It is under
+`intermediate_objects/bdev_reference/reports/preliminary_turning_summary_ebf1_ezh2_w30_s5_v2_20261008/`.
+
+The next preliminary display adds Nipbl, Mau2, and Wapl and colors trajectory
+cells on `umap.atac` by their membership-weighted mean
+`log2(smoothed delta-RNA/delta-ATAC)`. Red denotes RNA-faster progression, blue
+ATAC-faster progression, and white matched progression; cells outside the
+trajectory are gray. The report is under
+`intermediate_objects/bdev_reference/reports/preliminary_modality_ratio_umap_five_genes_20261008/`.
+
+The expanded nine-gene version additionally shows Ctcf, Eed, Tcf7, and Lef1:
+`intermediate_objects/bdev_reference/reports/preliminary_modality_ratio_umap_nine_genes_v3_20261008/`.
+Tcf7 alone required a recorded Gaussian-LOESS fallback after robust LOESS
+failed numerically on its low, sparse expression trajectory.
+
+A separate preliminary figure replaces the individual-gene curves with
+B-lineage, T-lineage, Flt3L-UP, and IL-7-UP arithmetic-mean `SCT_data` scores
+under the same slope panel and T1–T4 bands. Bdev mapping retains 236, 214, 45,
+and 20 genes, respectively. The figure and complete membership/coverage tables
+are under
+`intermediate_objects/bdev_reference/reports/preliminary_slope_gene_set_signals_v2_20261008/`.
+
+An LSI1 sensitivity check compares the accepted full LSI1–50 ATAC path with
+LSI2–50 while holding RNA coordinates and all windows fixed. Excluding LSI1
+changes relative ATAC distance only slightly (median absolute shift 0.00074;
+maximum 0.00224), and the smoothed log-slope curves correlate at 0.99995. The
+comparison is under
+`intermediate_objects/bdev_reference/reports/preliminary_lsi1_sensitivity_20261008/`.
+
+A separate Tsix figure shows `SCT_data` expression on the existing Bdev
+`umap.atac` beside its robust-LOESS-smoothed 30-cell/5-cell pseudotime profile.
+The exact T1–T4 cells are outlined and labeled on the UMAP, and the same fixed
+turning windows are banded and labeled on the trajectory. The read-only,
+unregistered report also contains a standalone white-to-crimson expression
+UMAP without T1–T4 overlays and a standalone zero-baseline pseudotime plot
+using the source BB1/BB2 ranges in place of T1–T4. It is under
+`intermediate_objects/bdev_reference/reports/preliminary_tsix_expression_v2_20261009/`.
+
+The local modality-balance curve is also available explicitly as
+`log2(delta RNA / delta ATAC)`, centered at zero, with the exact inverse
+`log2(delta ATAC / delta RNA)` on the secondary axis. T1–T4 remain fixed and
+unchanged. The report and a proposed autocorrelation-aware gene-pattern screen
+are under
+`intermediate_objects/bdev_reference/reports/preliminary_log2_modality_ratio_v1_20261009/`.
+
+The two proposed gene-pattern screens were implemented over 11,745 detected,
+variable Bdev `SCT_data` genes using the accepted 30-cell/5-cell windows and a
+fixed centered 8%-window smoother. The state-following screen retains 4,884
+genes (486 RNA-faster and 4,398 ATAC-faster/inverse), consistent with broad
+developmental-state structure. The change-following screen is much more
+selective and retains four RNA-faster genes—Angpt1, Adgrl4, Gcnt2, and Mecom—and
+no inverse genes at pooled-null BH < 0.05 and |correlation| >= 0.3. Circular
+shifts preserve trajectory autocorrelation; results remain descriptive because
+feature-fold cross-fitting of the RNA trajectory was not performed. The report
+is under
+`intermediate_objects/bdev_reference/reports/preliminary_modality_gene_pattern_screen_v2_20261009/`.
+
+Separate figures show the top 20 RNA-faster state genes and top 20 ATAC-faster
+inverse state genes as individual smoothed trajectories with within-window
+cell-level IQR ribbons and their matching modality target. A companion figure
+shows the four selected change-associated genes (Angpt1, Adgrl4, Gcnt2, and
+Mecom), with expression/IQR panels above the derivative profiles used by the
+screen. These read-only outputs are under
+`intermediate_objects/bdev_reference/reports/preliminary_state_top20_separate_figures_v1_20261009/`.
+
+Because whole-trajectory correlation can favor genes that barely change over
+long quiet portions, an event-focused replacement now ranks genes by up/down
+agreement over the strongest RNA/ATAC changes and explicitly across both
+flanks of T1-T4. A p95-p05 `SCT_data` range of at least 0.50 removes nearly
+flat profiles; selection additionally requires six of eight matching flanks
+and at least two complete turns. Four direct genes (Clint1, Arhgap15, Camk2d,
+and Baz2b) and six inverse genes (Cox4i1, Rplp2, Rps6, Impdh2, Rpl37, and
+Rpl12) pass. Separate top-20 direct and inverse figures include within-window
+IQR, while complete scores and per-turn calls remain available under
+`intermediate_objects/bdev_reference/reports/preliminary_modality_turn_pattern_screen_v2_20261009/`.
+
+Pass/fail trajectory plots for the chromatin-regulator candidates are under
+`intermediate_objects/bdev_reference/reports/preliminary_epigenetic_pattern_candidates_v1_20261009/`.
+They contain separate direct and inverse panels plus a focused cohesin/PRC2
+audit. Each panel overlays standardized expression and within-window IQR on
+the relevant modality target and reports the expression range, matched flanks,
+and complete turns. Baz2b is the sole strict passing epigenetic candidate.
+
+The cohesin set is also plotted specifically against the inverse ATAC/RNA
+target under
+`intermediate_objects/bdev_reference/reports/preliminary_inverse_cohesin_turn_audit_v2_20261009/`.
+Green/red trajectory markers and a companion pass/fail heatmap identify every
+T1-T4 pre-flank, post-flank, and complete-turn call. Wapl passes both flanks at
+T2 and T3 and the T4 pre-flank, but remains a strict near-hit at five of eight
+flanks and p95-p05 range 0.461.
+
+An unbiased continuous replacement excludes T4 and ranks all 11,745 detected
+genes without regulator preselection or binary turn cutoffs. The raw T1-T3
+score combines continuous derivative similarity (60%) and six-flank vector
+similarity (40%); amplitude and within-window IQR/SD contribute only smooth
+evidence weights. Nipbl has raw direct shape score 0.788 and ranks 36th after
+evidence weighting, while Smarca4 ranks 5th. Separate direct and inverse
+top-20 IQR figures and full genome-wide score tables are under
+`intermediate_objects/bdev_reference/reports/preliminary_t1_t3_continuous_gene_screen_v1_20261009/`.
+
+For the more specific question of concordance around every T1-T3 event, a
+turn-local balanced screen removes full-pseudotime correlation entirely and
+scores all six pre/post flanks separately. It balances the two flanks within
+each turn and then T1, T2, and T3 equally, with consistency penalties, so a
+single strong peak cannot conceal an opposite response at another turn. This
+demotes Igll1 from a visually T2-driven hit to direct rank 11,723 because its
+T3 score is strongly opposite (-0.254), while Smarca4 ranks first and Nipbl
+ranks 21st. The figures retain the entire pseudotime range and shade only the
+scored +/-100-window T1-T3 regions; T4 is dashed unscored context. Outputs are
+under
+`intermediate_objects/bdev_reference/reports/preliminary_turn_local_balanced_gene_screen_v2_20261009/`.
+
+A matched depth diagnostic compares the inverse top 20 with total RNA
+(`nCount_RNA`) and total ATAC (`nCount_peaks`) using the same windows,
+smoothing, complete pseudotime display, and shaded +/-100-window T1-T3
+regions. Eleven of the 20 are Rpl/Rps genes. Their median absolute
+scored-region correlation is 0.837 with total RNA but only 0.222 with total
+ATAC; non-ribosomal hits are almost as correlated with total RNA (0.815).
+Moreover, the ribosomal median cell-level RNA-depth correlation falls from
+0.455 to 0.074 after removing an 8-df pseudotime trend. This supports some
+RNA-depth or compositional contribution, but not a ribosomal-specific artifact
+explained solely by raw library size. Figures and the full correlation table
+are under
+`intermediate_objects/bdev_reference/reports/preliminary_inverse_hits_depth_diagnostic_v1_20261009/`.
+
+Total RNA and ATAC jointly explain 87.7% of the broad RNA/ATAC ratio level
+in-sample and 78.7% under 10 contiguous-fold prediction. This should not be
+interpreted as the same fraction of the local turning pattern: total-signal
+changes explain only 23.8% of the full-path ratio derivative and 7.4% within
+the scored T1-T3 regions. A model trained on two turns fails to predict the
+centered derivative shape of the held-out turn (pooled R2 -0.043). Thus total
+signal is a major correlate of the broad baseline but explains little of the
+local signal used in the turn-focused gene ranking. Fitted, residual, and
+derivative-residual curves are under
+`intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009/`.
+
+The preferred depth-removal sensitivity analysis is upstream and conditional
+on preserved Bdev pseudotime: regress each RNA-PC on spline(pt) plus log-total
+RNA and each ATAC-LSI dimension on spline(pt) plus log-total ATAC, retain the
+spline(pt) component plus residual, and then recompute window centroids,
+cumulative distances, the ratio, and gene ranks. This targets within-stage
+depth dependence while avoiding automatic removal of biological changes in
+cell size or transcriptional output. Direct subtraction of the fitted ratio
+curve is retained only as a more aggressive post-hoc sensitivity analysis.
+
+The post-hoc residual ratio and residual ratio-change curves are also shown in
+separate vertically aligned full-pseudotime figures above Ebf1, Ezh2, Nipbl,
+and Wapl expression with within-window IQR. These displays replace the T1-T3
+bands with the exact source `bb_up` BB1/BB2 pseudotime ranges and median lines.
+They are under
+`intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_bb_gene_stack_v4_20261009/`.
+
+The same full-path residual ratio is mapped onto the existing Bdev
+`umap.atac` by linear interpolation from window-center rank to every cell's
+exact trajectory rank. This increases distinct mapped values from 2,530 to
+12,614 among 12,642 cells and reduces adjacent exact ties from 80.0% to 0.22%;
+the original membership-mean projection is retained in the per-cell table. A
+zero-centered blue-white-red scale shows residual ATAC-faster, expected, and
+residual RNA-faster balance, respectively; cells outside the trajectory are
+gray. Both the absolute-p99-clipped symmetric scale and an unclipped symmetric
+scale using the observed maximum absolute value are exported. The figure and
+per-cell values are under
+`intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_umap_v3_20261009/`.
+
+A genome-wide descriptive screen compares depth-adjusted gene-expression
+up/down patterns with this corrected ratio without using BB or T-region
+definitions. The ratio and genes receive identical smoothing, and their slopes
+are normalized by their own scales before comparison, allowing magnitudes to
+differ. Every window contributes, while ratio magnitude, slope, and curvature
+continuously upweight informative parts. Eight equal-interest trajectory
+segments receive balanced emphasis. A separate full-pattern audit retains only
+genes with the requested direction in all eight segments: 15 direct and 71
+inverse candidates, although the similarities remain modest rather than exact.
+Because the RNA representation used
+to construct the ratio contains the genes being screened, these ranks remain
+descriptive; feature-fold cross-fitting is required for unbiased inferential
+ranks. The direction screen and full-pattern audit are under
+`intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_direction_gene_screen_v4_20261009/`
+and
+`intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_full_direction_matches_v1_20261009/`.
+
+The same conditional RNA-depth adjustment and matched smoothing are shown for
+Ebf1 together with the focused cohesin-associated set, and separately for Ebf1
+with Ezh2, Eed, and Suz12. The full pseudotime is displayed, ribbons are
+cell-level adjusted-expression IQR, and each label reports direct versus
+inverse agreement across the eight balanced trajectory segments. Results are
+under
+`intermediate_objects/bdev_reference/reports/preliminary_adjusted_cohesin_prc2_profiles_v1_20261009/`.
+
+A compact landscape version restricted to Ebf1, Tcf3, Stat5a, Stat5b, Ezh2,
+Nipbl, and Wapl places the corrected ratio alongside standardized,
+RNA-depth-adjusted expression. It shades the exact source BB1/BB2 ranges and
+median positions in every panel and is under
+`intermediate_objects/bdev_reference/reports/preliminary_adjusted_selected_genes_bb_v1_20261009/`.
+
+Nipbl, Wapl, and Ezh2 `SCT_data` expression is also shown on the existing Bdev
+`umap.atac`. Gene-specific white-to-crimson scales run from zero to each
+positive-cell p99, with higher values clipped only for display and high cells
+drawn last. The figure and per-cell values are under
+`intermediate_objects/bdev_reference/reports/preliminary_nipbl_wapl_ezh2_umap_v2_20261009/`.
+
+Cox6a1, Cox6a2, and Ube2c `SCT_data` expression is shown similarly on the
+unchanged Bdev `umap.atac`, using independent white-to-crimson scales capped at
+each gene's positive-cell p99 for display. Uncapped cell-level values and scale
+audits are under
+`intermediate_objects/bdev_reference/reports/preliminary_cox6a1_cox6a2_ube2c_umap_v1_20261010/`.
+
+The FLT3L/IL-7 follow-up includes separate motif-accessibility heatmaps for the
+exact `Flt3l_peak1` and `Il7_peak2` intervals. Motifs are selected solely by
+their temporal variability in Bdev: Bdev also fixes accessible peaks, chromVAR
+background/expectation, row order, centering, and scaling. WT and knockout
+cells enter only afterward using mapped Bdev pseudotime, with sparse bins
+(fewer than 20 cells) left blank and a descriptive WT-minus-KO panel. The
+unpromoted report is under
+`intermediate_objects/bdev_integrated/reports/bdev_selected_motif_pt_heatmaps_v1_20261010_run5/`.
+This run also exports trajectories for all 746 Bdev-eligible motifs.
+
+A full-universe follow-up retains every motif with a strong Bdev up/down
+pattern, defined by at least 1.5 Bdev temporal SD early-to-late change,
+absolute pseudotime Spearman correlation of at least 0.6, and concordant
+directions. It compares WT and KO within matched mapped-pseudotime bins and
+weights those contrasts to the Bdev cell distribution. The complete score
+table and paginated figures are under
+`intermediate_objects/bdev_integrated/reports/bdev_strong_directional_motif_trajectory_adjusted_wt_ko_v1_20261010/`.
+
+Companion heatmaps show the 20 strongest adjusted WT-higher and 20 strongest
+adjusted KO-higher motifs separately for Flt3L peak 1 and IL-7 peak 2. Bdev,
+WT, KO, and matched-bin WT-minus-KO panels are aligned across mapped
+pseudotime; stars identify motifs passing the strong descriptive difference
+flag. Results are under
+`intermediate_objects/bdev_integrated/reports/top_adjusted_wt_ko_motif_heatmaps_v1_20261010/`.
+
+A single-cell-axis version retains the same selected motif rows but uses every
+Bdev cell in each interval as an ordered focal column. Each panel is smoothed
+independently from its 30 nearest pseudotime cells, and WT-minus-KO is evaluated
+at identical Bdev focal positions. The displayed interval is restricted to the
+largest contiguous span where both query groups have a 30-neighbor radius no
+greater than 0.25 pseudotime units; full-axis values remain exported. Results
+are under
+`intermediate_objects/bdev_integrated/reports/single_cell_30nn_top_adjusted_motif_heatmaps_v1_20261010_run4/`.
+
+SNAI2, TCF3, RUNX1, SREBF2, and STAT5A::STAT5B motif activity is also shown
+on the unchanged Bdev `umap.atac`. A companion violin figure compares WT and
+KO cells within Flt3L peak 1 and IL-7 peak 2 using per-cell chromVAR deviations
+from region-specific Bdev-defined calibration. The raw violin distributions
+are annotated with matched-bin WT-minus-KO effects weighted to Bdev. Outputs
+are under
+`intermediate_objects/bdev_integrated/reports/selected_motif_bdev_umap_query_violins_v2_20261010/`.
+
+A row-aligned composite repeats this display for TCF3, EBF1, ZEB-family,
+STAT5A::STAT5B, and RUNX1, with all Bdev UMAPs on the left and the corresponding
+Flt3L/IL-7 WT/KO violins on the right. ZEB1 is explicitly labeled as a proxy
+because the motif collection contains no ZEB2 entry. Results are under
+`intermediate_objects/bdev_integrated/reports/tcf3_ebf1_zeb_stat5_runx1_composite_v1_20261010/`.
+
+A focused trajectory view uses the same seven motifs in both cytokine regions:
+EBF1, PAX5, TCF3, CEBPG as the most variable C/EBP-family motif, HLF, BACH2,
+and LEF1. Each panel overlays Bdev in black, WT in red, and the corresponding
+knockout in blue; the y-axis is chromVAR deviation centered and scaled using
+Bdev, with motif-specific ranges. Results are under
+`intermediate_objects/bdev_integrated/reports/selected_tf_motif_pt_curves_v1_20261009/`.
+
+The corresponding unbiased RNA screen selects the 30 most temporally variable
+eligible genes independently within Bdev `Flt3l_peak1` and `Il7_peak2`, then
+displays Bdev, WT, KO, and WT-minus-KO heatmaps. Both datasets use native
+scWorkbench log1p-CP10K normalization, and all selection and scaling is fixed
+from Bdev before query display. Every nonempty bin is calculated; black
+borders/crosses flag bins with fewer than 20 cells and gray marks zero-cell
+bins. Results are under
+`intermediate_objects/bdev_integrated/reports/bdev_variable_gene_expression_pt_heatmaps_v1_20261009_run4/`.
+
+Companion difference heatmaps compare WT and KO separately with Bdev in the
+same pseudotime bins, retaining the source top-30 genes and Bdev scaling.
+Positive values mean higher query expression and negative values mean higher
+Bdev expression. Results are under
+`intermediate_objects/bdev_integrated/reports/query_vs_bdev_gene_expression_diff_heatmaps_v1_20261009_run2/`.
+
+The KO-specific screen first limits its candidate pool, independently per
+region, to the top quartile by Bdev temporal SD after basic Bdev-expression
+eligibility. It then ranks those genes for large KO-minus-Bdev and small
+WT-minus-Bdev divergence across matched pseudotime bins. Sparse bins remain
+included with reduced reliability weight. The
+unfiltered result contains many ribosomal/translation genes, particularly in
+the IL-7 comparison, alongside lineage-related Flt3L hits; no technical gene
+class was removed. Each figure also shows the corresponding Bdev expression
+beside the WT-minus-Bdev and KO-minus-Bdev panels. Results are under
+`intermediate_objects/bdev_integrated/reports/ko_specific_bdev_variable_gene_expression_diff_heatmaps_v1_20261009/`.

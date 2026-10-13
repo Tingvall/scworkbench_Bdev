@@ -54,10 +54,26 @@ reference_state:
     promotion_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929
 
 validation:
-  status: ok_with_warnings
-  bundle_state_fingerprint: 1027f6390c6b853acc2bf40d3fae9abb59393f4256cb39285685eb2b2973f7ec
-  recipient_validation_fingerprint: e8291159c9472770275b73e5563f1477a01d19b775b3c44037ed89a43849b83b
-  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929/recipient_validation.json
+  status: capsule_registered_recipient_ready_full_revalidation_incomplete
+  bundle_state_fingerprint: 43918bc3fe79b5d7d0dad3a5b7aebc7450e63f16e41e843edd2c20cd3866f988
+  recipient_validation_fingerprint: null
+  previous_recipient_validation_fingerprint: e8291159c9472770275b73e5563f1477a01d19b775b3c44037ed89a43849b83b
+  previous_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929/recipient_validation.json
+  post_capsule_audit:
+    recipient_ready: true
+    capsule_content_hashes_verified: true
+    completed_phases:
+      - bundle_layout
+      - manifest
+      - schema_and_registry
+      - paths
+      - sqlite_integrity
+      - matrix_content
+      - spaces_and_models
+      - normalized_memberships
+      - artifacts
+    incomplete_phase: provenance
+    note: Full read-only recipient revalidation was interrupted after more than 15 minutes in historical provenance validation; no new recipient fingerprint was emitted.
 
 reports:
   inspection: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/prepared/inspection/complete
@@ -78,6 +94,280 @@ reports:
   all_cytokine_ucell_rankmean_genechange: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_ucell_rankmean_genechange_v1_20260928
   all_cytokine_breadth_intensity: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_v2_20260929
   all_cytokine_breadth_intensity_promotion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/all_cytokine_breadth_intensity_promotion_v1_20260929
+  rna_atac_latent_progress: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/rna_atac_latent_progress_v1_20261008
+  rna_atac_latent_progress_w30_s5: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/rna_atac_latent_progress_w30_s5_v1_20261008
+
+analysis_capsules:
+  rna_atac_latent_progress:
+    capsule_id: cap_h87vvq5k6ytk
+    status: content_registered
+    replay_status: not_verified
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/rna_atac_latent_progress_v1_20261008
+  rna_atac_latent_progress_w30_s5:
+    capsule_id: cap_2swjmepvjewk
+    status: content_registered
+    replay_status: not_verified
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/rna_atac_latent_progress_w30_s5_v1_20261008
+
+preliminary_reports:
+  smoothed_slope_ebf1_pax5_ezh2_w30_s5:
+    status: complete_unregistered
+    loess_span: 0.08
+    expression_matrix: SCT_data
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_smoothed_slope_expression_w30_s5_span008_20261008
+  slope_turning_regions_w30_s5:
+    status: complete_preliminary_unregistered
+    derivative: centered finite difference of robust-LOESS log10 slope
+    minimum_prominence_fold: 1.10
+    region_definition: exact 30-cell turning-point window
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_slope_turning_regions_w30_s5_span008_20261008
+  turning_summary_ebf1_ezh2_w30_s5:
+    status: complete_preliminary_unregistered
+    panels: slope, Ebf1, Ezh2, RNA-versus-ATAC progression, umap.atac
+    turning_regions: 4
+    highlighted_cells_per_region: 30
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_turning_summary_ebf1_ezh2_w30_s5_v2_20261008
+  modality_ratio_umap_five_genes:
+    status: complete_preliminary_unregistered
+    umap_value: mean overlapping-window log2(smoothed delta-RNA/delta-ATAC)
+    zero_definition: matched RNA and ATAC progress
+    genes: [Ebf1, Ezh2, Nipbl, Mau2, Wapl]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_ratio_umap_five_genes_20261008
+  modality_ratio_umap_nine_genes:
+    status: complete_preliminary_unregistered
+    umap_value: mean overlapping-window log2(smoothed delta-RNA/delta-ATAC)
+    genes: [Ebf1, Ezh2, Nipbl, Mau2, Wapl, Ctcf, Eed, Tcf7, Lef1]
+    robust_loess_fallback_genes: [Tcf7]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_ratio_umap_nine_genes_v3_20261008
+  slope_gene_set_signals:
+    status: complete_preliminary_unregistered
+    score: arithmetic mean SCT_data across Bdev-mapped members
+    gene_sets: [B_lineage, T_lineage, Flt3L_UP, IL-7_UP]
+    mapped_genes: {B_lineage: 236, T_lineage: 214, Flt3L_UP: 45, IL-7_UP: 20}
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_slope_gene_set_signals_v2_20261008
+  lsi1_sensitivity:
+    status: complete_preliminary_unregistered
+    comparison: full_LSI_1_50_vs_LSI_2_50
+    median_absolute_atac_relative_shift: 0.000740639323042858
+    maximum_absolute_atac_relative_shift: 0.00223640674289638
+    smoothed_log_slope_pearson: 0.999948816948618
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_lsi1_sensitivity_20261008
+  tsix_expression_umap_pseudotime:
+    status: complete_preliminary_unregistered
+    gene: Tsix
+    expression_matrix: SCT_data
+    embedding: umap.atac
+    pseudotime_summary: robust-LOESS of 30-cell means at 5-cell stride
+    turning_regions: 4
+    highlighted_cells_per_region: 30
+    standalone_umap: linear white-to-crimson expression without T1-T4 overlay
+    standalone_pseudotime: BB1-BB2 source ranges with y-axis minimum zero
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_tsix_expression_v2_20261009
+  log2_modality_ratio:
+    status: complete_preliminary_unregistered
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    inverse: negative target; log2(smoothed delta-ATAC/delta-RNA)
+    turning_regions: 4
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_log2_modality_ratio_v1_20261009
+  modality_gene_pattern_screen:
+    status: complete_preliminary_unregistered
+    approaches: [state_following, change_following]
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    inverse: negative score; ATAC-faster pattern
+    expression_smoother: fixed centered 8-percent window mean
+    genes_tested: 11745
+    state_selected: {total: 4884, RNA_faster: 486, ATAC_faster_inverse: 4398}
+    change_selected: {total: 4, RNA_faster: 4, ATAC_faster_inverse: 0}
+    change_selected_genes: [Angpt1, Adgrl4, Gcnt2, Mecom]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_gene_pattern_screen_v2_20261009
+  modality_state_top20_figures:
+    status: complete_preliminary_unregistered
+    figures: [RNA_faster_state_top20, ATAC_faster_state_top20, RNA_faster_change_four]
+    genes_per_state_figure: 20
+    interval: smoothed within-window cell-level IQR
+    change_genes: [Angpt1, Adgrl4, Gcnt2, Mecom]
+    source_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_gene_pattern_screen_v2_20261009
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_state_top20_separate_figures_v1_20261009
+  modality_turn_pattern_screen:
+    status: complete_preliminary_unregistered
+    approaches: [direct_RNA_ATAC_pattern, inverse_ATAC_RNA_pattern]
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    emphasis: strongest_30_percent_target_changes_and_T1_T4_flanks
+    amplitude_gate_p95_p05_sct_data: 0.50
+    event_gate: {matched_flanks_of_8: 6, complete_turns_of_4: 2}
+    genes_tested: 11745
+    direct_selected: [Clint1, Arhgap15, Camk2d, Baz2b]
+    inverse_selected: [Cox4i1, Rplp2, Rps6, Impdh2, Rpl37, Rpl12]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_turn_pattern_screen_v2_20261009
+  epigenetic_pattern_candidate_figures:
+    status: complete_preliminary_unregistered
+    source_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_turn_pattern_screen_v2_20261009
+    figures: [direct_chromatin_candidates, inverse_chromatin_candidates, cohesin_PRC2_audit]
+    interval: smoothed within-window cell-level IQR
+    strict_passing_epigenetic_candidates: [Baz2b]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_epigenetic_pattern_candidates_v1_20261009
+  inverse_cohesin_turn_audit:
+    status: complete_preliminary_unregistered
+    target: log2(smoothed delta-ATAC/delta-RNA)
+    genes: [Wapl, Smc1a, Smc3, Rad21, Pds5a, Ctcf, Stag2, Pds5b, Stag1, Mau2, Nipbl]
+    highlighted_near_hit: Wapl
+    wapl_inverse_calls: {matched_flanks_of_8: 5, complete_turns_of_4: 2, passing_turns: [T2, T3]}
+    figures: [inverse_cohesin_trajectories_with_flank_calls, inverse_cohesin_turn_flank_pass_fail]
+    source_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_modality_turn_pattern_screen_v2_20261009
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_inverse_cohesin_turn_audit_v2_20261009
+  t1_t3_continuous_gene_screen:
+    status: complete_preliminary_unregistered
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    included_turns: [T1, T2, T3]
+    excluded_turns: [T4]
+    genes_tested: 11745
+    raw_shape_score: 0.60_derivative_cosine_plus_0.40_six_flank_vector_cosine
+    ranking: continuous_amplitude_and_within_window_IQR_SD_precision_weight
+    hard_turn_or_flank_cutoffs: false
+    nipbl_direct_rank: 36
+    smarca4_direct_rank: 5
+    direct_top10: [Ebf1, Lef1, Igll1, Vpreb1, Smarca4, Vpreb3, B3gnt2, Cd79a, Blnk, Gm32569]
+    inverse_top10: [Plac8, H2afy, Rpsa, Flt3, Ramp1, Eef1b2, Rps12, Rpl13, Rpl14, Rps20]
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_t1_t3_continuous_gene_screen_v1_20261009
+  turn_local_balanced_gene_screen:
+    status: complete_preliminary_unregistered
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    scored_turns: [T1, T2, T3]
+    excluded_turns: [T4]
+    scored_flanks: [T1_pre, T1_post, T2_pre, T2_post, T3_pre, T3_post]
+    flank_half_width_windows: 100
+    full_pseudotime_similarity_in_score: false
+    raw_flank_shape_score: 0.70_derivative_cosine_plus_0.30_oriented_endpoint_change
+    ranking: amplitude_and_exact_within_window_IQR_SD_precision_weighted
+    aggregation: equal_pre_post_then_equal_turn_with_consistency_penalties
+    genes_tested: 11745
+    nipbl_direct_rank: 21
+    igll1_direct_rank: 11723
+    smarca4_direct_rank: 1
+    direct_top10: [Smarca4, Arl5c, Gpat3, Cplx2, Akap12, Slamf6, Ablim1, Baz2b, Atp1b1, Gm26779]
+    inverse_top10: [Rps2, Rplp1, Rpl14, Rps8, Rplp0, Hsp90ab1, Rps18, Plac8, Rpsa, Rpl3]
+    display: entire_pseudotime_with_scored_plus_minus_100_regions_shaded
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_turn_local_balanced_gene_screen_v2_20261009
+  inverse_hits_depth_diagnostic:
+    status: complete_preliminary_unregistered
+    source_gene_screen: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_turn_local_balanced_gene_screen_v2_20261009
+    total_RNA_field: nCount_RNA
+    total_ATAC_field: nCount_peaks
+    transform: log1p
+    plotted_genes: inverse_top20
+    ribosomal_hits_of_20: 11
+    ribosomal_median_abs_scored_rho_total_RNA: 0.837
+    ribosomal_median_abs_scored_rho_total_ATAC: 0.222
+    non_ribosomal_median_abs_scored_rho_total_RNA: 0.815
+    ribosomal_median_cell_rho_total_RNA: 0.455
+    ribosomal_median_pt_residual_cor_total_RNA: 0.074
+    display: entire_pseudotime_with_scored_plus_minus_100_regions_shaded
+    interpretation: RNA_depth_or_composition_contributes_but_is_not_ribosomal_specific_or_sufficient
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_inverse_hits_depth_diagnostic_v1_20261009
+  ratio_total_signal_explained:
+    status: complete_preliminary_unregistered
+    target: log2(smoothed delta-RNA/delta-ATAC)
+    predictors: [smoothed_log1p_nCount_RNA, smoothed_log1p_nCount_peaks]
+    model: linear_with_intercept
+    full_level_R2: 0.877
+    full_level_10_contiguous_fold_cv_R2: 0.787
+    scored_T1_T3_level_R2: 0.772
+    full_derivative_R2: 0.238
+    scored_T1_T3_derivative_R2: 0.074
+    leave_one_turn_out_centered_derivative_R2: -0.043
+    preferred_adjustment: upstream_pt_conditional_depth_residualization_of_RNA_PCs_and_ATAC_LSIs
+    display: entire_pseudotime_with_scored_plus_minus_100_regions_shaded
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009
+  residual_ratio_bb_gene_stack:
+    status: complete_preliminary_unregistered
+    ratio_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009
+    figures: [residual_ratio, residual_ratio_change]
+    genes: [Ebf1, Ezh2, Nipbl, Wapl]
+    gene_interval: smoothed_within_window_cell_level_IQR
+    highlighted_regions: source_bb_up_BB1_BB2_pt_min_to_max_with_medians
+    display: entire_pseudotime_vertically_aligned
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_bb_gene_stack_v4_20261009
+  residual_ratio_umap:
+    status: complete_preliminary_unregistered
+    residual_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009
+    space: umap.atac
+    projection: linear_interpolation_from_window_center_rank_to_exact_cell_rank
+    comparison_projection_exported: mean_residual_ratio_across_containing_windows
+    scale: blue_white_red_centered_at_zero
+    symmetric_color_limit: absolute_cell_value_p99
+    unclipped_symmetric_color_limit: observed_maximum_absolute_cell_value
+    figures: [p99_clipped, unclipped]
+    trajectory_cells: 12642
+    outside_trajectory_color: gray
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_umap_v3_20261009
+  residual_ratio_weighted_gene_screen:
+    status: complete_preliminary_unregistered
+    ratio_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009
+    expression_source: SCT_data
+    regions_used: none
+    full_pseudotime_scored: true
+    interest_formula: 0.40*abs(ratio) + 0.40*abs(first_derivative) + 0.20*abs(second_derivative)
+    minimum_relative_window_weight: 0.25
+    interest_balanced_segments: 8
+    gene_depth_adjustment: conditional_log1p_nCount_RNA_after_ns_pt_df8
+    smoothing: identical_3_percent_trajectory_smoother_for_ratio_and_genes
+    score: normalized_tanh_clipped_slope_direction_similarity
+    direction_balance: 30_percent_global_plus_70_percent_segment_balanced
+    segment_consistency_penalty_sd: 0.75
+    tested_genes: 11745
+    feature_fold_cross_fitting: false
+    interpretation: descriptive_depth_adjusted_screen_not_unbiased_inference
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_direction_gene_screen_v4_20261009
+  residual_ratio_full_direction_matches:
+    status: complete_preliminary_unregistered
+    source_screen: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_direction_gene_screen_v4_20261009
+    definition: requested_direction_in_all_8_equal_interest_trajectory_segments
+    magnitude_invariant: true
+    direct_count: 15
+    inverse_count: 71
+    interpretation: direction_concordant_candidates_not_exact_curve_matches_or_significance
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_full_direction_matches_v1_20261009
+  adjusted_cohesin_prc2_profiles:
+    status: complete_preliminary_unregistered
+    ratio_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_ratio_total_signal_explained_v1_20261009
+    score_source: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_residual_ratio_direction_gene_screen_v4_20261009
+    cohesin_genes: [Wapl, Smc1a, Smc3, Rad21, Pds5a, Ctcf, Stag2, Pds5b, Stag1, Mau2, Nipbl]
+    prc2_genes: [Ezh2, Eed, Suz12]
+    reference_gene: Ebf1
+    adjustment: conditional_log1p_nCount_RNA_after_ns_pt_df8
+    smoothing: identical_3_percent_trajectory_smoother_for_ratio_and_genes
+    interval: adjusted_expression_cell_level_IQR
+    display: full_pseudotime_standardized_profiles
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_adjusted_cohesin_prc2_profiles_v1_20261009
+  adjusted_selected_genes_bb:
+    status: complete_preliminary_unregistered
+    genes: [Ebf1, Tcf3, Stat5a, Stat5b, Ezh2, Nipbl, Wapl]
+    adjustment: conditional_log1p_nCount_RNA_after_ns_pt_df8
+    smoothing: identical_3_percent_trajectory_smoother_for_ratio_and_genes
+    interval: adjusted_expression_cell_level_IQR
+    highlighted_regions: source_bb_up_BB1_BB2_pt_min_to_max_with_medians
+    layout: compact_landscape_2_columns_14_by_8.5_inches
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_adjusted_selected_genes_bb_v1_20261009
+  nipbl_wapl_ezh2_expression_umap:
+    status: complete_preliminary_unregistered
+    genes: [Nipbl, Wapl, Ezh2]
+    matrix: SCT_data
+    space: umap.atac
+    scale: gene_specific_white_to_crimson_relative_to_positive_cell_p99
+    clipping: positive_cell_p99_display_only
+    high_expression_drawn_last: true
+    overlays: none
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_nipbl_wapl_ezh2_umap_v2_20261009
+  cox6a1_cox6a2_ube2c_expression_umap:
+    status: complete_preliminary_unregistered
+    genes: [Cox6a1, Cox6a2, Ube2c]
+    matrix: SCT_data
+    space: umap.atac
+    scale: gene_specific_white_to_crimson_relative_to_positive_cell_p99
+    clipping: positive_cell_p99_display_only
+    high_expression_drawn_last: true
+    overlays: none
+    report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_reference/reports/preliminary_cox6a1_cox6a2_ube2c_umap_v1_20261010
 
 processing:
   inspect: processing/bdev_reference/01_inspect_bdev_reference.R
@@ -98,4 +388,34 @@ processing:
   all_cytokine_neighborhood_rank_change: figure_scripts/bdev_reference/12_all_cytokine_neighborhood_rank_change_report.R
   all_cytokine_ucell_rankmean_genechange: figure_scripts/bdev_reference/13_all_cytokine_rankmean_comparison_report.R
   all_cytokine_breadth_intensity: figure_scripts/bdev_reference/14_all_cytokine_breadth_intensity_report.R
+  rna_atac_latent_progress: figure_scripts/bdev_reference/15_rna_atac_latent_progress.R
+  register_rna_atac_latent_progress_capsule: figure_scripts/bdev_reference/15_register_rna_atac_latent_progress_capsule.R
+  rna_atac_latent_progress_w30_s5: figure_scripts/bdev_reference/16_rna_atac_latent_progress_w30_s5.R
+  register_rna_atac_latent_progress_w30_s5_capsule: figure_scripts/bdev_reference/16_register_rna_atac_latent_progress_w30_s5_capsule.R
+  preliminary_smoothed_slope_gene_expression: figure_scripts/bdev_reference/17_preliminary_smoothed_slope_gene_expression.R
+  preliminary_slope_turning_regions_umap: figure_scripts/bdev_reference/18_preliminary_slope_turning_regions_umap.R
+  preliminary_turning_summary_ebf1_ezh2: figure_scripts/bdev_reference/19_preliminary_turning_summary_ebf1_ezh2.R
+  preliminary_modality_ratio_umap_five_genes: figure_scripts/bdev_reference/20_preliminary_modality_ratio_umap_five_genes.R
+  preliminary_modality_ratio_umap_nine_genes: figure_scripts/bdev_reference/20_preliminary_modality_ratio_umap_five_genes.R
+  preliminary_slope_gene_set_signals: figure_scripts/bdev_reference/21_preliminary_slope_gene_set_signals.R
+  preliminary_lsi1_sensitivity: figure_scripts/bdev_reference/22_preliminary_lsi1_sensitivity.R
+  preliminary_tsix_expression: figure_scripts/bdev_reference/23_preliminary_tsix_expression.R
+  preliminary_log2_modality_ratio: figure_scripts/bdev_reference/24_preliminary_log2_modality_ratio.R
+  preliminary_modality_gene_pattern_screen: figure_scripts/bdev_reference/25_preliminary_modality_gene_pattern_screen.R
+  preliminary_state_top20_separate_figures: figure_scripts/bdev_reference/26_preliminary_state_top20_separate_figures.R
+  preliminary_modality_turn_pattern_screen: figure_scripts/bdev_reference/27_preliminary_modality_turn_pattern_screen.R
+  preliminary_epigenetic_pattern_candidates: figure_scripts/bdev_reference/28_preliminary_epigenetic_pattern_candidates.R
+  preliminary_inverse_cohesin_turn_audit: figure_scripts/bdev_reference/29_preliminary_inverse_cohesin_turn_audit.R
+  preliminary_t1_t3_continuous_gene_screen: figure_scripts/bdev_reference/30_preliminary_t1_t3_continuous_gene_screen.R
+  preliminary_turn_local_balanced_gene_screen: figure_scripts/bdev_reference/31_preliminary_turn_local_balanced_gene_screen.R
+  preliminary_inverse_hits_depth_diagnostic: figure_scripts/bdev_reference/32_preliminary_inverse_hits_depth_diagnostic.R
+  preliminary_ratio_total_signal_explained: figure_scripts/bdev_reference/33_preliminary_ratio_total_signal_explained.R
+  preliminary_residual_ratio_bb_gene_stack: figure_scripts/bdev_reference/34_preliminary_residual_ratio_bb_gene_stack.R
+  preliminary_residual_ratio_umap: figure_scripts/bdev_reference/35_preliminary_residual_ratio_umap.R
+  preliminary_residual_ratio_weighted_gene_screen: figure_scripts/bdev_reference/36_preliminary_residual_ratio_weighted_gene_screen.R
+  preliminary_residual_ratio_full_direction_matches: figure_scripts/bdev_reference/37_preliminary_residual_ratio_full_direction_matches.R
+  preliminary_adjusted_cohesin_prc2_profiles: figure_scripts/bdev_reference/38_preliminary_adjusted_cohesin_prc2_profiles.R
+  preliminary_adjusted_selected_genes_bb: figure_scripts/bdev_reference/39_preliminary_adjusted_selected_genes_bb.R
+  preliminary_nipbl_wapl_ezh2_expression_umap: figure_scripts/bdev_reference/40_preliminary_nipbl_wapl_ezh2_umap.R
+  preliminary_cox6a1_cox6a2_ube2c_expression_umap: figure_scripts/bdev_reference/41_preliminary_cox6a1_cox6a2_ube2c_umap.R
   promote_flattened_rank_scores: processing/bdev_reference/04_promote_flattened_rank_scores.R
