@@ -215,6 +215,187 @@ current report and machine-readable WT/KO region artifacts are under
 `reports/bdev_cutoff025_mapping_report_v4_20261012/`. This is a report-only
 default and does not mutate or promote any source bundle.
 
+`85_wt_enrichment_rolling_window_cell_support.R` applies the reviewed support
+rule for the motif-analysis display domain. Within each WT-defined enrichment
+peak it finds maximal consecutive runs in which every source bin has at least
+10 WT cells. Runs shorter than three bins are audited and excluded because a
+centered three-bin window cannot be formed without extending outside the run.
+Displayed counts sum the left, middle, and right source bins and are located at
+the middle-bin pseudotime. KO support is assessed from the unsmoothed middle
+source bin. Regions without any middle bin containing at least 10 KO cells are
+excluded; in each retained region, one orange vertical line separates the last
+supported middle bin from the subsequent unsupported tail. Run with
+`bash processing/integration/run_85_wt_enrichment_rolling_window_cell_support.sh`.
+The completed read-only report is under
+`reports/wt_enrichment_rolling_3bin_cell_support_v2_20261013/`.
+
+`86_rolling_window_motif_trajectory_heatmaps.R` applies those exact windows to
+the motif analysis. Within each retained region, Bdev alone defines accessible
+peaks, chromVAR background and expectation, temporal-variability ranking,
+top-30 motif selection, centering, scaling, and row order. WT and KO enter only
+afterward. Each figure aligns Bdev, WT, KO, and descriptive WT-minus-KO panels;
+the agreed KO middle-bin support boundary is drawn in every panel. The display
+uses centered three-bin pseudobulks, and trajectories for all 746 eligible
+motifs are exported. Run with
+`bash processing/integration/run_86_rolling_window_motif_trajectory_heatmaps.sh`.
+The completed report is under
+`reports/rolling_3bin_motif_trajectory_heatmaps_v1g_20261013/`.
+
+`run_87_single_bin_motif_trajectory_heatmaps.sh` runs the same Bdev-defined
+motif workflow without rolling aggregation. Each displayed pseudobulk contains
+exactly one of the retained source bins: 18 positions for Flt3L WT peak 1 and
+13 for IL-7 WT peak 1. The top-30 motifs are reselected from Bdev single-bin
+temporal variability, while calibration, scaling, and row order remain
+Bdev-only. KO bins with zero cells, and their WT-minus-KO comparisons, are
+explicitly gray rather than imputed. Filled tracks above the heatmaps show each
+group's within-group accepted-cell fraction divided by the Bdev defined-pt
+cell fraction in the same bin. A value of one is Bdev-like occupancy; the
+comparison panel overlays WT and KO. The completed report is under
+`reports/single_bin_motif_trajectory_heatmaps_v2_20261013/`.
+
+`run_88_fine_rolling_motif_trajectory_heatmaps.sh` provides the narrowed
+rolling-window version. It halves the original source-bin width and aggregates
+three fine bins per centered pseudobulk, so each window spans 1.5 original
+bins and advances by 0.5 original bin. This yields 31 Flt3L and 21 IL-7 focal
+positions. WT support remains at least 22 and 43 cells per window,
+respectively. The Bdev-only motif workflow, density tracks, KO boundary, and
+explicit gray display for zero-cell KO windows are otherwise unchanged. KO
+and WT-minus-KO motif tiles after the support line are masked, while their
+computed values remain exported with a display-support flag. The
+completed report is under
+`reports/fine_rolling_motif_trajectory_heatmaps_v2_20261013/`. In v2, the KO
+line is aligned to the fine grid: it falls halfway between the last half-width
+middle bin with at least 10 KO cells and the first subsequent unsupported tail
+bin.
+
+`89_single_cell_axis_15nn_motif_heatmaps.R` removes the fixed plotting grid:
+every Bdev cell in each retained region supplies a focal position at its
+preserved `pt`. At every position, Bdev, WT, and KO activity is the mean of
+that group's 15 nearest pseudotime-cell chromVAR deviations. The top-30 motif
+identities are fixed from the Bdev-only fine rolling analysis for a direct
+resolution comparison; per-cell chromVAR calibration and trajectory scaling
+remain Bdev-only. A group is masked if its 15th neighbor is more than 0.25 pt
+away, and KO plus WT-minus-KO are masked after the fine-bin KO boundary.
+Filled tracks show 15-NN local density relative to Bdev. Run with
+`bash processing/integration/run_89_single_cell_axis_15nn_motif_heatmaps.sh`.
+The completed report is under
+`reports/single_cell_axis_15nn_motif_heatmaps_v2_20261013/`.
+
+`run_90_single_cell_axis_30nn_motif_heatmaps.sh` repeats that exact workflow
+with 30 nearest pseudotime cells per group. It is smoother but has a wider
+effective bandwidth. Neighbor radius is exported for auditing but does not
+mask values; the 0.25 threshold applies only to trajectory-support selection
+of mapped query cells. KO and WT-minus-KO remain masked after the agreed KO
+boundary. The completed comparison report is under
+`reports/single_cell_axis_30nn_motif_heatmaps_v2_20261013/`.
+
+`91_ebf1_pm2mb_shared_support_da.R` tests differential accessibility for all
+251 Bdev peaks overlapping Ebf1 TSS +/-2 Mb (mm10 chr11:42,617,317-46,617,317).
+For each cytokine comparison, cells are limited to the maximal consecutive
+original-bin interval in which every bin contains at least 10 accepted mapped
+WT cells and 10 accepted mapped KO cells: bins 14-25 for Flt3L and 22-30 for
+IL-7. The complete peak matrix is normalized with native scWorkbench
+log1p-CP10K and each target is tested with native `de_wilcox`; BH adjustment is
+within the 251-peak target test. Because there is one biological sample per
+genotype, results are descriptive cell-level differences. Run with
+`bash processing/integration/run_91_ebf1_pm2mb_shared_support_da.sh`. The
+read-only, unpromoted report is under
+`reports/ebf1_pm2mb_shared_support_da_v1_20261013/`.
+
+`92_add_wt_ko_da_to_tcf3_placseq_tracks.R` adds the shared-support Flt3L and
+IL-7 differential-accessibility results to the existing E2A/TCF3 degradation
+coverage and Ebf1-promoter PLAC-seq display. The two aligned DA tracks show
+accessible-cell fraction in WT minus KO for all 251 tested peaks. Peaks passing
+BH < 0.05 within their cytokine comparison are highlighted red for WT-higher
+and blue for KO-higher; nonsignificant peaks remain gray. Both the Ebf1 ±3 Mb
+and chr11:44-46 Mb layouts are rendered. The source coverage and PLAC-seq
+values are reused unchanged. Run with
+`bash processing/integration/run_92_add_wt_ko_da_to_tcf3_placseq_tracks.sh`.
+The completed unpromoted report is under
+`reports/e2a_tcf3_placseq_with_shared_support_wt_ko_da_v2_20261013/`.
+
+`93_ebf1_depth_complexity_matched_da.R` tests whether the strong directional
+skew in the Ebf1-window DA is explained by sample-level ATAC depth and
+complexity. Within every retained pseudotime bin, WT and KO cells are matched
+without replacement on an oriented PC1 of log total counts and log detected
+peaks across all 97,788 Bdev peaks. Matching requires common support and a
+0.2-target-SD caliper. It retains 475 pairs for Flt3L and 255 for IL-7 while
+reducing both covariate absolute standardized differences below 0.05. Native
+scWorkbench log1p-CP10K and `de_wilcox` are then reapplied to the matched cells.
+Only 5 Flt3L peaks remain BH-significant (1 WT-higher and 4 KO-higher), while
+none remain for IL-7. The Ebf1 TSS-overlapping peak remains Flt3L WT-higher
+(BH q=0.037) but not IL-7 significant (q=0.892). This is a sensitivity analysis,
+not a substitute for biological replicates. Run with
+`bash processing/integration/run_93_ebf1_depth_complexity_matched_da.sh`; the
+completed report is under
+`reports/ebf1_pm2mb_depth_complexity_matched_da_v1_20261013/`.
+
+`94_ebf1_locus_matched_da_e2a_placseq.R` renders the final Ebf1 ±2 Mb locus
+view from the matched sensitivity results. Separate control and E2A/TCF3-
+depleted coverage tracks are followed by aligned matched Flt3L and IL-7
+WT-minus-KO accessibility tracks and the Ebf1-promoter PLAC-seq arcs. The five
+remaining Flt3L BH-significant peaks are colored and labeled at the Ebf1 TSS,
+-0.43 Mb, +0.50 Mb, +1.19 Mb, and +1.51 Mb. The IL-7 track contains no
+significant highlight. Original E2A/TCF3-dependent peaks retain their P1-P7
+labels within this interval. Run with
+`bash processing/integration/run_94_ebf1_locus_matched_da_e2a_placseq.sh`;
+the completed report is under
+`reports/ebf1_locus_matched_da_e2a_placseq_v1_20261013/`.
+
+`95_bdev_five_region_ebf1_dynamic_peaks.R` partitions the preserved Bdev
+trajectory into five consecutive local states around the current shared
+WT/KO-supported cytokine domains: before Flt3L (bins 10-13), Flt3L only
+(14-21), dual (22-25), IL-7 only (26-30), and after IL-7 (31-34). The two
+four-bin flanks match the width of the dual interval. Across all 251 Bdev peaks
+within Ebf1 TSS ±2 Mb, native scWorkbench `de_wilcox` tests each adjacent
+state pair after full-matrix log1p-CP10K normalization. A peak is statistically
+dynamic when any adjacent comparison has BH q < 0.05; the robust list also
+requires an absolute accessible-cell-fraction change of at least 0.05 and a
+concordant normalized-effect direction. This identifies 108 statistically
+dynamic and 40 robust dynamic peaks. In the heatmap, Bdev accessibility below
+5% is white and values from 5% upward use a sequential blue-to-purple scale.
+Two aligned columns at right show the existing bulk E2A/TCF3 control and
+depleted mean fragment-coverage CPM over each peak, using a separate orange
+scale. Run with
+`bash processing/integration/run_95_bdev_five_region_ebf1_dynamic_peaks.sh`;
+the read-only, unpromoted report is under
+`reports/bdev_five_region_ebf1_dynamic_peaks_v3_20261013/`.
+
+`96_plot_two_dynamic_tcf3_peaks_bdev_umap.R` displays the two statistically
+dynamic Bdev elements that overlap significant E2A/TCF3-depletion peaks:
+`chr11-45089034-45090047` and `chr11-45847272-45848407`. All 26,723 Bdev
+cells are shown on the unchanged native `umap.atac`. Accessibility is the
+previously exported native scWorkbench log1p-CP10K value; gray denotes zero,
+and both panels share a pooled nonzero-p99 display cap so color intensity is
+comparable. Run with
+`bash processing/integration/run_96_plot_two_dynamic_tcf3_peaks_bdev_umap.sh`;
+the read-only report is under
+`reports/two_dynamic_tcf3_peaks_bdev_umap_v1_20261013/`.
+
+`97_tcf3_peaks_detection_normalized_wt_ko_ratio.R` evaluates all eight
+significant E2A/TCF3-depletion peaks in the shared-support Flt3L bins 14-25
+and IL-7 bins 22-30. For each cell and peak, its score is 10,000 times the
+binary accessibility indicator divided by the number of detected peaks across
+all 97,788 Bdev-aligned peaks. WT/KO is the ratio of genotype mean cell
+scores. No pseudocount is used, so peaks absent from one genotype retain exact
+WT-only or KO-only labels. The output also retains raw accessible-cell
+percentages and cell-level scores. Run with
+`bash processing/integration/run_97_tcf3_peaks_detection_normalized_wt_ko_ratio.sh`;
+the read-only report is under
+`reports/tcf3_peaks_detection_normalized_wt_ko_ratio_v2_20261013/`.
+
+`98_ebf1_tcf3_bdev_dynamics_wtko_placseq_locus.R` integrates the eight
+significant E2A/TCF3-depletion peaks in a focused Ebf1 locus view extending
+from -0.25 to +2.10 Mb relative to the TSS, which retains P8 at +2.018 Mb.
+Aligned panels show five-region Bdev accessible-cell percentages, Flt3L and
+IL-7 detected-peak-normalized WT/KO ratios, original TCF3 depletion log2FC,
+and 28 Ebf1-promoter H3K4me3 PLAC-seq arcs. P3 is marked as statistically
+Bdev-dynamic and P7 as robustly Bdev-dynamic; P8 is explicitly marked as
+outside the original ±2 Mb dynamic screen. Run with
+`bash processing/integration/run_98_ebf1_tcf3_bdev_dynamics_wtko_placseq_locus.sh`;
+the report is under
+`reports/ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_v1_20261013/`.
+
 `figure_scripts/bdev_integrated/07_ko_cytokine_positive_signal_report.R`
 combines the reviewed mapping with the accepted positive Flt3L and IL-7 score
 state. It produces exactly two five-panel composite figures: accepted combined

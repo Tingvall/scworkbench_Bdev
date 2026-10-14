@@ -481,6 +481,310 @@ ko_mapping_phase:
       pt_enrichment_with_bdev_signal_regions: figures/wt_ko_pt_enrichment_bdev_signal_regions_cutoff025.pdf
     source_bundles_preserved: true
     promotion: false
+  wt_enrichment_rolling_window_cell_support_status: complete_unpromoted_report_only
+  wt_enrichment_rolling_window_cell_support_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/wt_enrichment_rolling_3bin_cell_support_v2_20261013/REPORT.md
+  wt_enrichment_rolling_window_cell_support_parameters:
+    source: bdev_cutoff025_mapping_report_v4_20261012
+    source_region_policy: WT_enrichment_regions_cutoff025
+    minimum_cells_per_source_WT_bin: 10
+    retained_run_rule: maximal_consecutive_WT_passing_bins_with_at_least_3_bins
+    rolling_window: {width_bins: 3, alignment: centered_on_middle_bin, count: summed_unique_cells_across_left_middle_right_bins}
+    KO_support_assessment: raw_cell_count_in_middle_source_bin
+    region_KO_requirement: at_least_one_middle_bin_with_at_least_10_KO_cells
+    KO_highlight: one_vertical_boundary_after_last_supported_middle_bin
+    retained_regions: [flt3l_wt_peak1_run1, il7_wt_peak1_run1]
+    excluded_no_KO_support_regions: [il7_wt_peak2_run1]
+    retained_rolling_windows: 27
+    middle_bins_below_KO_threshold: 8
+    source_bundles_preserved: true
+    promotion: false
+  rolling_3bin_motif_trajectory_heatmaps_status: complete_unpromoted_report_only
+  rolling_3bin_motif_trajectory_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/rolling_3bin_motif_trajectory_heatmaps_v1g_20261013/REPORT.md
+  rolling_3bin_motif_trajectory_heatmaps_parameters:
+    source_windows: wt_enrichment_rolling_3bin_cell_support_v2_20261013
+    regions: [flt3l_wt_peak1_run1, il7_wt_peak1_run1]
+    excluded_region: il7_wt_peak2_run1
+    trajectory_support_cutoff: 0.25
+    window: centered_3_source_bin_pseudobulk_plotted_at_middle_bin
+    motif_source: exact_read_only_bdev_jaspar_match_matrix
+    motif_universe_per_region: 746
+    displayed_selection: top_30_Bdev_temporal_SD_per_region
+    background_expectation_selection_center_scale_and_order: Bdev_only
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    KO_support_boundary: raw_middle_bin_10_cell_boundary
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  single_bin_motif_trajectory_heatmaps_status: complete_unpromoted_report_only
+  single_bin_motif_trajectory_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/single_bin_motif_trajectory_heatmaps_v2_20261013/REPORT.md
+  single_bin_motif_trajectory_heatmaps_parameters:
+    source_bins: wt_enrichment_rolling_3bin_cell_support_v2_20261013/source_bin_cell_counts.tsv
+    regions: [flt3l_wt_peak1_run1, il7_wt_peak1_run1]
+    trajectory_positions: {Flt3l: 18, Il7: 13}
+    trajectory_support_cutoff: 0.25
+    window: exactly_1_source_bin_per_displayed_position
+    motif_source: exact_read_only_bdev_jaspar_match_matrix
+    motif_universe_per_region: 746
+    displayed_selection: top_30_Bdev_single_bin_temporal_SD_per_region
+    background_expectation_selection_center_scale_and_order: Bdev_only
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    density_track: within_group_accepted_cell_fraction_divided_by_Bdev_defined_pt_cell_fraction_in_same_bin
+    density_reference: Bdev_equals_1
+    density_comparison_panel: overlaid_WT_and_KO_filled_curves
+    zero_cell_KO_bins: explicit_missing_gray_no_imputation
+    KO_support_boundary: raw_bin_10_cell_boundary
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  fine_rolling_motif_trajectory_heatmaps_status: complete_unpromoted_report_only
+  fine_rolling_motif_trajectory_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/fine_rolling_motif_trajectory_heatmaps_v2_20261013/REPORT.md
+  fine_rolling_motif_trajectory_heatmaps_parameters:
+    source_domain: wt_enrichment_rolling_3bin_cell_support_v2_20261013
+    regions: [flt3l_wt_peak1_run1, il7_wt_peak1_run1]
+    trajectory_positions: {Flt3l: 31, Il7: 21}
+    fine_bin_width: half_original_source_bin
+    rolling_window: {width_fine_bins: 3, width_original_bins: 1.5, center_step_original_bins: 0.5}
+    window_WT_cell_minimum: {Flt3l: 22, Il7: 43}
+    trajectory_support_cutoff: 0.25
+    motif_source: exact_read_only_bdev_jaspar_match_matrix
+    motif_universe_per_region: 746
+    displayed_selection: top_30_Bdev_fine_window_temporal_SD_per_region
+    background_expectation_selection_center_scale_and_order: Bdev_only
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    density_track: within_group_accepted_cell_fraction_divided_by_Bdev_defined_pt_cell_fraction_in_same_window
+    zero_cell_KO_windows: explicit_missing_gray_no_imputation
+    KO_support_boundary: midpoint_between_last_half_width_middle_bin_with_at_least_10_KO_cells_and_first_subsequent_unsupported_tail_bin
+    after_KO_support_boundary: mask_KO_and_WT_minus_KO_motif_tiles
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  single_cell_axis_15nn_motif_heatmaps_status: complete_unpromoted_report_only
+  single_cell_axis_15nn_motif_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/single_cell_axis_15nn_motif_heatmaps_v2_20261013/REPORT.md
+  single_cell_axis_15nn_motif_heatmaps_parameters:
+    regions: [flt3l_wt_peak1_run1, il7_wt_peak1_run1]
+    focal_axis: every_Bdev_cell_ordered_by_preserved_pt
+    focal_cells: {Flt3l: 2004, Il7: 702}
+    smoothing: 15_nearest_pseudotime_cells_independently_per_group
+    maximum_neighbor_radius_pt: 0.25
+    median_neighbor_radius:
+      Flt3l: {Bdev: 0.01472, WT: 0.04459, KO: 0.12290}
+      Il7: {Bdev: 0.02399, WT: 0.03246, KO: 0.05891}
+    supported_focal_cells:
+      Flt3l: {Bdev: 2004, WT: 2004, KO: 1628, WT_minus_KO: 1628}
+      Il7: {Bdev: 702, WT: 702, KO: 618, WT_minus_KO: 618}
+    motif_selection: fixed_top_30_from_Bdev_only_fine_rolling_analysis
+    chromvar_calibration_center_scale_and_order: Bdev_only
+    panels: [Bdev, WT, KO, WT_minus_KO]
+    density_track: 15NN_local_density_relative_to_Bdev_normalized_by_group_total
+    KO_support_boundary: fine_half_width_middle_bin_10_cell_boundary
+    after_KO_support_boundary: mask_KO_and_WT_minus_KO_motif_tiles
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  single_cell_axis_30nn_motif_heatmaps_status: complete_unpromoted_report_only
+  single_cell_axis_30nn_motif_heatmaps_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/single_cell_axis_30nn_motif_heatmaps_v2_20261013/REPORT.md
+  single_cell_axis_30nn_motif_heatmaps_parameters:
+    comparator: single_cell_axis_15nn_motif_heatmaps_v2_20261013
+    focal_axis: every_Bdev_cell_ordered_by_preserved_pt
+    focal_cells: {Flt3l: 2004, Il7: 702}
+    smoothing: 30_nearest_pseudotime_cells_independently_per_group
+    mapped_cell_trajectory_support_cutoff: 0.25
+    neighbor_radius_mask: none_audit_only
+    median_neighbor_radius:
+      Flt3l: {Bdev: 0.03175, WT: 0.09463, KO: 0.23821}
+      Il7: {Bdev: 0.04995, WT: 0.06342, KO: 0.11101}
+    supported_focal_cells:
+      Flt3l: {Bdev: 2004, WT: 2004, KO: 1628, WT_minus_KO: 1628}
+      Il7: {Bdev: 702, WT: 702, KO: 618, WT_minus_KO: 618}
+    motif_selection: fixed_top_30_from_Bdev_only_fine_rolling_analysis
+    chromvar_calibration_center_scale_and_order: Bdev_only
+    density_track: 30NN_local_density_relative_to_Bdev_normalized_by_group_total
+    KO_support_boundary: fine_half_width_middle_bin_10_cell_boundary
+    after_KO_support_boundary: mask_KO_and_WT_minus_KO_motif_tiles
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  ebf1_pm2mb_shared_support_da_status: complete_unpromoted_report_only
+  ebf1_pm2mb_shared_support_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_pm2mb_shared_support_da_v1_20261013/REPORT.md
+  ebf1_pm2mb_shared_support_da_parameters:
+    genome: GRCm38_mm10
+    ebf1_tss: "chr11:44617317:+"
+    genomic_window_bp: 2000000
+    tested_bdev_peaks: 251
+    mapped_cell_trajectory_support_cutoff: 0.25
+    shared_region_rule: maximal_consecutive_original_100bin_run_with_at_least_10_WT_and_10_KO_cells_in_every_bin
+    shared_regions:
+      Flt3l: {region_id: flt3l_wt_peak1_run1, first_bin: 14, last_bin: 25, n_wt_cells: 762, n_ko_cells: 814}
+      Il7: {region_id: il7_wt_peak1_run1, first_bin: 22, last_bin: 30, n_wt_cells: 627, n_ko_cells: 370}
+    normalization: native_scworkbench_full_peak_matrix_log1p_cp10k
+    operation: native_scworkbench_de_wilcox
+    group_a: WT
+    group_b: KO
+    min_pct: 0
+    p_adjustment: BH_within_each_251_peak_target_test
+    significant_bh05:
+      Flt3l: {total: 86, WT_higher: 4, KO_higher: 82}
+      Il7: {total: 26, WT_higher: 26, KO_higher: 0}
+    biological_replicates_per_genotype: 1
+    inference: descriptive_cell_level
+    source_bundles_preserved: true
+    promotion: false
+  e2a_tcf3_placseq_with_shared_support_wt_ko_da_status: complete_unpromoted_report_only
+  e2a_tcf3_placseq_with_shared_support_wt_ko_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/e2a_tcf3_placseq_with_shared_support_wt_ko_da_v2_20261013/REPORT.md
+  e2a_tcf3_placseq_with_shared_support_wt_ko_da_parameters:
+    source_coverage_report: tcf3_ebf1_coverage_placseq_tracks_v4_20261005
+    source_da_report: ebf1_pm2mb_shared_support_da_v1_20261013
+    layouts: [Ebf1_TSS_pm3Mb, chr11_44_46Mb]
+    tracks: [E2A_TCF3_control, E2A_TCF3_depleted, Flt3L_WT_minus_KO_DA, IL7_WT_minus_KO_DA, Ebf1_promoter_PLACseq]
+    da_y_axis: accessible_cell_fraction_WT_minus_KO
+    significant_peak_highlight:
+      threshold: BH_adjusted_P_below_0.05_within_each_251_peak_comparison
+      WT_higher: red
+      KO_higher: blue
+      not_significant: gray
+    significant_counts: {Flt3L: 86, IL7: 26}
+    coverage_and_placseq_values_changed: false
+    source_bundles_preserved: true
+    promotion: false
+  ebf1_pm2mb_depth_complexity_matched_da_status: complete_unpromoted_report_only
+  ebf1_pm2mb_depth_complexity_matched_da_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_pm2mb_depth_complexity_matched_da_v1_20261013/REPORT.md
+  ebf1_pm2mb_depth_complexity_matched_da_parameters:
+    source_da_report: ebf1_pm2mb_shared_support_da_v1_20261013
+    exact_matching_strata: target_x_original_pseudotime_bin
+    matching_covariates: [log1p_total_counts_across_97788_Bdev_peaks, log1p_detected_Bdev_peaks]
+    matching_score: oriented_PC1_of_target_standardized_covariates
+    common_support: true
+    caliper_target_sd: 0.2
+    matching_algorithm: maximum_cardinality_minimum_distance_ordered_matching_without_replacement
+    balance_smd:
+      Flt3l: {original_peak_counts: -0.725, original_detected_peaks: -0.738, matched_peak_counts: 0.005, matched_detected_peaks: -0.023}
+      Il7: {original_peak_counts: 0.668, original_detected_peaks: 0.688, matched_peak_counts: 0.008, matched_detected_peaks: 0.049}
+    matched_pairs: {Flt3l: 475, Il7: 255}
+    normalization: reused_native_scworkbench_full_peak_matrix_log1p_cp10k
+    operation: native_scworkbench_de_wilcox
+    p_adjustment: BH_within_each_251_peak_target_test
+    significant_bh05:
+      Flt3l: {total: 5, WT_higher: 1, KO_higher: 4}
+      Il7: {total: 0, WT_higher: 0, KO_higher: 0}
+    ebf1_tss_overlapping_peak:
+      Flt3l: {direction: WT_higher, BH_q: 0.0369749230208246}
+      Il7: {direction: WT_higher, BH_q: 0.892495205689489}
+    biological_replicates_per_genotype: 1
+    inference: descriptive_sensitivity_analysis
+    source_bundles_preserved: true
+    promotion: false
+  ebf1_locus_matched_da_e2a_placseq_status: complete_unpromoted_report_only
+  ebf1_locus_matched_da_e2a_placseq_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_locus_matched_da_e2a_placseq_v1_20261013/REPORT.md
+  ebf1_locus_matched_da_e2a_placseq_parameters:
+    genome: GRCm38_mm10
+    locus: "chr11:42617317-46617317"
+    source_coverage_report: tcf3_ebf1_coverage_placseq_tracks_v4_20261005
+    source_matched_da_report: ebf1_pm2mb_depth_complexity_matched_da_v1_20261013
+    tracks: [E2A_TCF3_control, E2A_TCF3_depleted, Flt3L_matched_WT_minus_KO, IL7_matched_WT_minus_KO, Ebf1_promoter_PLACseq]
+    highlighted_matched_bh05_peaks: {Flt3L: 5, IL7: 0}
+    retained_peak_labels: [Ebf1_TSS, "-0.43_Mb", "+0.50_Mb", "+1.19_Mb", "+1.51_Mb"]
+    coverage_and_placseq_values_changed: false
+    source_bundles_preserved: true
+    promotion: false
+  bdev_five_region_ebf1_dynamic_peaks_status: complete_unpromoted_report_only
+  bdev_five_region_ebf1_dynamic_peaks_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/bdev_five_region_ebf1_dynamic_peaks_v3_20261013/REPORT.md
+  bdev_five_region_ebf1_dynamic_peaks_parameters:
+    genome: GRCm38_mm10
+    ebf1_tss: "chr11:44617317:+"
+    genomic_window_bp: 2000000
+    tested_bdev_peaks: 251
+    pseudotime: exact_preserved_Bdev_pt
+    region_basis: current_shared_WT_KO_supported_Flt3L_bins_14_25_and_IL7_bins_22_30
+    regions:
+      before_flt3l: {bins: "10-13", pt: [-28.1841755833703, -26.9453107225628], bdev_cells: 1071}
+      flt3l_only: {bins: "14-21", pt: [-26.9453107225628, -24.4675810009478], bdev_cells: 1574}
+      dual: {bins: "22-25", pt: [-24.4675810009478, -23.2287161401404], bdev_cells: 443}
+      il7_only: {bins: "26-30", pt: [-23.2287161401404, -21.680135064131], bdev_cells: 372}
+      after_il7: {bins: "31-34", pt: [-21.680135064131, -20.4412702033235], bdev_cells: 120}
+    local_flank_width: four_bins_matching_dual_region_width
+    normalization: reused_native_scworkbench_full_peak_matrix_log1p_cp10k
+    operation: native_scworkbench_de_wilcox_on_four_adjacent_region_pairs
+    p_adjustment: BH_within_each_251_peak_transition_test
+    statistically_dynamic_rule: BH_q_below_0.05_in_at_least_one_adjacent_transition
+    robust_dynamic_rule: BH_q_below_0.05_and_absolute_accessible_fraction_change_at_least_0.05_and_concordant_normalized_effect
+    statistically_dynamic_peaks: 108
+    robust_dynamic_peaks: 40
+    heatmap:
+      bdev_below_accessible_fraction: {threshold: 0.05, color: white}
+      bdev_at_or_above_threshold_scale: sequential_blue_to_purple
+      appended_bulk_columns: [Control_WT, TCF3_depleted]
+      appended_bulk_metric: weighted_mean_fragment_coverage_CPM_over_each_peak
+      appended_bulk_source: tcf3_ebf1_coverage_placseq_tracks_v4_20261005
+      appended_bulk_scale: separate_sequential_orange
+    transition_counts:
+      before_to_flt3l_only: {significant: 62, robust: 12, later_higher_robust: 12, earlier_higher_robust: 0}
+      flt3l_only_to_dual: {significant: 77, robust: 34, later_higher_robust: 34, earlier_higher_robust: 0}
+      dual_to_il7_only: {significant: 1, robust: 1, later_higher_robust: 0, earlier_higher_robust: 1}
+      il7_only_to_after: {significant: 1, robust: 1, later_higher_robust: 1, earlier_higher_robust: 0}
+    ebf1_tss_overlapping_peak:
+      feature_id: chr11-44616624-44617726
+      midpoint_relative_to_tss_bp: -142
+      robust_adjacent_transitions: 2
+      maximum_accessible_fraction_region: After_IL7
+    inference: descriptive_cell_level_Bdev_trajectory_screen
+    source_bundles_preserved: true
+    promotion: false
+  two_dynamic_tcf3_peaks_bdev_umap_status: complete_unpromoted_report_only
+  two_dynamic_tcf3_peaks_bdev_umap_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/two_dynamic_tcf3_peaks_bdev_umap_v1_20261013/REPORT.md
+  two_dynamic_tcf3_peaks_bdev_umap_parameters:
+    peaks: [chr11-45089034-45090047, chr11-45847272-45848407]
+    cells: 26723
+    embedding: unchanged_native_Bdev_umap.atac
+    accessibility: native_scworkbench_log1p_cp10k
+    accessibility_source: ebf1_tcf3_peaks_bdev_umap_v3_20261005_all_cell_export
+    display_scale: shared_pooled_nonzero_p99_cap
+    zero_accessibility_cells: gray
+    detected_percent: {chr11-45089034-45090047: 13.146, chr11-45847272-45848407: 20.282}
+    source_bundles_preserved: true
+    promotion: false
+  tcf3_peaks_detection_normalized_wt_ko_ratio_status: complete_unpromoted_report_only
+  tcf3_peaks_detection_normalized_wt_ko_ratio_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/tcf3_peaks_detection_normalized_wt_ko_ratio_v2_20261013/REPORT.md
+  tcf3_peaks_detection_normalized_wt_ko_ratio_parameters:
+    peaks: all_8_significant_E2A_TCF3_depletion_peaks
+    cell_regions:
+      Flt3l: {bins: "14-25", WT: 762, KO: 814}
+      Il7: {bins: "22-30", WT: 627, KO: 370}
+    detected_peak_universe: 97788_Bdev_aligned_peaks
+    per_cell_score: 10000_times_peak_accessible_indicator_divided_by_cell_detected_peak_count
+    comparison: WT_group_mean_score_divided_by_KO_group_mean_score
+    pseudocount: none
+    zero_support: retained_as_exact_WT_only_or_KO_only
+    summary:
+      Flt3l: {WT_higher: 2, KO_higher: 6, finite_ratios: 7, WT_only: 0, KO_only: 1, median_finite_WT_over_KO: 0.724}
+      Il7: {WT_higher: 6, KO_higher: 2, finite_ratios: 4, WT_only: 4, KO_only: 0, median_finite_WT_over_KO: 1.357}
+    biological_replicates_per_genotype: 1
+    inference: descriptive
+    source_bundles_preserved: true
+    promotion: false
+  ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_status: complete_unpromoted_report_only
+  ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_v1_20261013/REPORT.md
+  ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_parameters:
+    genome: GRCm38_mm10
+    locus: "chr11:44367317-46717317"
+    ebf1_tss_1based: 44617317
+    tcf3_dependent_peaks: 8
+    panels:
+      - five_region_Bdev_accessible_cell_percent
+      - Flt3L_and_IL7_detection_normalized_WT_over_KO
+      - original_E2A_TCF3_depletion_log2FC
+      - Ebf1_promoter_H3K4me3_PLACseq_arcs
+    bdev_dynamic_tcf3_peaks:
+      P3: {feature_id: chr11-45089034-45090047, class: BH_significant}
+      P7: {feature_id: chr11-45847272-45848407, class: robust}
+      P8: {feature_id: chr11-46634933-46635974, class: outside_original_pm2Mb_dynamic_screen}
+    placseq_links: 28
+    source_bundles_preserved: true
+    promotion: false
   wt_enriched_peak_de_status: complete_unpromoted_report_only
   wt_enriched_peak_de_report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/REPORT.html
   wt_enriched_peak_de_completion: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/bdev_integrated/reports/ko_wt_enriched_peak_rna_de_v1_20261001/completion.json
@@ -1092,6 +1396,31 @@ processing:
   bdev_trajectory_cutoff_sweep_runner: processing/integration/run_83_bdev_trajectory_cutoff_sweep.sh
   bdev_cutoff025_mapping_report: processing/integration/84_bdev_cutoff025_mapping_report.R
   bdev_cutoff025_mapping_report_runner: processing/integration/run_84_bdev_cutoff025_mapping_report.sh
+  wt_enrichment_rolling_window_cell_support: processing/integration/85_wt_enrichment_rolling_window_cell_support.R
+  wt_enrichment_rolling_window_cell_support_runner: processing/integration/run_85_wt_enrichment_rolling_window_cell_support.sh
+  motif_trajectory_heatmaps: processing/integration/86_rolling_window_motif_trajectory_heatmaps.R
+  rolling_3bin_motif_trajectory_heatmaps_runner: processing/integration/run_86_rolling_window_motif_trajectory_heatmaps.sh
+  single_bin_motif_trajectory_heatmaps_runner: processing/integration/run_87_single_bin_motif_trajectory_heatmaps.sh
+  fine_rolling_motif_trajectory_heatmaps_runner: processing/integration/run_88_fine_rolling_motif_trajectory_heatmaps.sh
+  single_cell_axis_15nn_motif_heatmaps: processing/integration/89_single_cell_axis_15nn_motif_heatmaps.R
+  single_cell_axis_15nn_motif_heatmaps_runner: processing/integration/run_89_single_cell_axis_15nn_motif_heatmaps.sh
+  single_cell_axis_30nn_motif_heatmaps_runner: processing/integration/run_90_single_cell_axis_30nn_motif_heatmaps.sh
+  ebf1_pm2mb_shared_support_da: processing/integration/91_ebf1_pm2mb_shared_support_da.R
+  ebf1_pm2mb_shared_support_da_runner: processing/integration/run_91_ebf1_pm2mb_shared_support_da.sh
+  e2a_tcf3_placseq_with_shared_support_wt_ko_da: processing/integration/92_add_wt_ko_da_to_tcf3_placseq_tracks.R
+  e2a_tcf3_placseq_with_shared_support_wt_ko_da_runner: processing/integration/run_92_add_wt_ko_da_to_tcf3_placseq_tracks.sh
+  ebf1_pm2mb_depth_complexity_matched_da: processing/integration/93_ebf1_depth_complexity_matched_da.R
+  ebf1_pm2mb_depth_complexity_matched_da_runner: processing/integration/run_93_ebf1_depth_complexity_matched_da.sh
+  ebf1_locus_matched_da_e2a_placseq: processing/integration/94_ebf1_locus_matched_da_e2a_placseq.R
+  ebf1_locus_matched_da_e2a_placseq_runner: processing/integration/run_94_ebf1_locus_matched_da_e2a_placseq.sh
+  bdev_five_region_ebf1_dynamic_peaks: processing/integration/95_bdev_five_region_ebf1_dynamic_peaks.R
+  bdev_five_region_ebf1_dynamic_peaks_runner: processing/integration/run_95_bdev_five_region_ebf1_dynamic_peaks.sh
+  two_dynamic_tcf3_peaks_bdev_umap: processing/integration/96_plot_two_dynamic_tcf3_peaks_bdev_umap.R
+  two_dynamic_tcf3_peaks_bdev_umap_runner: processing/integration/run_96_plot_two_dynamic_tcf3_peaks_bdev_umap.sh
+  tcf3_peaks_detection_normalized_wt_ko_ratio: processing/integration/97_tcf3_peaks_detection_normalized_wt_ko_ratio.R
+  tcf3_peaks_detection_normalized_wt_ko_ratio_runner: processing/integration/run_97_tcf3_peaks_detection_normalized_wt_ko_ratio.sh
+  ebf1_tcf3_bdev_dynamics_wtko_placseq_locus: processing/integration/98_ebf1_tcf3_bdev_dynamics_wtko_placseq_locus.R
+  ebf1_tcf3_bdev_dynamics_wtko_placseq_locus_runner: processing/integration/run_98_ebf1_tcf3_bdev_dynamics_wtko_placseq_locus.sh
   ko_positive_cytokine_report: figure_scripts/bdev_integrated/07_ko_cytokine_positive_signal_report.R
   ko_positive_cytokine_report_runner: processing/integration/run_ko_cytokine_positive_signal_report.sh
   ko_positive_cytokine_distribution_report: figure_scripts/bdev_integrated/08_ko_cytokine_positive_distribution_report.R
