@@ -1,4 +1,4 @@
-#Exlude general
+# Exclude general runtime artifacts
 __pycache__/
 .ipynb_checkpoints/
 .venv/
@@ -11,10 +11,26 @@ figure_outputs/
 figure_scripts/**/outputs/
 *.log
 
-#Exlude RData etc
+# Exclude generated analysis state and results; keep their contracts in Git
+current_analysis/intermediate_objects/*
+!current_analysis/intermediate_objects/README.md
+current_analysis/results/*
+!current_analysis/results/README.md
+
+# Exclude containers and large data objects wherever they occur
+*.sif
+*.sif.*
+*.RData
+*.Rdata
+*.rds
+*.h5
+*.h5ad
+*.h5seurat
+
+# Exclude R session state
 /.RData
 /.Rhistory
 /.Rproj.user
 
-#Exclude nextflow logs
+# Exclude Nextflow logs
 /.nextflow.log*

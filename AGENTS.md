@@ -1,74 +1,77 @@
-# Repository guidance
+# Repository operating mode
 
 These instructions apply to the entire repository.
 
 ## Project
 
-This repository develops the B cell development use case for scWorkbench.
-The analyses described in `README.md` cover cytokine stimulation Parse data
-and IL7KO/FLT3LKO single-cell multiome data, including mapping to a reference
-B cell development dataset.
+This repository develops the B-cell development use case for scWorkbench. It
+contains one frozen exploratory generation and one active scaffold for a redo
+with the updated, module-oriented scworkbench.
 
 For the Bdev reference, use the existing `Bdev@meta.data$pt` field as
 pseudotime, as selected by the user. Preserve its values and missing entries
 when importing and using the reference.
 
-## Default analysis: scWorkbench
+## Archived analysis
 
-- Use scWorkbench as the default for analysis and create a scWorkbench bundle
-  for each dataset, following the documentation provided inside the `.sif`.
-- The image is in the mirrored storage location:
-  `/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/intermediate_objects/scworkbench-bdev-signac.sif`.
-- All scWorkbench documentation is inside that image. Consult it for commands,
-  supported workflows, and bundle creation. Do not guess tool behavior or
-  duplicate its documentation in this repository.
-- Keep dataset identities and bundle locations explicit so each bundle can be
-  traced to its inputs and analysis settings.
-- Editing repository instructions alone does not require running the image.
+Treat `archived_analysis/` and everything below it as read-only unless the user
+explicitly requests a legacy repair. Do not use archived paths for new outputs.
 
-## Analysis outside scWorkbench
+Preserve legacy filenames, manifests, timestamps, and internal references. If
+a legacy artifact is needed by the new analysis, declare its exact archived
+storage path in `current_analysis/inputs/` and document its provenance instead
+of modifying the archive.
 
-Use analysis outside scWorkbench only when the user explicitly requests it,
-or when scWorkbench cannot perform the task and the user approves an outside
-approach. Do not switch automatically because another tool is more familiar
-or convenient.
+The archived repository code is paired with storage at:
 
-If scWorkbench cannot perform a requested task, explain the specific limitation
-and the proposed alternative, then obtain approval before implementing or
-running that outside analysis. Existing explicit authorization for the same
-scope is sufficient; do not ask again.
+```text
+/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/
+```
 
-For authorized outside analysis:
+## Active analysis
 
-- Keep work within the requested or approved scope.
-- Use reproducible scripts with recorded dependencies, inputs, parameters, and
-  random seeds where applicable.
-- Preserve raw data and existing scWorkbench bundles. Save outside results
-  separately and record their source dataset or bundle.
-- Verify cell/sample identifiers, metadata alignment, and relevant output
-  checks. State assumptions and any validation that could not be performed.
+Put all new work under `current_analysis/`:
 
-## Repository structure
+- framework and run configuration in `current_analysis/config/`
+- migration plans and analysis documentation in `current_analysis/docs/`
+- input manifests and provenance in `current_analysis/inputs/`
+- project-specific scworkbench modules in `current_analysis/modules/`
+- reproducible analysis definitions in `current_analysis/workflows/`
+- generated working state in the paired storage `current_analysis/intermediate_objects/`
+- final reports and figures in the paired storage `current_analysis/results/`
 
-- `config/`: the central bundle registry and one project configuration per
-  source or derived bundle.
-- `processing/<bundle_id>/`: numbered dataset pipeline scripts, with numeric
-  prefixes indicating execution order within that workflow.
-- `processing/integration/`: the Bdev-centered integration pipeline. It reads
-  accepted parent bundles and writes only to the separate `bdev_integrated`
-  bundle.
-- `figure_scripts/<bundle_id>/`: final figure and report generation scripts.
-- `src/`: reusable code shared by pipeline and figure scripts.
+The paired active storage root is:
 
-Keep `bdev_reference`, `parse_cytokines`, and `scmulti_flt3ko_il7ko`
-independently reproducible. Do not write integration results into these parent
-bundles. Record joint state in `bdev_integrated`, with `bdev_reference` as the
-explicit reference parent.
+```text
+/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/
+```
 
-## Repository practices
+Do not put large inputs, containers, bundles, models, or generated results in
+Git.
 
-- Keep container images, large datasets, bundles, models, and generated outputs
-  out of Git; check `.gitignore` when adding output locations.
-- Preserve sample metadata and record input provenance, analysis settings,
-  and output locations needed to reproduce results.
+## Analysis framework
+
+Use scWorkbench as the default analysis framework and create traceable
+scWorkbench bundles for each selected dataset. Before implementing workflows,
+pin the exact updated scworkbench release, commit, or container digest and
+consult the documentation supplied with that version. Do not infer the new
+module interface from archived runtime source or duplicate framework
+documentation in this repository.
+
+Use analysis outside scWorkbench only when the user explicitly requests it, or
+when scWorkbench cannot perform the task and the user approves the proposed
+alternative. Existing explicit authorization for the same scope is sufficient.
+
+For authorized outside analysis, use reproducible scripts with recorded
+dependencies, inputs, parameters, and random seeds where applicable. Preserve
+raw data and scWorkbench bundles, save outside results separately, and validate
+cell/sample identifiers and metadata alignment.
+
+## Reproducibility
+
+- Keep dataset identities, bundle locations, parent relationships, and source
+  checksums explicit.
+- Preserve source bundles during integration; write joint state only to a
+  separate derived bundle.
+- Record the configuration and workflow responsible for every generated result.
 - Keep changes focused and report what changed and how it was validated.
