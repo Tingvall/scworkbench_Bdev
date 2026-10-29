@@ -1,0 +1,32 @@
+schema_version: bdev.development_capability_registry.v1
+phase: Bdev_development
+status: proposed
+numbering_width: 2
+identifiers_immutable_after_reference: true
+capabilities:
+  - capability_id: 01_bulk_marker_boundary
+    status: contract_required
+    purpose: Decide and qualify the replicate-aware bulk marker discovery boundary used for ImmGen and related datasets.
+    preferred_owner: scwbStatistics_or_new_official_bulk_pack
+    core_change_indicated: false
+    notes: An approved reproducible outside-analysis boundary remains an option if no reusable pack contract is justified.
+  - capability_id: 02_slingshot_trajectory_semantics
+    status: gap_analysis_required
+    purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.
+    preferred_owner: scwbTrajectory
+    core_change_indicated: false
+  - capability_id: 03_trajectory_preranked_gsea
+    status: gap_analysis_required
+    purpose: Add classical preranked trajectory GSEA as a distinct operation from cell-score permutation dynamics.
+    preferred_owner: scwbTrajectory
+    core_change_indicated: false
+  - capability_id: 04_reference_mapping
+    status: gap_analysis_required
+    purpose: Qualify reference fitting, projection, support calibration, pseudotime transfer, uncertainty, and out-of-reference calls.
+    preferred_owner: scwbRepresentation_scwbLatent_or_new_scwbReferenceMap
+    core_change_indicated: false
+  - capability_id: 05_trajectory_group_contrasts
+    status: gap_analysis_required
+    purpose: Qualify support-aware occupancy, signal, and motif contrasts between biological groups.
+    preferred_owner: scwbTrajectory_or_new_official_contrast_pack
+    core_change_indicated: false

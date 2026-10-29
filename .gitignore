@@ -11,11 +11,14 @@ figure_outputs/
 figure_scripts/**/outputs/
 *.log
 
-# Exclude generated analysis state and results; keep their contracts in Git
-current_analysis/intermediate_objects/*
-!current_analysis/intermediate_objects/README.md
-current_analysis/results/*
-!current_analysis/results/README.md
+# Exclude generated state and results in both active stages; keep contracts in Git
+current_analysis/*/intermediate_objects/*
+!current_analysis/*/intermediate_objects/README.md
+current_analysis/*/results/*
+!current_analysis/*/results/README.md
+!current_analysis/*/results/containers/
+current_analysis/*/results/containers/*
+!current_analysis/*/results/containers/README.md
 
 # Exclude containers and large data objects wherever they occur
 *.sif

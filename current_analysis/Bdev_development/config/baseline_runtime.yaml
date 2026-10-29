@@ -1,0 +1,49 @@
+schema_version: bdev.scworkbench_development_runtime.v1
+status: candidate_development_baseline
+sif:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  architecture: amd64
+  supersedes:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261022.sif
+    sha256: 40d5fddd9a64aae532639bd1924d5230804f850f20f6e6dc719747e4db96246a
+    reason: corrected image supplies the CPU PeakVI runtime required for scWorkbench development
+components:
+  scworkbench:
+    version: 0.1.0
+    source_commit: 9f10e7c0a849a87249573a2ef78d8ff7643dccba
+  pybench:
+    version: 0.1.0
+    source_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
+  operation_packs:
+    - package: scwbStatistics
+      version: 0.1.0
+      source_commit: 00d1ba6a63d853b146916243bb8035d32528d575
+    - package: scwbGenePrograms
+      version: 0.1.0
+      source_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    - package: scwbRNA
+      version: 0.1.0
+      source_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
+    - package: scwbRepresentation
+      version: 0.1.0
+      source_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
+    - package: scwbTrajectory
+      version: 0.1.2
+      source_commit: de6e0810578e918cf9425858eddd0549e41195be
+    - package: scwbLatent
+      version: 0.1.3
+      source_commit: 5a6baaf32fbbe5a663933ed91ef1d1681c891a19
+    - package: scwbATAC
+      version: 0.1.0
+      source_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
+qualification:
+  standard_profile_activation_status: passed
+  activated_operation_packs: 7
+  registered_operations: 62
+  peakvi_operations_registered: true
+  peakvi_cpu_dependency_probe_status: passed
+  peakvi_cpu_lifecycle_status: not_run
+  operation_pack_tutorial_checks: null
+  operation_pack_tutorial_status: not_rerun_for_corrected_sif
+  implementation_eligible: false

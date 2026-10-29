@@ -1,0 +1,13 @@
+schema_version: bdev.paper_runtime.v1
+status: awaiting_qualified_development_sif
+development_target_manifest: ../../Bdev_development/config/target_runtime.yaml
+sif:
+  path: null
+  sha256: null
+  architecture: null
+components: []
+operation_catalog_identity: null
+qualification_report: null
+accepted: false
+accepted_by: null
+acceptance_date: null

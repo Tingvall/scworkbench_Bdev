@@ -1,0 +1,43 @@
+schema_version: bdev.dataset_registry.v1
+status: proposed
+phase: reserved_for_future_implementation
+active: false
+numbering_width: 2
+identifiers_immutable_after_reference: true
+datasets:
+  - dataset_id: 01_bdev_reference
+    role: immutable_source
+    status: proposed
+    description: Bdev assays, reductions, metadata, and preserved pt values.
+  - dataset_id: 02_immgen_bulk_rna
+    role: immutable_source
+    status: proposed
+    description: ImmGen bulk counts, normalized values, sample design, and marker provenance.
+  - dataset_id: 03_bulk_atac_reference
+    role: immutable_source
+    status: proposed
+    description: Selected bulk ATAC libraries, metadata, genome build, and peak mapping.
+  - dataset_id: 04_parse_cytokines
+    role: immutable_source
+    status: proposed
+    description: Reprocessed Parse cytokine source and QC state.
+  - dataset_id: 05_scmulti_flt3lko_il7ko
+    role: immutable_source
+    status: proposed_pending_genotype_confirmation
+    description: Single-cell multiome knockout query source; final slug requires genotype confirmation.
+  - dataset_id: 06_bdev_annotation_trajectory
+    role: derived
+    status: proposed
+    parents:
+      - 01_bdev_reference
+      - 02_immgen_bulk_rna
+      - 04_parse_cytokines
+    description: Bdev annotation, scoring, trajectory comparison, and approved gene-set results.
+  - dataset_id: 07_bdev_atac_mapping
+    role: derived
+    status: proposed
+    parents:
+      - 01_bdev_reference
+      - 03_bulk_atac_reference
+      - 05_scmulti_flt3lko_il7ko
+    description: Reference and query projections, mapping QC, pseudotime transfer, chromVAR, and motif contrasts.

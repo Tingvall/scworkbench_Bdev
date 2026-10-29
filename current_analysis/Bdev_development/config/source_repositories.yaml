@@ -1,0 +1,100 @@
+schema_version: bdev.scworkbench_source_repositories.v1
+retrieved_at: "2026-10-29T12:05:11-07:00"
+analysis_repository: /home/jtg/msi_projects/scworkbench_Bdev
+checkout_layout:
+  scworkbench_core: /home/jtg/msi_projects/scworkbench
+  remaining_components_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories
+checkout_policy:
+  core_frozen_by_default: true
+  operation_destination: existing_official_pack_or_new_official_pack
+  core_change_gate: explicit_user_approval_after_documented_pressing_infrastructure_need
+  core_edit_without_specific_approval: prohibited
+  approval_may_be_inferred: false
+development_strategy:
+  baseline_sif_role: immutable_toolchain_and_build_base
+  reconstruct_baseline_sif_from_source: false
+  test_changed_sources_against_baseline_sif: true
+  candidate_sif_strategy: extend_baseline_sif_with_qualified_source_updates
+  baseline_commit_availability_is_provenance_only: true
+repositories:
+  - component: scworkbench
+    role: core
+    remote: https://gitlab.liu.se/hende58/scworkbench.git
+    local_path: /home/jtg/msi_projects/scworkbench
+    default_branch: master
+    checkout_commit: d85353c3f8acfd181cc9d179a98f2c6339cc020d
+    checkout_clean: true
+    baseline_sif_commit: 9f10e7c0a849a87249573a2ef78d8ff7643dccba
+    baseline_sif_commit_present: false
+  - component: pybench
+    role: core
+    remote: https://gitlab.liu.se/hende58/pybench.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/pybench
+    default_branch: main
+    checkout_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
+    checkout_clean: true
+    baseline_sif_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
+    baseline_sif_commit_present: true
+  - component: scwbStatistics
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbStatistics.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbStatistics
+    default_branch: main
+    checkout_commit: 00d1ba6a63d853b146916243bb8035d32528d575
+    checkout_clean: true
+    baseline_sif_commit: 00d1ba6a63d853b146916243bb8035d32528d575
+    baseline_sif_commit_present: true
+  - component: scwbGenePrograms
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbGenePrograms.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbGenePrograms
+    default_branch: main
+    checkout_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    checkout_clean: true
+    baseline_sif_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    baseline_sif_commit_present: true
+  - component: scwbRNA
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbRNA.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbRNA
+    default_branch: main
+    checkout_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
+    checkout_clean: true
+    baseline_sif_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
+    baseline_sif_commit_present: true
+  - component: scwbRepresentation
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbRepresentation.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbRepresentation
+    default_branch: main
+    checkout_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
+    checkout_clean: true
+    baseline_sif_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
+    baseline_sif_commit_present: true
+  - component: scwbTrajectory
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbTrajectory.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbTrajectory
+    default_branch: main
+    checkout_commit: de6e0810578e918cf9425858eddd0549e41195be
+    checkout_clean: true
+    baseline_sif_commit: de6e0810578e918cf9425858eddd0549e41195be
+    baseline_sif_commit_present: true
+  - component: scwbLatent
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbLatent.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbLatent
+    default_branch: main
+    checkout_commit: 003dcd3530e0b5e5aec631eda99071ca0e3876d4
+    checkout_clean: true
+    baseline_sif_commit: 5a6baaf32fbbe5a663933ed91ef1d1681c891a19
+    baseline_sif_commit_present: false
+  - component: scwbATAC
+    role: operation_pack
+    remote: https://gitlab.liu.se/hende58/scwbATAC.git
+    local_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbATAC
+    default_branch: main
+    checkout_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
+    checkout_clean: true
+    baseline_sif_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
+    baseline_sif_commit_present: true

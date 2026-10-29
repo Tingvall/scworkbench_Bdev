@@ -1,0 +1,20 @@
+schema_version: bdev.scworkbench_development_target.v1
+status: not_built
+base_runtime: baseline_runtime.yaml
+build_strategy: extend_immutable_baseline_sif
+component_policy:
+  scworkbench: inherit_from_baseline_unless_specific_core_change_is_explicitly_approved
+  pybench: inherit_from_baseline_unless_specific_core_change_is_explicitly_approved
+  operation_packs: install_qualified_updates_from_pinned_source_commits
+source_branches: []
+resolved_components: []
+sif:
+  path: null
+  sha256: null
+  architecture: amd64
+qualification:
+  report: null
+  catalog_snapshot: null
+  accepted: false
+  accepted_by: null
+  acceptance_date: null
