@@ -1,7 +1,35 @@
 # Bdev scWorkbench development
 
-**Purpose:** extend and qualify scWorkbench for the Bdev paper use case, then
-produce a new immutable SIF for the implementation stage.
+**Purpose:** use the planned Bdev analysis to identify, coordinate, and qualify
+the scWorkbench changes required for the paper, then produce a new immutable
+SIF for the implementation stage.
+
+## Bdev-driven development scope
+
+This directory is the development and acceptance-test area for capabilities
+required by the Bdev analysis. It is not an independent, comprehensive
+scWorkbench development roadmap. Work proceeds through the planned Bdev
+workflow one step at a time:
+
+1. define the Bdev analysis requirement and its scientific contract;
+2. determine what the current scWorkbench runtime and official operation packs
+   can already provide;
+3. identify the smallest missing or inadequate reusable capability;
+4. coordinate its implementation in the owning official operation pack, or
+   document and obtain approval for another boundary where appropriate; and
+5. qualify the implemented capability with synthetic contract tests and a
+   bounded Bdev acceptance fixture before advancing to the next analysis step.
+
+When the same capability will be needed by a later Bdev step, record those
+known requirements during the first gap analysis so that the improvement can
+be designed and qualified once. This does not authorize execution of the later
+paper-analysis step or require unrelated framework development.
+
+The repository records Bdev requirements, decisions, fixtures, acceptance
+workflows, and runtime pins. Reusable scientific implementations remain in the
+official scWorkbench operation-pack repository that owns them. Full paper
+analysis and biological results remain in the locked `Bdev_implementation`
+stage until the replacement SIF is qualified and accepted.
 
 This is the current active stage. Work here identifies and closes reusable
 capability gaps, qualifies every changed component, and produces the replacement
