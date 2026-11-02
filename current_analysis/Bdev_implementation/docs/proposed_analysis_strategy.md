@@ -83,17 +83,37 @@ identities, operation catalog, and qualification record are pinned in
 
 ### 1. Derive marker gene sets from ImmGen bulk RNA data
 
-**Current status:** not started. No project-specific ImmGen bulk marker workflow
-or accepted result was found in the archived analysis.
+**Current status:** input manifest frozen; marker analysis not executed. Use the
+`GSE109125` GENCODE vM25 count matrix, restricted to the approved 64
+steady-state populations with population-matched ATAC data. The current matrix
+provides 126 selected RNA library columns; its other columns are not eligible
+merely because they occur in the updated release. No project-specific ImmGen
+bulk marker workflow or accepted result was found in the archived analysis.
 
-**Proposed boundary:** begin with a small analysis outside scworkbench because
-the available framework operations are cell-oriented and do not provide a
-replicate-aware bulk RNA differential-expression contract.
+The population hierarchy is also approved: 61 populations contribute to broad
+discovery, while `B.Sp`, `Tgd.Sp`, and `MF.PC` are broad-validation-only
+populations. `NKT.Sp`, `GN.BM`, and `GN.Sp` remain in discovery to preserve the
+only approved NKT and granulocyte branches. Fine developmental contrasts are
+currently defined only for the B lineage through an explicit neighbor graph.
+
+A replicate-aware statistical contract is approved and its analysis preflight
+has passed. It uses robust edgeR quasi-likelihood
+models, population-level profiles for equally weighted broad contrasts,
+library-level local B-stage contrasts, deterministic stability requirements,
+and held-out broad-population validation. The exact annotation, state-gene
+lists, and software versions are frozen; no ImmGen model has yet been run.
+
+**Approved boundary:** perform the replicate-aware bulk analysis outside
+scworkbench. Only the resulting versioned gene sets are imported into
+scworkbench and used to score single-cell datasets. The available framework
+operations are cell-oriented and do not provide the required bulk RNA
+differential-expression contract; no bulk-analysis operation or core change is
+required for this project.
 
 The possible workflow would:
 
-1. declare checksummed raw and normalized count tables and complete sample
-   metadata;
+1. declare the checksummed GENCODE vM25 integer-count matrix, a column-level
+   allowlist, and complete sample metadata;
 2. use raw counts and a reviewed replicate-aware statistical design for marker
    discovery;
 3. use normalized values only for QC and display unless an approved method
@@ -104,14 +124,16 @@ The possible workflow would:
 6. export versioned long-form and GMT-like feature-set definitions for import
    into scworkbench.
 
-An operation pack such as `scwbBulkMarkers` should be considered only after the
-bulk contrast and marker-selection contract is stable and expected to be
-reused. A one-off initial analysis should remain a focused, reproducible outside
-script rather than force bulk samples into an inappropriate single-cell
-interface.
+The outside analysis must remain reproducible and record its dependencies,
+inputs, checksums, sample design, parameters, and outputs. Its versioned
+long-form statistics and gene-set definitions form the provenance boundary for
+the subsequent scworkbench import. Bulk samples must not be represented as
+single cells merely to use cell-oriented operations.
 
-**Approval gate:** approve the ImmGen release, population selection, sample
-design, statistical method, contrasts, gene identifiers, and marker filters.
+**Approval gate:** the ImmGen release, population boundary, library manifest,
+sample design, statistical method, contrasts, gene-identifier policy, marker
+filters, annotation, state-gene flags, and software environment are approved or
+frozen. Marker-workflow implementation and qualification precede execution.
 
 ### 2. Label Bdev cells with ImmGen marker sets
 
@@ -386,7 +408,7 @@ current likely ownership is:
 | Cross-validated query mapping, support thresholds, pseudotime transfer, uncertainty, and out-of-reference calls | Existing representation/latent packs where their contracts fit; otherwise a new official `scwbReferenceMap` pack | Keep reference fitting, projection, calibration, and transfer provenance explicit. |
 | Classical preranked trajectory GSEA | `scwbTrajectory` | Keep it distinct from the existing cell-score permutation dynamics operation. |
 | Trajectory occupancy and group-aware signal or motif contrasts | `scwbTrajectory` | Scientifically distinct alternatives, including alternative cytokine-signal analyses, should remain separate selectable operations rather than hidden modes. |
-| Replicate-aware bulk marker discovery | `scwbStatistics` or a new official bulk-analysis pack | Add only after the ImmGen/Parse design and reusable sample-level contract stabilize. |
+| Replicate-aware bulk marker discovery | Approved outside preprocessing | Keep bulk data and statistical analysis outside scworkbench; import only versioned generated gene sets for use on single-cell datasets. No pack or core change is required. |
 
 Core changes are appropriate only when a generic primitive, reader, writer,
 axis, registry, provenance, or publication capability is missing, and even then

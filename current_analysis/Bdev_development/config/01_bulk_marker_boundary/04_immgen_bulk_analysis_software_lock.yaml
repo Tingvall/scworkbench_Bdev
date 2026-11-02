@@ -1,0 +1,54 @@
+schema_version: bdev.immgen_bulk_analysis_software_lock.v1
+status: frozen_and_smoke_tested
+frozen_on: 2026-10-31
+execution_boundary: outside_scworkbench
+
+base_sif:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  role: Immutable development toolchain only; do not invoke scWorkbench operations for bulk analysis.
+  r_version: 4.5.2
+  bioconductor_version: "3.21"
+  inherited_packages:
+    limma: 3.64.3
+    statmod: 1.5.2
+    yaml: 2.3.11
+    jsonlite: 2.0.0
+    data.table: 1.18.4
+    digest: 0.6.39
+    BiocManager: 1.30.27
+
+source_packages:
+  edgeR:
+    version: 4.6.3
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/edgeR_4.6.3.tar.gz
+    url: https://bioconductor.org/packages/3.21/bioc/src/contrib/edgeR_4.6.3.tar.gz
+    sha256: 93dec6ab2af33182251df2090ea809dc8e2e0f652b1975971580dfd7d2b53b8d
+  locfit:
+    version: 1.5-9.12
+    installed_version: 1.5.9.12
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/locfit_1.5-9.12.tar.gz
+    url: https://cran.r-project.org/src/contrib/locfit_1.5-9.12.tar.gz
+    sha256: fa31b9d407f3557a6fcb7105cbd7b16a32a6fb868a7c60bc38a3e33cb7a39343
+
+installed_library:
+  build_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/05_objects/01_r_library
+  archive: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/05_objects/02_edgeR_library_R-4.5_Bioc-3.21.tar.gz
+  archive_sha256: 3aed57f0a07c4da25de1de689f1f42e3c22c17f90be1e930b298baca55b00087
+  execution_rule: Verify the archive checksum and extract it into a run-owned directory; do not execute from the mutable build path.
+  packages:
+    edgeR: 4.6.3
+    locfit: 1.5.9.12
+
+runtime_contract:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  required_bind: /mnt/sata2:/mnt/sata2
+  r_libs: Run-owned extraction of installed_library.archive
+  random_seed: 20261031
+
+qualification:
+  edgeR_load: passed
+  robust_glmQLFit_argument: passed
+  glmTreat_lfc_0_5_smoke: passed
+  model_data_used: synthetic_only
+  immgen_model_run: false

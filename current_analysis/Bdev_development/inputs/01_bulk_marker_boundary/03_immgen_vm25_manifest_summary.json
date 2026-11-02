@@ -1,0 +1,135 @@
+{
+  "acceptance_checks": {
+    "all_matrix_columns_map_one_to_one_to_rna_gsm": true,
+    "all_matrix_values_are_nonnegative_integers": true,
+    "all_selected_populations_are_in_paper_table_s1": true,
+    "all_selected_populations_have_population_matched_atac": true,
+    "no_unapproved_population_selected": true
+  },
+  "approved_on": "2026-10-31",
+  "manifest": {
+    "excluded_libraries": 79,
+    "excluded_reasons": {
+      "engineered_foxp3_ires_gfp": 2,
+      "engineered_p14_tcr_transgenic": 2,
+      "engineered_prdm1_gfp": 4,
+      "explicit_female_population": 5,
+      "not_in_paper_table_s1": 40,
+      "perturbed_anti_cd3_cd40": 2,
+      "perturbed_lcmv": 9,
+      "perturbed_lps": 5,
+      "perturbed_np_klh_alum_day14": 7,
+      "perturbed_poly_ic": 1,
+      "perturbed_thioglycollate": 2
+    },
+    "excluded_roles": {
+      "excluded_later_population": 40,
+      "excluded_table_s1": 39
+    },
+    "file": "02_immgen_vm25_library_manifest.tsv",
+    "rna_gsm_mapping_methods": {
+      "approved_title_alias": 6,
+      "exact_title": 199
+    },
+    "selected_libraries": 126,
+    "selected_lineages": {
+      "B": {
+        "libraries": 21,
+        "populations": 11
+      },
+      "DC": {
+        "libraries": 8,
+        "populations": 3
+      },
+      "ILC": {
+        "libraries": 18,
+        "populations": 10
+      },
+      "Stem&Prog": {
+        "libraries": 10,
+        "populations": 5
+      },
+      "abT": {
+        "libraries": 24,
+        "populations": 13
+      },
+      "gdT": {
+        "libraries": 13,
+        "populations": 7
+      },
+      "monocyte": {
+        "libraries": 4,
+        "populations": 2
+      },
+      "myeloid": {
+        "libraries": 16,
+        "populations": 8
+      },
+      "stroma": {
+        "libraries": 12,
+        "populations": 5
+      }
+    },
+    "selected_population_replicate_differences": {
+      "BEC.SLN": {
+        "paper_table_s1": 2,
+        "vm25": 3
+      },
+      "DC.4+.Sp": {
+        "paper_table_s1": 2,
+        "vm25": 3
+      },
+      "DC.8+.Sp": {
+        "paper_table_s1": 2,
+        "vm25": 3
+      },
+      "FRC.SLN": {
+        "paper_table_s1": 2,
+        "vm25": 3
+      },
+      "ILC3.CCR6+.SI": {
+        "paper_table_s1": 1,
+        "vm25": 2
+      },
+      "MF.PC": {
+        "paper_table_s1": 3,
+        "vm25": 2
+      },
+      "T.4.Nve.Sp": {
+        "paper_table_s1": 3,
+        "vm25": 2
+      },
+      "T.DN4.Th": {
+        "paper_table_s1": 3,
+        "vm25": 2
+      },
+      "T.ISP.Th": {
+        "paper_table_s1": 3,
+        "vm25": 2
+      },
+      "preT.DN2a.Th": {
+        "paper_table_s1": 2,
+        "vm25": 1
+      },
+      "preT.DN3.Th": {
+        "paper_table_s1": 3,
+        "vm25": 2
+      }
+    },
+    "selected_populations": 64,
+    "sha256": "34bebcdea2cc2e94c6e9da6febb351ecf0d73be9345e338902077c0ebb53dc71",
+    "total_libraries": 205
+  },
+  "matrix_annotation": "GENCODE vM25",
+  "matrix_qc": {
+    "bad_width_rows": 0,
+    "gene_rows": 55011,
+    "library_columns": 205,
+    "negative_values": 0,
+    "noninteger_values": 0,
+    "unique_gene_symbols": 55011
+  },
+  "schema_version": "bdev.immgen_vm25_manifest_summary.v1",
+  "source_checksums_validated": true,
+  "status": "passed"
+}

@@ -1,0 +1,102 @@
+schema_version: bdev.immgen_deferred_gate_qualification.v1
+status: deferred_gate_mechanics_qualified_full_immgen_execution_required
+mode: synthetic_counts_exact_cohort_structure
+random_seed: 20261031
+
+inputs:
+  statistical_contract: 02_immgen_marker_statistical_contract.yaml
+  hierarchy: 01_immgen_geneset_hierarchy.yaml
+  software_lock: 04_immgen_bulk_analysis_software_lock.yaml
+  core_qualification_config: 05_immgen_marker_workflow_qualification.yaml
+  core_qualification_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/05_qualify_immgen_marker_workflow
+  synthetic_counts:
+    path: 01_tables/01_synthetic_counts.tsv.gz
+    sha256: 491736aa85ded20302fa05fb13e4d455421cb1c5d914640022eace42e97c0b12
+  synthetic_metadata:
+    path: 01_tables/02_synthetic_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  expected_markers:
+    path: 01_tables/04_expected_markers.tsv
+    sha256: d072ad2b11d480a5072d5dca8d6dceb01469b3a21b1f9763056569e199bcac56
+  contrast_plan:
+    path: 01_tables/05_contrast_plan.tsv
+    sha256: 734008cceffb2219d56f0dcf589112cc6cf06fb70bea846052e45cea5ddf30ad
+  synthetic_selected_genesets:
+    path: 01_tables/08_synthetic_selected_genesets.tsv
+    sha256: 59f4f459a46d601583f836fd3c0b53f0f71bd9ef0a4a8fd8a6e4acedfc946c08
+  core_qualification_manifest:
+    path: 06_manifests/01_synthetic_qualification_manifest.json
+    sha256: 8697106f22d911db674e9a74d953e7c427e4d60ae8fbb926d0368b06e43108df
+
+qualification_scope:
+  included:
+    - 200 deterministic balanced one-library-per-population resamples
+    - TMM recalculation and required-effect recalculation in every resample
+    - leave-one-target-population-out robust quasi-likelihood refits
+    - leave-one-target-library-out local-stage robust quasi-likelihood refits
+    - population-by-laboratory and population-by-organ contingency audits
+    - complete laboratory and organ separation flags for every contrast
+    - synthetic unrelated-lineage tissue-bias and independent-support controls
+    - broad-lineage leave-one-population-out score validation
+    - broad-validation-only population scoring
+    - local-neighbor pairwise AUROC validation
+  explicitly_deferred:
+    - full ImmGen marker execution
+  acceptance_rule: This step may qualify deferred gate mechanics but cannot emit accepted_core gene sets or an importable GMT.
+
+balanced_resampling:
+  iterations: 200
+  seed: 20261031
+  schedule: Cycle deterministically through a seeded permutation of each population's libraries; selections per library may differ by at most one.
+
+synthetic_confounding_controls:
+  unrelated_tissue_bias:
+    rejection_effect_threshold: 0.75
+    cases:
+      - control_id: tissue_bias_reproduced
+        source_effect: 1.10
+        unrelated_lineage_effect: 0.90
+        expected_outcome: rejected_tissue_bias
+      - control_id: identity_not_tissue_bias
+        source_effect: 1.10
+        unrelated_lineage_effect: 0.10
+        expected_outcome: retained_no_reproduced_bias
+  unresolved_confounding:
+    cases:
+      - control_id: separated_without_support
+        completely_separated: true
+        independent_support: false
+        expected_outcome: candidate_confounding
+      - control_id: separated_with_support
+        completely_separated: true
+        independent_support: true
+        expected_outcome: passes_confounding_gate
+      - control_id: not_separated
+        completely_separated: false
+        independent_support: false
+        expected_outcome: passes_confounding_gate
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/06_qualify_immgen_deferred_gates
+  tables:
+    resample_schedule: 01_tables/01_balanced_resample_schedule.tsv
+    balanced_stability: 01_tables/02_balanced_stability.tsv.gz
+    population_loo: 01_tables/03_population_loo_stability.tsv
+    library_loo: 01_tables/04_library_loo_stability.tsv
+    broad_lopo_scores: 01_tables/05_broad_lopo_scores.tsv
+    broad_lopo_predictions: 01_tables/06_broad_lopo_predictions.tsv
+    heldout_scores: 01_tables/07_heldout_broad_scores.tsv
+    heldout_predictions: 01_tables/08_heldout_broad_predictions.tsv
+    local_neighbor_auroc: 01_tables/09_local_neighbor_auroc.tsv
+    population_factor_contingency: 01_tables/10_population_factor_contingency.tsv
+    contrast_confounding_audit: 01_tables/11_contrast_confounding_audit.tsv
+    confounding_controls: 01_tables/12_synthetic_confounding_controls.tsv
+  reports:
+    model_summary: 03_reports/01_deferred_gate_model_summary.json
+    qualification_summary: 03_reports/02_deferred_gate_qualification_summary.json
+  manifest: 06_manifests/01_deferred_gate_qualification_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false

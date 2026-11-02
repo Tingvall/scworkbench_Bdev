@@ -1,0 +1,91 @@
+schema_version: bdev.immgen_positive_competitor_refinement_pilot.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261031_positive_competitor_refinement_pilot
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Test whether a positive-only, multigene strongest-competitor refinement analogous to the archived Parse cytokine workflow improves target separation.
+  - Keep effect direction, expression, annotation, and support gates while using FDR as ranking evidence rather than a hard candidate-pool gate.
+  - Produce diagnostic candidates only; do not revise the approved marker contract or create a scWorkbench import artifact.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  contrast_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/03_contrast_plan.tsv
+    sha256: 734008cceffb2219d56f0dcf589112cc6cf06fb70bea846052e45cea5ddf30ad
+  complete_statistics:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/04_complete_statistics.tsv.gz
+    sha256: 893286b0b8a4932b96d477bfc259a75b2d2f41263ec744149a1879ea0625a4db
+  production_validation_sets:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/11_validation_gene_sets.tsv
+    sha256: 2f881fcc5d02e01cc10a6dfc9f8c9a02cc70a92fda83a823f71d8582849f08d8
+  production_set_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/20_set_summary.tsv
+    sha256: 6236a623d1b78bc89bb0b58c72f964a66c6bc28c8f7b2d98e0642a3b010f8c6e
+  production_heldout_broad_predictions:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/15_heldout_broad_predictions.tsv
+    sha256: 7b4472546a59467439312e720eed0521a2d0dd26559d99e61df202d11166d836
+  hierarchy:
+    path: 01_immgen_geneset_hierarchy.yaml
+    sha256: 26cdb18cac7e31ef987aff06ade4097f9969e2c924839246c4a95764de3aad2a
+  statistical_contract:
+    path: 02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  production_execution_config:
+    path: 07_immgen_vm25_marker_execution.yaml
+    sha256: 4f389133553150260ce9463dd9f24b55d7c1573b8b758fa58ade5b85b5113062
+
+method:
+  direction: positive_only
+  candidate_pool_maximum_genes: 100
+  candidate_eligibility:
+    expression_filter: all required contrasts
+    annotation_identity: core_identity_eligible
+    target_support: retain approved family threshold
+    effect: retain every approved family global and competitor or neighbor effect threshold
+    fdr: ranking_evidence_not_hard_pool_gate
+  ranking:
+    - descending fraction of required tests passing their approved FDR threshold
+    - ascending worst required-test FDR divided by its approved threshold
+    - descending target support
+    - descending worst effect margin over its approved threshold
+    - descending worst target-versus-competitor AUROC
+    - ascending gene symbol
+  score:
+    type: mean_within_profile_expression_percentile_rank
+    population_families: sum discovery-library counts within population before ranking
+    local_family: rank each discovery RNA library
+  refinement:
+    objective: standardized gap between target median score and strongest declared competitor median score
+    operation: greedy one-gene deletion
+    floor: approved family minimum gene count
+    stop: no single deletion strictly improves the objective or the floor is reached
+  diagnostic_support_fraction: 0.80
+  limitations:
+    - Candidate ranking and greedy refinement use the complete discovery data and are therefore optimistic.
+    - Fixed-set target-unit support does not make gene selection cross-fitted.
+    - Sparse ImmGen target replication prevents faithful three-fold Parse-style construction for many B targets.
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/09_positive_competitor_refinement_pilot
+  tables:
+    candidate_pool_membership: 01_tables/01_candidate_pool_membership.tsv.gz
+    refinement_summary: 01_tables/02_refinement_summary.tsv
+    final_membership: 01_tables/03_final_membership.tsv.gz
+    removal_trace: 01_tables/04_removal_trace.tsv
+    profile_scores: 01_tables/05_profile_scores.tsv.gz
+    production_comparison: 01_tables/06_production_comparison.tsv
+    heldout_broad_predictions: 01_tables/07_heldout_broad_predictions.tsv
+  reports:
+    pilot_summary: 03_reports/01_pilot_summary.json
+  manifest: 06_manifests/01_pilot_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false

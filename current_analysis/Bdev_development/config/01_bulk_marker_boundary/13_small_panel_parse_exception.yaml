@@ -1,0 +1,89 @@
+schema_version: bdev.immgen_small_panel_parse_exception.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261031_small_panel_parse_exception
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Apply the user-authorized lower gene-count allowance to two-fold candidates that failed only the 20-gene Parse floor.
+  - Preserve the complete stable intersection for each small panel and keep its reduced evidence explicit.
+  - Produce a complete 27-target diagnostic collection without using single-cell expression data.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  contrast_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/03_contrast_plan.tsv
+    sha256: 734008cceffb2219d56f0dcf589112cc6cf06fb70bea846052e45cea5ddf30ad
+  low_replication_candidates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/03_low_replication_candidates.tsv.gz
+    sha256: d021c224d813dee1d542022193993f753472e6f7a7092e45cdd0af022c264423
+  adaptive_final_membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/05_adaptive_final_membership.tsv.gz
+    sha256: 4d7d54f55222bed29aed05956d4c4f5744c676bd0c204fd79260bb437d95f8dd
+  adaptive_target_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/07_adaptive_target_summary.tsv
+    sha256: 19e1e6caaea852e816c36b1f551dc4b0000b6e0516df6bf75afd1b6a1aa44c01
+  prior_target_comparison:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/08_method_target_comparison.tsv
+    sha256: b85e27b1741816ed22869be920b142bd8b88a77eef353a0797ad125c8dee35f6
+  prior_heldout_comparison:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/09_heldout_broad_comparison.tsv
+    sha256: 20cc533708da97f88e58e66149faf4a83163d3da4e1c2a2532f2b8aa0796067b
+  prior_method_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/01_tables/10_method_summary.tsv
+    sha256: f839da2ad8ab38e68b571ef05f3ee038027ca7e0619ee9d3453aa606562c71d0
+  adaptive_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/12_replication_adaptive_parse_transfer/06_manifests/01_adaptive_manifest.json
+    sha256: a966a7ae26d2be2b2294f0396e6df4dc9853ee435e01742792a2b84dc3b215d0
+  archived_five_gene_precedent:
+    path: ../../../../archived_analysis/legacy_scworkbench_exploratory/figure_scripts/parse_cytokines/03_signature_sample_treatment_violins.R
+    sha256: 32c8080536dd2667fc874350ec083df9f5fbefe3e0e6c3fb5265ddecf90522ae
+  base_sif:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+    sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+
+policy:
+  standard_minimum_genes: 20
+  small_panel_minimum_genes: 5
+  eligible_evidence_tier: moderate_twofold
+  eligibility:
+    - candidate is the complete intersection of two leave-one-target-unit-out top-100 rankings
+    - candidate contains at least 5 and fewer than 20 genes
+    - target failed the adaptive run only because it was below the standard 20-gene minimum
+  membership_rule: retain_complete_stable_intersection_without_greedy_deletion
+  evidence_label: moderate_twofold_small_panel
+  acceptance_effect: none_diagnostic_only
+  rationale:
+    - User explicitly authorized a lower gene count while retaining awareness of its limitation.
+    - Five genes is the prespecified minimum used by the earlier archived Parse discovery workflow.
+    - Retaining the complete intersection avoids optimizing an already small panel on the same discovery profiles.
+
+scoring:
+  type: ucell_capped_rank_on_raw_immgen_library_counts
+  max_rank: 1500
+  population_score: mean_library_score_within_population
+  group_score: median_independent_unit_score
+  mean_test: target_group_median_strictly_greater_than_every_other_family_group_median
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/13_small_panel_parse_exception
+  tables:
+    small_panel_membership: 01_tables/01_small_panel_membership.tsv
+    complete_membership: 01_tables/02_complete_membership.tsv.gz
+    target_summary: 01_tables/03_target_summary.tsv
+    method_target_comparison: 01_tables/04_method_target_comparison.tsv
+    heldout_broad_comparison: 01_tables/05_heldout_broad_comparison.tsv
+    method_summary: 01_tables/06_method_summary.tsv
+  reports:
+    summary: 03_reports/01_summary.json
+  manifest: 06_manifests/01_small_panel_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  accepted_sets_emitted: 0
+  importable_artifact_created: false

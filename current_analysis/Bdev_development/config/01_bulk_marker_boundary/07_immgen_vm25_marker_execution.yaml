@@ -1,0 +1,81 @@
+schema_version: bdev.immgen_vm25_marker_execution.v1
+status: execution_complete_candidates_require_scientific_review
+run_identity: immgen_vm25_20261031_seed20261031
+random_seed: 20261031
+execution_boundary: outside_scworkbench
+
+inputs:
+  count_matrix:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/GSE109125_Gene_count_table_GENCODE_vM25.csv.gz
+    sha256: cc513819170cbd2e6cfbff6415f0533b114e66fa1c3588f438f232ba491bcb90
+  library_manifest:
+    path: ../../inputs/01_bulk_marker_boundary/02_immgen_vm25_library_manifest.tsv
+    sha256: 34bebcdea2cc2e94c6e9da6febb351ecf0d73be9345e338902077c0ebb53dc71
+  hierarchy:
+    path: 01_immgen_geneset_hierarchy.yaml
+    sha256: 26cdb18cac7e31ef987aff06ade4097f9969e2c924839246c4a95764de3aad2a
+  statistical_contract:
+    path: 02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  preflight_config:
+    path: 03_immgen_analysis_preflight.yaml
+    sha256: 2df12901a483c0ce0ccff8f2ce93b5a45d9e30c43c4dca10125b8656c8a799af
+  software_lock:
+    path: 04_immgen_bulk_analysis_software_lock.yaml
+    sha256: d76cc5e4f86b61284073df394302d21bd12d3c5ff6441e78711d05bae1fc9e32
+  gene_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/01_tables/01_gene_annotation.tsv.gz
+    sha256: b7c909ecb1e2e83c749a26501415a9ea4d3c163f8861491d662ba9fe065c5f6f
+  preflight_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/06_manifests/01_preflight_run_manifest.json
+    sha256: d82ca2df2a1f25a17390fac3f4b9c36cc1d5c5822f53415d9602b7e0d4d312da
+  edgeR_library_archive:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/05_objects/02_edgeR_library_R-4.5_Bioc-3.21.tar.gz
+    sha256: 3aed57f0a07c4da25de1de689f1f42e3c22c17f90be1e930b298baca55b00087
+
+execution:
+  selected_libraries: 126
+  discovery_libraries: 121
+  held_out_libraries: 5
+  discovery_populations: 61
+  expected_gene_rows: 55011
+  balanced_resampling_iterations: 200
+  seed: 20261031
+  acceptance_policy: Produce candidate classifications for scientific review; do not emit accepted_core or an importable GMT in this run.
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers
+  tables:
+    selected_counts: 01_tables/01_selected_counts.tsv.gz
+    metadata: 01_tables/02_library_metadata.tsv
+    contrast_plan: 01_tables/03_contrast_plan.tsv
+    complete_statistics: 01_tables/04_complete_statistics.tsv.gz
+    design_audit: 01_tables/05_design_audit.tsv
+    preliminary_candidates: 01_tables/06_preliminary_candidates.tsv.gz
+    resample_schedule: 01_tables/07_balanced_resample_schedule.tsv
+    balanced_stability: 01_tables/08_balanced_stability.tsv.gz
+    population_loo: 01_tables/09_population_loo_stability.tsv.gz
+    library_loo: 01_tables/10_library_loo_stability.tsv
+    validation_gene_sets: 01_tables/11_validation_gene_sets.tsv
+    broad_lopo_scores: 01_tables/12_broad_lopo_scores.tsv
+    broad_lopo_predictions: 01_tables/13_broad_lopo_predictions.tsv
+    heldout_scores: 01_tables/14_heldout_broad_scores.tsv
+    heldout_predictions: 01_tables/15_heldout_broad_predictions.tsv
+    local_neighbor_auroc: 01_tables/16_local_neighbor_auroc.tsv
+    population_factor_contingency: 01_tables/17_population_factor_contingency.tsv
+    contrast_confounding_audit: 01_tables/18_contrast_confounding_audit.tsv
+    candidate_genesets: 01_tables/19_candidate_genesets.tsv.gz
+    set_summary: 01_tables/20_set_summary.tsv
+  reports:
+    preparation_summary: 03_reports/01_preparation_summary.json
+    model_summary: 03_reports/02_model_summary.json
+    execution_summary: 03_reports/03_execution_summary.json
+  objects:
+    r_library: 05_objects/01_r_library
+  manifest: 06_manifests/01_execution_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  bulk_inputs_imported: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false

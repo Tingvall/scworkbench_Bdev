@@ -1,0 +1,107 @@
+schema_version: bdev.immgen_all_population_parse.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261102_all_population_parse
+random_seed: 20261102
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Construct a population-specific positive marker geneset for every ImmGen population in the frozen vM25 matrix.
+  - Preserve the original held-out validation boundary when constructing discovery-population sets.
+  - Label replication evidence and fallback construction explicitly; emit diagnostic candidates only.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  gene_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/01_tables/01_gene_annotation.tsv.gz
+    sha256: b7c909ecb1e2e83c749a26501415a9ea4d3c163f8861491d662ba9fe065c5f6f
+  statistical_contract:
+    path: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/config/01_bulk_marker_boundary/02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+
+target_scope:
+  expected_populations: 64
+  expected_discovery_populations: 61
+  expected_held_out_validation_populations: 3
+  specificity_family_column: table_s1_lineage
+  target_column: population
+  discovery_role: discovery
+  held_out_role: held_out_validation
+  discovery_construction_rule: Use only discovery libraries from the target broad lineage.
+  held_out_construction_rule: Add only the held-out target to discovery libraries from its broad lineage; do not expose held-out populations to discovery-target construction.
+
+method:
+  direction: positive_only
+  specificity_contrast: target_population_minus_equal_weight_mean_of_other_populations_in_same_broad_lineage
+  minimum_oriented_log2_fold_change: 0.5
+  strict_fdr: 0.05
+  fold_top_genes: 100
+  standard_minimum_genes: 20
+  crossfit_folds_for_three_or_more_units: 3
+  evidence_tiers:
+    replicated_threefold:
+      minimum_units: 3
+      construction: intersection_of_three_crossfit_top100_lists
+    moderate_twofold:
+      units: 2
+      construction: intersection_of_two_leave_one_library_out_top100_lists
+    provisional_singleton:
+      units: 1
+      construction: full_data_top100_without_replication_stability_claim
+  empty_intersection_fallback:
+    construction: rank_union_by_fold_presence_then_mean_rank
+    maximum_genes: 100
+    claim: provisional_no_intersection_stability
+  scoring:
+    type: ucell_capped_rank_on_raw_immgen_library_counts
+    max_rank: 1500
+    population_score: mean_library_score_within_population
+  refinement:
+    objective: standardized_target_minus_strongest_same_lineage_population
+    operation: greedy_one_gene_deletion_on_complete_evaluation_profiles
+    standard_floor: 20
+    small_panel_rule: Preserve a nonempty crossfold intersection below 20 genes without deletion.
+  final_mean_test: target_population_mean_strictly_greater_than_every_other_same_lineage_population_mean
+  limitations:
+    - Two-library sets have only one target library in each training fit and provide weaker evidence than three-fold sets.
+    - Singleton sets provide no target-library reproducibility evidence and remain provisional.
+    - Held-out-derived sets are constructed only after the discovery panel is frozen and cannot retain a held-out validation claim themselves.
+    - Full-data refinement and mean testing are optimistic and diagnostic.
+    - Organ and laboratory can be confounded with population identity.
+    - No single-cell expression, label, embedding, or pseudotime enters construction.
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  container: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  r_version: 4.5.2
+  edgeR_version: 4.6.3
+  threads: 4
+  r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/05_objects/01_r_library
+
+outputs:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/14_all_population_parse_genesets
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets
+  intermediate_tables:
+    fold_plan: 01_tables/01_fold_plan.tsv
+    fold_rankings: 01_tables/02_fold_rankings.tsv.gz
+    model_audit: 01_tables/03_model_audit.tsv
+    refinement_trace: 01_tables/04_refinement_trace.tsv.gz
+  result_tables:
+    membership: 01_tables/01_population_geneset_membership.tsv.gz
+    target_summary: 01_tables/02_population_geneset_summary.tsv
+    candidate_gmt: 01_tables/03_candidate_population_genesets.gmt
+  reports:
+    model_summary: 03_reports/01_model_summary.json
+    final_summary: 03_reports/02_final_summary.json
+  manifest: 06_manifests/01_run_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  accepted_sets_emitted: 0
+  candidate_gmt_created: true
+  importable_artifact_created: false

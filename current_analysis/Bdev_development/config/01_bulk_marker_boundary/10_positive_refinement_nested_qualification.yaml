@@ -1,0 +1,111 @@
+schema_version: bdev.immgen_positive_refinement_nested_qualification.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261031_positive_refinement_nested_qualification
+random_seed: 20261031
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Test the positive-only competitor-refinement procedure with target-unit-held-out candidate ranking, refinement, and evaluation.
+  - Qualify only targets with at least three independent discovery populations or RNA libraries.
+  - Leave sparse targets explicitly non-qualifiable and produce no accepted or importable gene set.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  contrast_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/03_contrast_plan.tsv
+    sha256: 734008cceffb2219d56f0dcf589112cc6cf06fb70bea846052e45cea5ddf30ad
+  gene_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/01_tables/01_gene_annotation.tsv.gz
+    sha256: b7c909ecb1e2e83c749a26501415a9ea4d3c163f8861491d662ba9fe065c5f6f
+  production_validation_sets:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/11_validation_gene_sets.tsv
+    sha256: 2f881fcc5d02e01cc10a6dfc9f8c9a02cc70a92fda83a823f71d8582849f08d8
+  production_set_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/20_set_summary.tsv
+    sha256: 6236a623d1b78bc89bb0b58c72f964a66c6bc28c8f7b2d98e0642a3b010f8c6e
+  statistical_contract:
+    path: 02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  pilot_config:
+    path: 09_positive_competitor_refinement_pilot.yaml
+    sha256: e3d4feb7a9b1a40e3d66f7b5e7e2f4a1b051333fb241a5ae53e67a62f6d9aa70
+  pilot_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/09_positive_competitor_refinement_pilot/06_manifests/01_pilot_manifest.json
+    sha256: 1324037605a9b43ad9e7cd49909ae0c9ae6875746157174181a923facea6c865
+  base_sif:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+    sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  edgeR_library_archive:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/05_objects/02_edgeR_library_R-4.5_Bioc-3.21.tar.gz
+    sha256: 3aed57f0a07c4da25de1de689f1f42e3c22c17f90be1e930b298baca55b00087
+
+qualification:
+  direction: positive_only
+  unit:
+    superlineage: discovery_population
+    broad_lineage: discovery_population
+    b_branch: discovery_population
+    b_local_stage: discovery_rna_library
+  minimum_independent_target_units: 3
+  folds: leave_one_target_unit_out
+  candidate_pool_maximum_genes: 100
+  candidate_rules:
+    - Refit edgeR on training units only.
+    - Retain approved expression-filter, core-identity, target-support, and every positive effect threshold.
+    - Use fold-specific FDR as ranking evidence rather than a hard eligibility gate.
+    - Do not use negative genes, down modules, or Bdev data.
+  ranking:
+    - descending fraction of required tests passing their approved FDR threshold
+    - ascending worst required-test FDR divided by its approved threshold
+    - descending target support
+    - descending worst positive-effect margin over its threshold
+    - ascending gene symbol
+  refinement:
+    score: mean_within_profile_expression_percentile_rank
+    objective: standardized target-training-median minus strongest-competitor-training-median
+    operation: greedy one-gene deletion on training profiles only
+    floor: approved family minimum gene count
+  heldout_pass: held-out target-unit score is strictly greater than every training competitor-group median
+  minimum_nested_pass_fraction: 0.80
+  stable_membership_frequency: 0.80
+  method_screen_pass:
+    - every fold constructs at least the family minimum genes
+    - nested held-out pass fraction is at least 0.80
+    - at least the family minimum genes occur in at least 80 percent of fold-final memberships
+  acceptance_policy: Method-screen evidence only; no target or gene set is accepted by this qualification.
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  r_version: 4.5.2
+  bioconductor_version: "3.21"
+  edgeR_version: 4.6.3
+  r_library: 05_objects/01_r_library
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/10_positive_refinement_nested_qualification
+  tables:
+    fold_plan: 01_tables/01_fold_plan.tsv
+    fold_candidate_pools: 01_tables/02_fold_candidate_pools.tsv.gz
+    fold_model_audit: 01_tables/03_fold_model_audit.tsv
+    fold_results: 01_tables/04_fold_results.tsv
+    fold_final_membership: 01_tables/05_fold_final_membership.tsv.gz
+    fold_removal_trace: 01_tables/06_fold_removal_trace.tsv.gz
+    target_summary: 01_tables/07_target_summary.tsv
+    stable_membership: 01_tables/08_stable_membership.tsv.gz
+  reports:
+    model_summary: 03_reports/01_nested_model_summary.json
+    qualification_summary: 03_reports/02_qualification_summary.json
+  objects:
+    r_library: 05_objects/01_r_library
+  manifest: 06_manifests/01_qualification_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false
+

@@ -1,0 +1,50 @@
+schema_version: bdev.immgen_geneset_default.v1
+status: active_default_candidate
+selected_on: 2026-11-02
+selection_reason: User selected the complete all-population Parse collection as the working default pending Bdev integration evaluation.
+
+selected_collection:
+  run_identity: immgen_vm25_20261102_all_population_parse
+  scope: 64 ImmGen populations
+  construction_status: complete_diagnostic_only
+  run_config:
+    path: 14_all_population_parse_genesets.yaml
+    sha256: 9bf8d1a84f88d1e51d94728c745f3e737e9e19be7493f9d0ae54a9ba38b26d9b
+  candidate_gmt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/03_candidate_population_genesets.gmt
+    sha256: 1bffe1b2412bfab390261e9193ad740e198c1d2be63cdd710dd839bc807e0691
+  membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/01_population_geneset_membership.tsv.gz
+    sha256: d8ac2ea0581049c01de9782ef7fb32c5c03c7495aa499459946204c36140b641
+  target_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/02_population_geneset_summary.tsv
+    sha256: cf3cde368266132915276715ac1edc9300b78f87c06ab569ca221e5625334e4c
+  run_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/06_manifests/01_run_manifest.json
+    sha256: 40ed3095ae67025b3c4db5c4cb6e1f892852ec6b7efdeea17f8b6f22db091e3a
+
+default_policy:
+  use_for:
+    - Bdev integration planning
+    - Bdev integration evaluation
+    - population-level ImmGen geneset lookups
+  do_not_treat_as:
+    - production-accepted genesets
+    - an approved scworkbench import
+    - independently validated Bdev annotations
+  supersedes_for_working_default:
+    - the prior 27-target replication-adaptive collection
+    - the prior two-set small-panel exception collection
+
+deferred_evaluation:
+  stage: Bdev integration
+  required_before_production_promotion:
+    - Evaluate population-score specificity and abstention on Bdev cells.
+    - Review singleton-provisional and held-out-derived sets separately.
+    - Check state, tissue, laboratory, and progenitor-program confounding.
+    - Freeze any approved changes as a new version rather than mutating this collection.
+
+scworkbench_boundary:
+  imported: false
+  accepted_sets_emitted: 0
+  importable_artifact_created: false

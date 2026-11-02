@@ -5,11 +5,28 @@ numbering_width: 2
 identifiers_immutable_after_reference: true
 capabilities:
   - capability_id: 01_bulk_marker_boundary
-    status: contract_required
-    purpose: Decide and qualify the replicate-aware bulk marker discovery boundary used for ImmGen and related datasets.
-    preferred_owner: scwbStatistics_or_new_official_bulk_pack
+    status: complete_27_target_diagnostic_collection_biological_review_required
+    purpose: Qualify reproducible outside-scWorkbench bulk marker discovery and the gene-set import boundary used for ImmGen and related datasets.
+    preferred_owner: bdev_outside_preprocessing_plus_scworkbench_gene_set_import
     core_change_indicated: false
-    notes: An approved reproducible outside-analysis boundary remains an option if no reusable pack contract is justified.
+    notes: >-
+      Replicate-aware bulk analysis remains outside scWorkbench. The production
+      workflow and all completed diagnostics remain unchanged. Following user
+      authorization, a five-gene small-panel floor matching the earlier Parse
+      discovery minimum was applied only to two-fold stable intersections that
+      failed the latest Parse 20-gene floor. This retains committed marrow B
+      with 13 genes and mature conventional B with nine, producing a complete
+      27-target diagnostic collection: 14 high three-fold, eight standard
+      two-fold, three provisional singleton, and two small two-fold panels.
+      All aggregate discovery medians rank their target first, and the unchanged
+      nine-set broad panel calls all three validation-only broad populations
+      correctly. Evidence remains unequal: committed marrow B has a small gap
+      and only one of two target populations above its strongest competitor,
+      singleton panels lack replication, two-fold evidence is weak, and
+      full-data results are optimistic. No set is accepted and no single-cell
+      expression was used. Freeze biological/confounding review and evaluation
+      policy before single-cell evaluation. No core or operation-pack change is
+      required.
   - capability_id: 02_slingshot_trajectory_semantics
     status: gap_analysis_required
     purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.

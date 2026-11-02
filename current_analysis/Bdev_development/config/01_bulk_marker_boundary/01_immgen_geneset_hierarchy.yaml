@@ -1,0 +1,158 @@
+schema_version: bdev.immgen_geneset_hierarchy.v1
+status: approved
+approved_on: 2026-10-31
+source_manifest: ../../inputs/01_bulk_marker_boundary/02_immgen_vm25_library_manifest.tsv
+scope: Population roles, hierarchy, and contrast neighborhoods only; no statistical method or marker threshold is selected here.
+
+principles:
+  population_weighting: Equalize fine-population contribution within broad contrasts; extra libraries must not give a population extra biological weight.
+  assay_matching: RNA and ATAC are matched at population level only and must never be modeled as replicate-paired.
+  broad_populations: Retain broad populations for validation, but do not use them as precise developmental-stage targets.
+  local_stage_contrasts: Compare fine stages with declared biological or phenotypic neighbors rather than the entire atlas.
+  abstention: Fine-stage assignment must later support an unassigned result when neighboring scores cannot be separated.
+
+population_role_overrides:
+  broad_validation_only:
+    B.Sp:
+      rationale: Broad CD19+ IgM+ splenic B-cell gate; validates the broad B-lineage set but is not a precise stage.
+    Tgd.Sp:
+      rationale: Broad splenic gamma-delta T-cell gate; validates gamma-delta lineage coverage but is not a defined developmental stage.
+    MF.PC:
+      rationale: Broad peritoneal macrophage gate; validates macrophage generalization while specific peritoneal subsets remain available for discovery.
+  retained_unique_branch_discovery:
+    NKT.Sp:
+      rationale: Only approved steady-state NKT population; removing it would eliminate the NKT branch.
+    GN.BM:
+      rationale: Retains bone-marrow neutrophil representation.
+    GN.Sp:
+      rationale: Retains splenic neutrophil representation; removing both GN populations would eliminate the granulocyte branch.
+
+superlineages:
+  stem_progenitor:
+    table_s1_lineages: [Stem&Prog]
+  lymphoid:
+    table_s1_lineages: [B, abT, gdT, ILC]
+  myeloid_dc:
+    table_s1_lineages: [monocyte, myeloid, DC]
+  stroma:
+    table_s1_lineages: [stroma]
+
+broad_lineages:
+  Stem&Prog:
+    expected_discovery_populations: 5
+    closest_competitor_lineages: [B, abT]
+  B:
+    expected_discovery_populations: 10
+    closest_competitor_lineages: [Stem&Prog, abT, gdT, ILC]
+  abT:
+    expected_discovery_populations: 13
+    closest_competitor_lineages: [B, gdT, ILC]
+  gdT:
+    expected_discovery_populations: 6
+    closest_competitor_lineages: [abT, ILC]
+  ILC:
+    expected_discovery_populations: 10
+    closest_competitor_lineages: [abT, gdT, myeloid]
+  monocyte:
+    expected_discovery_populations: 2
+    closest_competitor_lineages: [myeloid, DC]
+  myeloid:
+    expected_discovery_populations: 7
+    closest_competitor_lineages: [monocyte, DC]
+  DC:
+    expected_discovery_populations: 3
+    closest_competitor_lineages: [monocyte, myeloid]
+  stroma:
+    expected_discovery_populations: 5
+    closest_competitor_lineages: [Stem&Prog, B, abT, gdT, ILC, monocyte, myeloid, DC]
+
+b_lineage:
+  broad_validation_populations: [B.Sp]
+  branch_groups:
+    early_lymphoid_progenitor:
+      populations: [proB.CLP.BM, proB.FrA.BM]
+    committed_bone_marrow_b:
+      populations: [proB.FrBC.BM, B.FrE.BM]
+    splenic_transitional_b:
+      populations: [B.T1.Sp, B.T2.Sp, B.T3.Sp]
+    mature_conventional_b:
+      populations: [B.Fo.Sp, B.MZ.Sp]
+    b1b_branch:
+      populations: [B1b.PC]
+      candidate_only: true
+      rationale: A single population can define a candidate branch signature but cannot demonstrate cross-population branch stability.
+
+  directed_developmental_edges:
+    - edge_id: BDEV_E01
+      source: proB.CLP.BM
+      target: proB.FrA.BM
+      edge_type: early_progenitor
+    - edge_id: BDEV_E02
+      source: proB.FrA.BM
+      target: proB.FrBC.BM
+      edge_type: early_commitment
+    - edge_id: BDEV_E03
+      source: proB.FrBC.BM
+      target: B.FrE.BM
+      edge_type: gap_spanning
+      caution: preB.FrD.BM has ATAC but no matched RNA population in the study, so this is not a direct observed RNA-stage transition.
+    - edge_id: BDEV_E04
+      source: B.FrE.BM
+      target: B.T1.Sp
+      edge_type: compartment_spanning
+      caution: Bone-marrow to splenic transition; tissue-associated genes require explicit screening.
+    - edge_id: BDEV_E05
+      source: B.T1.Sp
+      target: B.T2.Sp
+      edge_type: transitional_progression
+    - edge_id: BDEV_E06
+      source: B.T1.Sp
+      target: B.T3.Sp
+      edge_type: transitional_branch
+    - edge_id: BDEV_E07
+      source: B.T2.Sp
+      target: B.Fo.Sp
+      edge_type: mature_branch
+    - edge_id: BDEV_E08
+      source: B.T2.Sp
+      target: B.MZ.Sp
+      edge_type: mature_branch
+
+  local_stage_neighbors:
+    proB.CLP.BM: [proB.FrA.BM]
+    proB.FrA.BM: [proB.CLP.BM, proB.FrBC.BM]
+    proB.FrBC.BM: [proB.FrA.BM, B.FrE.BM]
+    B.FrE.BM: [proB.FrBC.BM, B.T1.Sp]
+    B.T1.Sp: [B.FrE.BM, B.T2.Sp, B.T3.Sp]
+    B.T2.Sp: [B.T1.Sp, B.T3.Sp, B.Fo.Sp, B.MZ.Sp]
+    B.T3.Sp: [B.T1.Sp, B.T2.Sp, B.Fo.Sp]
+    B.Fo.Sp: [B.T2.Sp, B.T3.Sp, B.MZ.Sp]
+    B.MZ.Sp: [B.T2.Sp, B.Fo.Sp]
+
+  branch_contrasts:
+    - contrast_id: BBRANCH_C01
+      target_group: early_lymphoid_progenitor
+      competitor_groups: [committed_bone_marrow_b]
+    - contrast_id: BBRANCH_C02
+      target_group: committed_bone_marrow_b
+      competitor_groups: [early_lymphoid_progenitor, splenic_transitional_b]
+    - contrast_id: BBRANCH_C03
+      target_group: splenic_transitional_b
+      competitor_groups: [committed_bone_marrow_b, mature_conventional_b]
+    - contrast_id: BBRANCH_C04
+      target_group: mature_conventional_b
+      competitor_groups: [splenic_transitional_b, b1b_branch]
+    - contrast_id: BBRANCH_C05
+      target_group: b1b_branch
+      competitor_groups: [mature_conventional_b]
+      candidate_only: true
+
+deferred_to_statistical_contract:
+  - count filtering and normalization
+  - differential-expression engine and design formula
+  - handling of laboratory and tissue covariates
+  - effect-size and false-discovery thresholds
+  - minimum target-population support
+  - stability resampling and acceptance thresholds
+  - gene exclusions and identifier policy
+  - final gene-set size and deterministic ranking

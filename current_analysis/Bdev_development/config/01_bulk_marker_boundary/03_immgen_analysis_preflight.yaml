@@ -1,0 +1,140 @@
+schema_version: bdev.immgen_analysis_preflight.v1
+status: frozen_and_validated
+approved_contract: 02_immgen_marker_statistical_contract.yaml
+frozen_on: 2026-10-31
+
+storage_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development
+
+sources:
+  count_matrix:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/GSE109125_Gene_count_table_GENCODE_vM25.csv.gz
+    url: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE109nnn/GSE109125/suppl/GSE109125_Gene_count_table_GENCODE_vM25.csv.gz
+    sha256: cc513819170cbd2e6cfbff6415f0533b114e66fa1c3588f438f232ba491bcb90
+    expected_gene_rows: 55011
+    expected_library_columns: 205
+  gencode_all_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/gencode.vM25.chr_patch_hapl_scaff.annotation.gtf.gz
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.chr_patch_hapl_scaff.annotation.gtf.gz
+    sha256: 311a035c01fca80e9b150ae89998f73c1049d557ce5d994789adca2b210a38d4
+    release: GENCODE mouse M25
+    assembly: GRCm38.p6
+  gencode_reference_chromosome_audit:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/gencode.vM25.annotation.gtf.gz
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz
+    sha256: e6c9704cb5832b8a1c71431ecac9ea30057377c72cdc9a12dc5d0405ab066d5a
+  mouse_orgdb:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/org.Mm.eg.db_3.23.0.tar.gz
+    url: https://bioconductor.org/packages/3.23/data/annotation/src/contrib/org.Mm.eg.db_3.23.0.tar.gz
+    sha256: 507a54cf51dbd5c0b00706bbc7a741c2fd89c9d7d3be406a04939b7dc6114544
+    package_version: 3.23.0
+    go_source_date: "2026-01-23"
+    entrez_source_date: 2026-Mar18
+
+annotation_mapping:
+  reference_chromosomes:
+    - chr1
+    - chr2
+    - chr3
+    - chr4
+    - chr5
+    - chr6
+    - chr7
+    - chr8
+    - chr9
+    - chr10
+    - chr11
+    - chr12
+    - chr13
+    - chr14
+    - chr15
+    - chr16
+    - chr17
+    - chr18
+    - chr19
+    - chrX
+    - chrY
+    - chrM
+  precedence:
+    - Use a symbol when it maps to exactly one gene on a declared reference chromosome.
+    - When no reference-chromosome record exists, use exactly one non-reference record.
+    - Mark all remaining multiple mappings ambiguous and exclude them from exported gene sets.
+  accepted_export_biotype: protein_coding
+
+state_gene_policy:
+  go_annotation_table: go_all
+  include_all_evidence_codes: true
+  go_sets:
+    cell_cycle:
+      ontology: bp
+      roots:
+        - id: GO:0007049
+          name: cell cycle
+    interferon_response:
+      ontology: bp
+      roots:
+        - id: GO:0034340
+          name: response to type I interferon
+        - id: GO:0034341
+          name: response to type II interferon
+    heat_shock:
+      ontology: bp
+      roots:
+        - id: GO:0034605
+          name: cellular response to heat
+    generic_stress:
+      ontology: bp
+      roots:
+        - id: GO:0006986
+          name: response to unfolded protein
+        - id: GO:0034599
+          name: cellular response to oxidative stress
+  curated_sets:
+    immediate_early:
+      source: Denisenko et al. 2020, Genome Biology 21:130
+      doi: 10.1186/s13059-020-02048-6
+      derivation: Canonical immediate-early subset of the authors' 17-gene warm-dissociation stress score.
+      symbols: [Atf3, Btg1, Btg2, Dusp1, Egr1, Fos, Fosb, Ier2, Ier3, Jun, Junb, Jund]
+    generic_stress_dissociation:
+      source: Denisenko et al. 2020, Genome Biology 21:130
+      doi: 10.1186/s13059-020-02048-6
+      derivation: Exact 17-gene warm-dissociation stress score reported in Methods.
+      symbols: [Atf3, Btg1, Btg2, Dusp1, Egr1, Fos, Fosb, Hsp90ab1, Hspa1a, Hspa1b, Hspa8, Hspb1, Ier2, Ier3, Jun, Junb, Jund]
+  action: Flag all members in complete statistics and exclude them from accepted core identity sets; retain them only in separately named auxiliary state sets.
+
+mandatory_identity_exclusions:
+  symbol_or_chromosome:
+    - chromosome_Y_genes
+    - Xist
+    - mitochondrial_genes
+  go_sets:
+    ribosomal_protein_genes:
+      ontology: mf
+      roots:
+        - id: GO:0003735
+          name: structural constituent of ribosome
+    hemoglobin_genes:
+      ontology: cc
+      roots:
+        - id: GO:0005833
+          name: hemoglobin complex
+  gencode_biotypes:
+    - IG_V_gene
+    - IG_D_gene
+    - IG_J_gene
+    - TR_V_gene
+    - TR_D_gene
+    - TR_J_gene
+
+software_lock: 04_immgen_bulk_analysis_software_lock.yaml
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight
+  gene_annotation: 01_tables/01_gene_annotation.tsv.gz
+  state_gene_flags: 01_tables/02_state_gene_flags.tsv
+  preflight_summary: 03_reports/01_preflight_summary.json
+  run_manifest: 06_manifests/01_preflight_run_manifest.json
+
+scworkbench_boundary:
+  bulk_inputs_imported: false
+  core_or_pack_change_required: false
+  future_imports_only: [accepted_gmt, long_form_genesets, run_manifest]

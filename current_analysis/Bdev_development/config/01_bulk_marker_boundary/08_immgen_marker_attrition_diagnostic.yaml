@@ -1,0 +1,73 @@
+schema_version: bdev.immgen_marker_attrition_diagnostic.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261031_seed20261031_attrition_diagnostic
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Quantify target-by-target gene attrition through the frozen primary, stability, holdout, and size gates.
+  - Identify the gates and contrasts responsible for missing or undersized candidate sets.
+  - Audit the completed production run without changing thresholds, refitting models, or emitting importable gene sets.
+
+inputs:
+  production_execution_config:
+    path: 07_immgen_vm25_marker_execution.yaml
+    sha256: 4f389133553150260ce9463dd9f24b55d7c1573b8b758fa58ade5b85b5113062
+  statistical_contract:
+    path: 02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  complete_statistics:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/04_complete_statistics.tsv.gz
+    sha256: 893286b0b8a4932b96d477bfc259a75b2d2f41263ec744149a1879ea0625a4db
+  preliminary_candidates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/06_preliminary_candidates.tsv.gz
+    sha256: a0167c758ed771a25c102a7748920a70e3d7b7df28f875da1ec2ca5f1968bdf0
+  balanced_stability:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/08_balanced_stability.tsv.gz
+    sha256: 68ca078432ce624c1a421834c0cb304cfd8176eedb734180bf7ab0e996af5b2a
+  population_loo:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/09_population_loo_stability.tsv.gz
+    sha256: c9a98bc9800ad64a92d4a6d2a52e052f39b2baf7de83f8a93336483367ca1b46
+  library_loo:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/10_library_loo_stability.tsv
+    sha256: 0708241c7beeea53ef735a1bad18c6be3a3ad8d87ac418ac68ab2b5d98acbcf9
+  set_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/20_set_summary.tsv
+    sha256: 6236a623d1b78bc89bb0b58c72f964a66c6bc28c8f7b2d98e0642a3b010f8c6e
+  production_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/06_manifests/01_execution_manifest.json
+    sha256: bd334b9f93e47b18d0ffce24c729dc56c86a41c8bbb450e64a9b3c3dc58b3efb
+
+diagnostic_policy:
+  gate_order:
+    - expression_filter
+    - annotation_identity
+    - target_support
+    - global_effect
+    - global_fdr
+    - competitor_effect
+    - competitor_fdr
+    - balanced_stability
+    - leave_one_out
+    - minimum_set_size
+    - maximum_set_size
+  first_failure_assignment: Assign each gene to the first failed applicable gate in the declared order.
+  leave_one_out_policy: Count not-assessable low-replication genes separately and retain them exactly as the production candidate workflow did.
+  interpretation: Descriptive only; no threshold or hierarchy revision is authorized by this diagnostic.
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/08_diagnose_immgen_marker_attrition
+  tables:
+    attrition_funnel: 01_tables/01_attrition_funnel.tsv
+    first_failure_reasons: 01_tables/02_first_failure_reasons.tsv
+    contrast_bottlenecks: 01_tables/03_contrast_bottlenecks.tsv
+    post_primary_attrition: 01_tables/04_post_primary_attrition.tsv
+    target_diagnosis: 01_tables/05_target_diagnosis.tsv
+  reports:
+    diagnostic_summary: 03_reports/01_diagnostic_summary.json
+  manifest: 06_manifests/01_diagnostic_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false
+

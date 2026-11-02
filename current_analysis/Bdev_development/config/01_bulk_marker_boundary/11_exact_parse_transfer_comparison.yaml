@@ -1,0 +1,112 @@
+schema_version: bdev.immgen_exact_parse_transfer_comparison.v1
+status: approved_for_execution
+run_identity: immgen_vm25_20261031_exact_parse_transfer_comparison
+random_seed: 20261031
+execution_boundary: outside_scworkbench
+
+purpose:
+  - Transfer the latest Parse top-100 stability-intersection and strongest-competitor refinement method to ImmGen without using single-cell expression data.
+  - Compare the transferred sets with the production, full-data positive-pilot, and nested-stable ImmGen sets under one UCell-style bulk-profile score.
+  - Keep all results diagnostic; do not accept or export a gene-set collection.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  contrast_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/03_contrast_plan.tsv
+    sha256: 734008cceffb2219d56f0dcf589112cc6cf06fb70bea846052e45cea5ddf30ad
+  gene_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/01_tables/01_gene_annotation.tsv.gz
+    sha256: b7c909ecb1e2e83c749a26501415a9ea4d3c163f8861491d662ba9fe065c5f6f
+  statistical_contract:
+    path: 02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  production_membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/11_validation_gene_sets.tsv
+    sha256: 2f881fcc5d02e01cc10a6dfc9f8c9a02cc70a92fda83a823f71d8582849f08d8
+  positive_pilot_membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/09_positive_competitor_refinement_pilot/01_tables/03_final_membership.tsv.gz
+    sha256: 24d7370a0d01fd45ac9ec599c47df490590836be7a96e1f834f881d08593384f
+  nested_stable_membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/10_positive_refinement_nested_qualification/01_tables/08_stable_membership.tsv.gz
+    sha256: 47fc60db58604e34b7102ad2e2d49b535dbd33431d408cf031702e27ce9ccace
+  nested_target_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/10_positive_refinement_nested_qualification/01_tables/07_target_summary.tsv
+    sha256: f90cc6abf90b51f28a58d9f2d164bfffb26fe9c4a5e9c19dc79cb33ca415c3b7
+  archived_parse_method:
+    path: ../../../../archived_analysis/legacy_scworkbench_exploratory/processing/parse_cytokines/ALL_CYTOKINE_COMPETITOR_REFINEMENT_AND_BDEV_REPORTING.md
+    sha256: 6997bdb57f814b32e93d3a47beb23f99d26549e40f2d8ffbd40adaef016514f0
+  archived_parse_implementation:
+    path: ../../../../archived_analysis/legacy_scworkbench_exploratory/processing/parse_cytokines/17_flt3_il7_competitor_refinement_pilot.R
+    sha256: e11be3b35905fcb97fb3face2e623416a1b4e57cc127ccaeb3a022cf79effe2c
+  base_sif:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+    sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  edgeR_library_archive:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/05_objects/02_edgeR_library_R-4.5_Bioc-3.21.tar.gz
+    sha256: 3aed57f0a07c4da25de1de689f1f42e3c22c17f90be1e930b298baca55b00087
+
+method:
+  direction: positive_only
+  crossfit_folds: 3
+  fold_assignment: deterministic_round_robin_over_ordered_target_units
+  minimum_independent_target_units: 3
+  specificity_contrast: target_minus_equal_weight_mean_of_all_other_family_groups
+  minimum_oriented_log2_fold_change: 0.5
+  strict_fdr: 0.05
+  fold_top_genes: 100
+  candidate_rule: intersection_of_all_three_fold_top100_lists
+  minimum_candidate_genes: 20
+  scoring:
+    type: ucell_capped_rank_on_raw_immgen_library_counts
+    max_rank: 1500
+    population_score: mean_library_score_within_population
+    group_score: median_independent_unit_score
+  refinement:
+    objective: standardized_target_minus_strongest_competitor_group_median
+    operation: greedy_one_gene_deletion
+    floor: 20
+    stop: no_single_deletion_strictly_improves_objective_or_floor_reached
+  final_mean_test: target_group_median_strictly_greater_than_every_other_family_group_median
+  unavailable_parse_route: responder_fraction_requires_matched_control_cells_and_has_no_immgen_bulk_analogue
+  limitations:
+    - Three folds are deterministic partitions of target units because ImmGen populations are not matched three-replicate blocks across all groups.
+    - Greedy refinement and the final mean test use the complete discovery profiles and are optimistic, as in the archived Parse review method.
+    - The responder route is not run because ImmGen has no matched control-cell distribution.
+    - No single-cell expression value, label, embedding, or pseudotime enters construction or comparison.
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  r_version: 4.5.2
+  bioconductor_version: "3.21"
+  edgeR_version: 4.6.3
+  r_library: 05_objects/01_r_library
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/11_exact_parse_transfer_comparison
+  tables:
+    fold_plan: 01_tables/01_fold_plan.tsv
+    fold_rankings: 01_tables/02_fold_top100_rankings.tsv.gz
+    candidate_membership: 01_tables/03_candidate_membership.tsv.gz
+    model_audit: 01_tables/04_model_audit.tsv
+    final_membership: 01_tables/05_final_membership.tsv.gz
+    refinement_trace: 01_tables/06_refinement_trace.tsv.gz
+    method_target_comparison: 01_tables/07_method_target_comparison.tsv
+    heldout_broad_comparison: 01_tables/08_heldout_broad_comparison.tsv
+    method_summary: 01_tables/09_method_summary.tsv
+  reports:
+    model_summary: 03_reports/01_model_summary.json
+    comparison_summary: 03_reports/02_comparison_summary.json
+  objects:
+    r_library: 05_objects/01_r_library
+  manifest: 06_manifests/01_comparison_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  accepted_sets_emitted: 0
+  importable_artifact_created: false

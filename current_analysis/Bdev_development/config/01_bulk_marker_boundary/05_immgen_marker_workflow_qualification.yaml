@@ -1,0 +1,79 @@
+schema_version: bdev.immgen_marker_workflow_qualification.v1
+status: model_and_selection_core_qualified_deferred_gates_required
+mode: synthetic_counts_exact_cohort_structure
+random_seed: 20261031
+
+inputs:
+  manifest: ../../inputs/01_bulk_marker_boundary/02_immgen_vm25_library_manifest.tsv
+  hierarchy: 01_immgen_geneset_hierarchy.yaml
+  statistical_contract: 02_immgen_marker_statistical_contract.yaml
+  preflight: 03_immgen_analysis_preflight.yaml
+  software_lock: 04_immgen_bulk_analysis_software_lock.yaml
+
+synthetic_fixture:
+  baseline_count: 24
+  marker_count: 420
+  low_count: 1
+  marker_genes_per_target:
+    superlineage: 60
+    broad_lineage: 35
+    b_branch: 25
+    b_local_stage: 18
+  control_genes: 24
+  state_decoy_genes: 4
+  ambiguous_decoy_genes: 4
+  no_padding_control:
+    family: b_local_stage
+    target: B.T1.Sp
+    marker_genes: 10
+  design_structure:
+    libraries: 126
+    discovery_libraries: 121
+    held_out_libraries: 5
+    discovery_populations: 61
+  rules:
+    - Use the exact frozen selected libraries, population labels, lineage hierarchy, branch membership, and held-out roles.
+    - Generate synthetic integer counts only; never read expression values from the ImmGen count matrix.
+    - Inject positive markers independently for every declared hierarchy target.
+    - Include low-expression, state-flagged, and ambiguous-mapping decoys.
+    - Give B.T1.Sp fewer eligible synthetic markers than the family minimum to prove that selection does not pad or emit an undersized set.
+
+qualification_scope:
+  included:
+    - selected-column and held-out-role handling
+    - population-level integer aggregation
+    - exact design-matrix rank checks
+    - all declared global, closest-competitor, branch, and local-neighbor contrasts
+    - filterByExpr, TMM normalization, robust glmQLFit, and glmTreat
+    - complete per-gene statistics including filtered genes
+    - annotation eligibility and no-padding selection
+    - deterministic ranking and family size limits
+  explicitly_deferred:
+    - 200-iteration balanced stability resampling
+    - leave-one-population-out stability
+    - leave-one-library-out stability
+    - tissue and laboratory confounding audits
+    - held-out scoring thresholds
+    - full ImmGen marker execution
+  acceptance_rule: This step may qualify the model and deterministic-selection core, but cannot emit accepted_core gene sets or an importable GMT.
+
+outputs:
+  root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/05_qualify_immgen_marker_workflow
+  fixture:
+    counts: 01_tables/01_synthetic_counts.tsv.gz
+    metadata: 01_tables/02_synthetic_library_metadata.tsv
+    annotation: 01_tables/03_synthetic_gene_annotation.tsv
+    expected_markers: 01_tables/04_expected_markers.tsv
+    contrast_plan: 01_tables/05_contrast_plan.tsv
+  model:
+    complete_statistics: 01_tables/06_synthetic_complete_statistics.tsv.gz
+    design_audit: 01_tables/07_design_audit.tsv
+  selection:
+    long_form: 01_tables/08_synthetic_selected_genesets.tsv
+    summary: 03_reports/01_synthetic_qualification_summary.json
+  manifest: 06_manifests/01_synthetic_qualification_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  core_or_pack_change_required: false
+  importable_artifact_created: false

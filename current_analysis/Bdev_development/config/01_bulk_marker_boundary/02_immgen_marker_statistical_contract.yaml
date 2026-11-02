@@ -1,0 +1,209 @@
+schema_version: bdev.immgen_marker_statistical_contract.v1
+status: approved
+proposed_on: 2026-10-31
+approved_on: 2026-10-31
+source_manifest: ../../inputs/01_bulk_marker_boundary/02_immgen_vm25_library_manifest.tsv
+hierarchy: 01_immgen_geneset_hierarchy.yaml
+execution_boundary: outside_scworkbench
+random_seed: 20261031
+
+software:
+  primary_engine: edgeR_quasi_likelihood
+  requirements:
+    - Use an exact pinned R, Bioconductor, edgeR, limma, annotation-package, and dependency environment.
+    - Record the lockfile and package versions in the run manifest before execution.
+    - Use the edgeR v4 quasi-likelihood pipeline with robust quasi-dispersion estimation.
+  prohibited:
+    - mixing counts from the paper-era and GENCODE vM25 matrices
+    - substituting normalized population averages for the integer-count input
+    - treating RNA and ATAC libraries as replicate-paired
+    - selecting genes by inspecting Bdev single-cell labels or pseudotime
+
+analysis_layers:
+  library_level:
+    input_libraries: 126
+    discovery_model_libraries: 121
+    held_out_validation_libraries: 5
+    purpose:
+      - library QC
+      - local B-stage pairwise contrasts
+      - within-population consistency
+      - balanced population resampling
+    design: "~ 0 + population"
+    model_rule: Exclude the five libraries belonging to broad-validation-only populations from every discovery fit.
+  population_level:
+    populations: 61
+    construction: Sum integer counts across libraries within each discovery-eligible fine population; recalculate library sizes and TMM factors after aggregation.
+    purpose:
+      - superlineage contrasts
+      - broad-lineage contrasts
+      - B-branch contrasts
+      - equal fine-population weighting
+    designs:
+      superlineage: "~ 0 + superlineage"
+      broad_lineage: "~ 0 + table_s1_lineage"
+      b_branch: "~ 0 + b_branch"
+  held_out_broad_validation:
+    populations: [B.Sp, Tgd.Sp, MF.PC]
+    rule: Never fit marker-discovery models with these populations; score them only after gene sets are frozen within an internal run.
+
+count_processing:
+  input_assay: nonnegative_integer_gene_counts
+  identifier_column: GeneSymbol
+  expected_gene_rows: 55011
+  normalization: edgeR TMM effective-library-size normalization using normLibSizes or its version-appropriate exact equivalent
+  expression_filter:
+    method: edgeR filterByExpr for each analysis layer and design
+    min_count: 10
+    min_total_count: 15
+    rule: Record the pass/fail flag for every one of the 55,011 source rows; do not silently discard failed genes from provenance tables.
+  model:
+    fit: edgeR glmQLFit
+    robust: true
+    test: edgeR glmTreat
+    treat_log2_fold_change: 0.5
+    multiple_testing: Benjamini-Hochberg within each declared contrast
+
+annotation_and_gene_policy:
+  annotation: GENCODE vM25 mouse annotation matching the count matrix
+  preflight_gate:
+    - Freeze and checksum the exact GENCODE vM25 GTF before execution.
+    - Map each unique matrix symbol to Ensembl gene ID, chromosome, and biotype.
+    - Retain all genes and mapping outcomes in the complete statistics table.
+    - Exclude ambiguous symbol-to-gene mappings from exported gene sets.
+  accepted_export_biotype: protein_coding
+  mandatory_identity_exclusions:
+    - chromosome_Y_genes
+    - Xist
+    - mitochondrial_genes
+    - ribosomal_protein_genes
+    - hemoglobin_genes
+    - immunoglobulin_V_D_J_segments
+    - T_cell_receptor_V_D_J_segments
+  state_program_policy:
+    - Flag cell-cycle, interferon-response, immediate-early, heat-shock, and generic stress genes in the full results.
+    - Do not use flagged state genes in core identity sets.
+    - Retain biologically coherent state genes only in separately named auxiliary state or transition sets.
+    - Freeze the exact versioned state-gene lists before model execution.
+  clonality_policy: Immunoglobulin and TCR constant or signaling genes may remain eligible; variable, diversity, and joining segments are excluded.
+
+contrast_families:
+  superlineage:
+    unit: population_profile
+    global_contrast: Target superlineage versus the equal-weight mean of every other superlineage coefficient.
+    minimum_target_population_support: 0.50
+    minimum_global_log2_fold_change: 1.0
+    maximum_global_fdr: 0.05
+    minimum_stability_fraction: 0.80
+    minimum_genes: 40
+    maximum_genes: 150
+  broad_lineage:
+    unit: population_profile
+    global_contrast: Target lineage versus the equal-weight mean of every other broad-lineage coefficient.
+    competitor_contrasts: Test separately against every closest competitor lineage declared in the hierarchy.
+    minimum_target_population_support: 0.60
+    minimum_global_log2_fold_change: 1.0
+    minimum_each_competitor_log2_fold_change: 0.75
+    maximum_global_fdr: 0.05
+    maximum_each_competitor_fdr: 0.10
+    minimum_stability_fraction: 0.80
+    minimum_genes: 30
+    maximum_genes: 120
+  b_branch:
+    unit: population_profile
+    competitor_contrasts: Test separately against every declared sibling branch.
+    minimum_target_population_support: 0.50
+    minimum_global_log2_fold_change: 0.75
+    minimum_each_competitor_log2_fold_change: 0.50
+    maximum_global_fdr: 0.05
+    maximum_each_competitor_fdr: 0.10
+    minimum_stability_fraction: 0.80
+    minimum_genes: 20
+    maximum_genes: 75
+    single_population_rule: A branch represented by one population, including B1b, can produce only a candidate set.
+  b_local_stage:
+    unit: rna_library
+    contrasts: Target population versus each symmetric local neighbor declared in the hierarchy.
+    minimum_target_cpm: 1.0
+    minimum_target_library_fraction: 0.50
+    singleton_target_minimum_cpm: 2.0
+    minimum_each_neighbor_log2_fold_change: 0.75
+    maximum_each_neighbor_fdr: 0.10
+    minimum_stability_fraction: 0.80
+    minimum_genes: 15
+    maximum_genes: 40
+    singleton_target_rule: A target with one RNA library can produce only a candidate set.
+    gap_or_compartment_rule: Sets depending on a gap-spanning or tissue-spanning edge remain candidate sets until orthogonally validated.
+
+population_support:
+  expressed_population_definition: Population-level CPM is at least 1 and at least one underlying library has CPM at least 1.
+  broad_direction_definition: The target-population value exceeds the median of the declared competitor population profiles.
+  requirement: A gene must satisfy both the expression-support fraction and positive-direction fraction specified for its family.
+
+stability:
+  balanced_library_resampling:
+    iterations: 200
+    sampling: Select one library per discovery population per iteration, preserving every population and giving populations equal weight.
+    recompute: Recalculate TMM factors and all tested effects in every iteration.
+    acceptance: The gene must retain the required direction and minimum effect in at least the family-specific stability fraction.
+  leave_one_population_out:
+    applies_to: [superlineage, broad_lineage, b_branch]
+    minimum_target_populations: 3
+    acceptance: Retain eligibility in at least 80 percent of target-population holdouts.
+  leave_one_library_out:
+    applies_to: [b_local_stage]
+    minimum_target_libraries: 2
+    acceptance: Retain positive direction against every neighbor in at least 80 percent of valid target-library holdouts.
+  low_replication: If the required holdout cannot be performed, label the set candidate_low_replication rather than accepted_core.
+
+confounding_policy:
+  primary_rule: Do not add laboratory, tissue, or organ covariates when they are structurally confounded with population identity.
+  required_audits:
+    - Report population-by-laboratory and population-by-organ contingency tables.
+    - Flag contrasts whose target and competitors are completely separated by laboratory or organ.
+    - For tissue-spanning contrasts, reject core-identity genes that reproduce the same tissue bias in unrelated lineages.
+    - Require independent support from another population or contrast for any gene arising from a fully confounded comparison.
+  unresolved_confounding: Downgrade the resulting set to candidate_confounding rather than interpreting the covariate as statistically adjusted.
+
+deterministic_selection:
+  eligibility_first: Never pad a set with genes that fail its family thresholds.
+  ranking_order:
+    - descending stability fraction
+    - descending target-population support
+    - descending worst-case log2 fold change across required contrasts
+    - descending target-versus-competitor AUROC
+    - ascending worst required contrast FDR
+    - ascending gene symbol as final deterministic tie-breaker
+  size_rule: Truncate eligible genes at the family maximum; do not emit an accepted set when fewer than the family minimum remain.
+  positive_only_core_sets: true
+
+confidence_classes:
+  accepted_core: Passes every family threshold, stability gate, annotation rule, confounder audit, and internal validation gate.
+  candidate_low_replication: Fails only because cross-replicate or cross-population stability cannot be assessed.
+  candidate_gap_or_compartment: Depends on a missing intermediate stage or tissue-spanning edge.
+  candidate_confounding: Has unresolved laboratory, tissue, or organ confounding.
+  rejected: Fails an effect, FDR, specificity, stability, annotation, or validation requirement.
+
+internal_validation:
+  leakage_policy: Gene selection and threshold tuning must use ImmGen only; Bdev expression, labels, and pt are unavailable to selection.
+  score: Mean training-standardized expression of positive set genes in held-out population profiles.
+  broad_leave_one_population_out:
+    minimum_overall_top1_accuracy: 0.80
+    minimum_per_lineage_sensitivity: 0.67
+  local_neighbor_validation:
+    minimum_pairwise_auroc: 0.80
+    insufficient_replication: Candidate status rather than forced acceptance.
+  broad_validation_only_populations:
+    requirement: The declared parent lineage must receive the highest broad-lineage score; otherwise that lineage set is candidate rather than accepted.
+
+outputs:
+  complete_statistics: Every source gene, filter flag, annotation, contrast estimate, p-value, FDR, support metric, stability metric, state flag, exclusion reason, and confidence class.
+  long_form_genesets: Gene-set hierarchy, parent ID, target, competitors, gene symbol, Ensembl ID, rank, evidence metrics, status, and complete input provenance.
+  accepted_gmt: Positive-only accepted_core sets for scWorkbench import.
+  candidate_gmt: Candidate sets kept separate and not imported for primary annotation without later approval.
+  run_manifest: Exact inputs, checksums, software lockfile, parameters, seed, configuration hash, and output checksums.
+
+scworkbench_boundary:
+  core_or_pack_change_required: false
+  imported_artifacts: [accepted_gmt, long_form_genesets, run_manifest]
+  prohibited_imports: [bulk_count_matrix, bulk_sample_objects, candidate_gmt_without_approval]
