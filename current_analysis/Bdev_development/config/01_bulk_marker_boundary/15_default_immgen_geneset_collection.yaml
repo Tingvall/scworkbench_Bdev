@@ -76,6 +76,17 @@ deferred_evaluation:
     - Freeze any approved changes as a new version rather than mutating this collection.
 
 evaluation_history:
+  - run_identity: simple_mean_contrast_bootstrap_stability_20261103T010000Z
+    scope: 30_round_ImmGen_population_stratified_bootstrap_then_fixed_Bdev_transfer_stability
+    result: mixed_stability_default_retained_as_provisional_with_uncertainty
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/28_simple_mean_contrast_bootstrap_stability/simple_mean_contrast_bootstrap_stability_20261103T010000Z/03_reports/02_bootstrap_stability_summary.json
+    interpretation:
+      - Overall cell-round agreement with the baseline was 71.2 percent and median per-cell agreement was 76.7 percent.
+      - At 80 percent agreement, 859 of 1746 cells were stable; 57.1 percent of baseline-assigned cells were stable.
+      - B.FrE.BM and proB.FrBC.BM were substantially more stable than adjacent stem and progenitor sublabels.
+      - Most instability localized to the stem/progenitor ATAC manifold and involved neighboring states or abstention rather than broad lineage jumps.
+      - Eight singleton ImmGen populations remain structurally unassessable for target-replicate stability.
+      - Retain the current default for exploration but carry bootstrap agreement as uncertainty and do not promote the labels.
   - run_identity: simple_mean_contrast_20261102T235008Z
     scope: ImmGen_only_population_balanced_mean_contrast_then_bounded_Bdev_diagnostic
     result: selected_as_provisional_Bdev_development_default_by_user

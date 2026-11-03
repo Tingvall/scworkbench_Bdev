@@ -83,61 +83,47 @@ identities, operation catalog, and qualification record are pinned in
 
 ### 1. Derive marker gene sets from ImmGen bulk RNA data
 
-**Current status:** input manifest frozen; marker analysis not executed. Use the
-`GSE109125` GENCODE vM25 count matrix, restricted to the approved 64
-steady-state populations with population-matched ATAC data. The current matrix
-provides 126 selected RNA library columns; its other columns are not eligible
-merely because they occur in the updated release. No project-specific ImmGen
-bulk marker workflow or accepted result was found in the archived analysis.
+**Current status:** selected as the proposed later-implementation strategy on
+2026-11-02 after bounded development exploration; not active in the reserved
+implementation stage. Use the checksummed `GSE109125` GENCODE vM25 count
+matrix restricted to the 126 approved libraries representing 64 steady-state
+ImmGen populations.
 
-The population hierarchy is also approved: 61 populations contribute to broad
-discovery, while `B.Sp`, `Tgd.Sp`, and `MF.PC` are broad-validation-only
-populations. `NKT.Sp`, `GN.BM`, and `GN.Sp` remain in discovery to preserve the
-only approved NKT and granulocyte branches. Fine developmental contrasts are
-currently defined only for the B lineage through an explicit neighbor graph.
+The proposed discovery rule is intentionally simple and population-balanced:
 
-A replicate-aware statistical contract is approved and its analysis preflight
-has passed. It uses robust edgeR quasi-likelihood
-models, population-level profiles for equally weighted broad contrasts,
-library-level local B-stage contrasts, deterministic stability requirements,
-and held-out broad-population validation. The exact annotation, state-gene
-lists, and software versions are frozen; no ImmGen model has yet been run.
+1. transform counts to `log2(CPM + 0.5)`;
+2. take the median across libraries within each ImmGen population;
+3. for every gene and target population, subtract the equally weighted mean of
+   the other 63 population medians from the target median;
+4. require target expression of at least 1 on the transformed scale and a
+   positive contrast; and
+5. retain the top 20 genes for each of all 64 populations.
 
-**Approved boundary:** perform the replicate-aware bulk analysis outside
-scworkbench. Only the resulting versioned gene sets are imported into
-scworkbench and used to score single-cell datasets. The available framework
-operations are cell-oriented and do not provide the required bulk RNA
-differential-expression contract; no bulk-analysis operation or core change is
-required for this project.
+Gene reuse across populations is allowed. Neither Bdev expression nor the
+user-supplied comparison gene sets may be used to select or tune genes. This
+keeps every ImmGen population eligible and prevents dataset-informed removal of
+apparently implausible labels. The earlier broad-lineage gate, percentile
+calibration, shared-gene prevalence filter, and replicate-aware edgeR proposal
+are not part of this selected strategy.
 
-The possible workflow would:
+Marker discovery remains reproducible outside scworkbench because the available
+framework operations are cell-oriented. The versioned GMT, ranked candidates,
+membership table, configuration, run manifest, and checksums form the import
+boundary; bulk libraries must not be represented as single cells. The selected
+development record is
+[`15_default_immgen_geneset_collection.yaml`](../../Bdev_development/config/01_bulk_marker_boundary/15_default_immgen_geneset_collection.yaml),
+and its method summary is
+[`24_simple_mean_contrast_development_default.md`](../../Bdev_development/docs/01_bulk_marker_boundary/24_simple_mean_contrast_development_default.md).
 
-1. declare the checksummed GENCODE vM25 integer-count matrix, a column-level
-   allowlist, and complete sample metadata;
-2. use raw counts and a reviewed replicate-aware statistical design for marker
-   discovery;
-3. use normalized values only for QC and display unless an approved method
-   explicitly requires them;
-4. compare each selected population with approved competitor populations;
-5. retain complete statistics, including effect sizes, p-values, adjusted
-   p-values, specificity criteria, and exclusion reasons; and
-6. export versioned long-form and GMT-like feature-set definitions for import
-   into scworkbench.
-
-The outside analysis must remain reproducible and record its dependencies,
-inputs, checksums, sample design, parameters, and outputs. Its versioned
-long-form statistics and gene-set definitions form the provenance boundary for
-the subsequent scworkbench import. Bulk samples must not be represented as
-single cells merely to use cell-oriented operations.
-
-**Approval gate:** the ImmGen release, population boundary, library manifest,
-sample design, statistical method, contrasts, gene-identifier policy, marker
-filters, annotation, state-gene flags, and software environment are approved or
-frozen. Marker-workflow implementation and qualification precede execution.
+**Activation gate:** before implementation execution, the selected artifacts
+must be pinned in an implementation input manifest and rerun or verified with
+the accepted immutable SIF. This proposal does not itself approve labels,
+activate a workflow, or unlock `Bdev_implementation`.
 
 ### 2. Label Bdev cells with ImmGen marker sets
 
-**Current status:** not started.
+**Current status:** exact development strategy selected as the proposed later
+implementation default; implementation not started.
 
 **Proposed boundary:** scworkbench-native after the marker sets from step 1 are
 approved. Candidate operations are:
@@ -150,14 +136,33 @@ scwbgeneprograms::cell_vector_winners
 scwbgeneprograms::winner_cell_sets
 ```
 
-The output should retain all scores, not only the winning label. Winner calls
-should have reviewed rules for minimum score, minimum winning margin, ties,
-missing features, and an explicit unassigned state. Feature-set source
-checksums and identifier conversions must be recorded.
+After feature import and overlap QC, score `RNA_counts` with native UCell using
+`maxRank = 1500`. Reduce the 64 raw scores by uncalibrated argmax, with no broad
+or lineage gate and no percentile calibration. Require a winner-minus-runner-up
+raw-score margin of at least `0.01`; ties and smaller margins are `unassigned`.
+The minimum raw score is `0.0`.
 
-**Approval gate:** approve the feature-set version, expression layer, scoring
-parameters, overlap requirements, winner/abstention rules, and validation
-plots.
+Retain all 64 scores, the winner, runner-up, winner and runner-up scores, raw
+margin, assignment or abstention reason, missing-feature information, and
+source gene-set checksums. Preserve the existing Bdev `pt` field and its
+missing entries exactly. Use the ATAC UMAP for label visualizations, but never
+use its geometry to select genes or labels.
+
+The 30-round within-population ImmGen bootstrap produced 71.2% overall
+cell-round agreement with the baseline and a 76.7% median per-cell agreement.
+The B-cell-heavy manifold was substantially more stable than adjacent
+stem/progenitor labels. Therefore carry numeric bootstrap agreement as an
+uncertainty field and avoid hard interpretation of unstable sublabels; do not
+add a new confidence threshold unless it is separately justified. Eight
+singleton ImmGen populations remain structurally unassessable for
+target-replicate stability. The evidence is recorded in
+[`25_simple_mean_contrast_bootstrap_stability.md`](../../Bdev_development/docs/01_bulk_marker_boundary/25_simple_mean_contrast_bootstrap_stability.md).
+
+**Activation gate:** pin the qualified runtime, exact gene-set version and
+checksums, expression layer, overlap QC, reducer parameters, bootstrap evidence,
+and validation outputs before execution. No scWorkbench core or operation-pack
+change is currently required because the existing import, UCell, and winner
+reducer operations support this strategy.
 
 ### 3. Regenerate the original pseudotime trajectory and compare it with `pt`
 

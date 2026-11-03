@@ -1,0 +1,90 @@
+schema_version: bdev.simple_mean_contrast_bootstrap_stability.v1
+status: approved_for_diagnostic_execution
+run_identity: simple_mean_contrast_bootstrap_stability_20261103T010000Z
+execution_boundary: ImmGen_only_stratified_bootstrap_then_fixed_Bdev_label_stability_diagnostic
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  baseline_gmt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/03_simple_mean_contrast_sets.gmt
+    sha256: ff9a20765121ac349da69dd6946d87debb2b45a85a77ba59dd676c965dbb812c
+  baseline_decisions:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/06_bdev_raw_decisions.tsv
+    sha256: 5f686568cf89c99d46cf10d021369a55dcefd5ee9c922b74fdc0900fa208ffa7
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  atac_coordinates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/20_plot_hierarchical_population_umap/immgen_hierarchical_population_umap_20261102T203953Z/01_tables/01_bdev_umap_atac_coordinates.tsv.gz
+    sha256: d604bc81d48d924b32f3672828cf01caf4b9e95effed0efcc530c937782869dd
+    space_id: umap.atac
+  execution_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/01_execution_bundle
+    manifest_sha256: 79fc89cda7d64ea0735c9fb02553f69fb55a9e8cb3d0887ac41b62d78479c04e
+    fingerprint: 2149ca4e6b1896bed98a512701ad01238ecec197fff9585c2b14d5436ece61bb
+
+bootstrap:
+  rounds: 30
+  random_seed: 20261103
+  strategy: within_population_library_resampling_with_replacement
+  preserve_population_library_count: true
+  singleton_interpretation: structurally_unassessable
+
+discovery:
+  expected_populations: 64
+  normalization: log2_CPM_plus_0.5
+  target_summary: median_across_resampled_target_libraries
+  competitor_summary: mean_of_other_population_medians
+  population_balanced: true
+  minimum_target_log2_cpm: 1.0
+  require_positive_contrast: true
+  genes_per_population: 20
+
+fixture:
+  expected_cells: 1746
+  sample_field: orig.ident
+  reported_sample_field: sampleId
+  pseudotime_field: pt
+
+scoring:
+  matrix_id: RNA_counts
+  execution_strategy: one_batched_native_ucell_pass_then_in_memory_contract_equivalent_reduction
+  reducer_equivalence_check: exact_against_completed_native_round_1
+  ucell_max_rank: 1500
+  ncores: 1
+  parallel_backend: serial
+  chunk_size: 500
+  missing_features_policy: drop
+  reduction_rule: argmax
+  minimum_raw_score: 0.0
+  minimum_raw_margin: 0.01
+  unknown_label: unassigned
+  ties: unknown
+  tie_tolerance: 1.0e-8
+
+stability:
+  stable_cell_agreement_threshold: 0.8
+  label_plot_minimum_cells_exclusive: 20
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39cee557b8e344d84b52f2
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/28_simple_mean_contrast_bootstrap_stability/simple_mean_contrast_bootstrap_stability_20261103T010000Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/28_simple_mean_contrast_bootstrap_stability/simple_mean_contrast_bootstrap_stability_20261103T010000Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  bdev_used_for_gene_selection: false
+  default_changed_by_run: false
+  artifacts_promoted: false
+  accepted_labels_emitted: false
+  implementation_unlocked: false
+  core_or_operation_pack_changed: false

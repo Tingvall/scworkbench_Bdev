@@ -36,3 +36,8 @@ not accept the cell labels as truth, promote an artifact into scWorkbench,
 modify core or an operation pack, or unlock `Bdev_implementation`. The exact
 artifacts and checksums are pinned in
 `config/01_bulk_marker_boundary/15_default_immgen_geneset_collection.yaml`.
+
+The subsequent 30-round robustness result is documented in
+[`25_simple_mean_contrast_bootstrap_stability.md`](25_simple_mean_contrast_bootstrap_stability.md).
+It supports retaining bootstrap agreement as uncertainty, particularly for
+adjacent stem/progenitor labels, while leaving this provisional default intact.

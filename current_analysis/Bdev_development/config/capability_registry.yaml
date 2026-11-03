@@ -57,9 +57,14 @@ capabilities:
       top 20. With raw UCell and a 0.01 margin it assigned 1416/1746 Bdev cells,
       gave B-heavy calls in sampleIds 3 and 4, and removed the earlier DP/ISP
       failure. The user selected this collection and rule as the provisional
-      development default. No artifacts were promoted to implementation or
-      scWorkbench core, no labels were accepted as truth, and no core or
-      operation-pack change is required.
+      development default. A 30-round within-population ImmGen bootstrap then
+      found 71.2 percent overall cell-round agreement and 57.1 percent stable
+      baseline-assigned cells at an 80 percent agreement threshold. Stability
+      was strongest for the B-cell manifold and weaker among adjacent stem and
+      progenitor labels. The default remains provisional and bootstrap
+      agreement should be retained as uncertainty. No artifacts were promoted
+      to implementation or scWorkbench core, no labels were accepted as truth,
+      and no core or operation-pack change is required.
   - capability_id: 02_slingshot_trajectory_semantics
     status: gap_analysis_required
     purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.

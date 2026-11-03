@@ -32,7 +32,8 @@ datasets:
       - 01_bdev_reference
       - 02_immgen_bulk_rna
       - 04_parse_cytokines
-    description: Bdev annotation, scoring, trajectory comparison, and approved gene-set results.
+    description: Bdev annotation using the proposed ImmGen mean-contrast top-20/raw-UCell margin-0.01 strategy, uncertainty fields, trajectory comparison, and approved gene-set results.
+    proposed_labeling_strategy_record: ../docs/proposed_analysis_strategy.md
   - dataset_id: 07_bdev_atac_mapping
     role: derived
     status: proposed
