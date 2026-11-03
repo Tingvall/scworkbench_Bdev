@@ -1,0 +1,39 @@
+schema_version: bdev.hierarchical_population_umap.v1
+status: approved_for_diagnostic_plotting
+run_identity: immgen_hierarchical_population_umap_20261102T203953Z
+
+inputs:
+  decisions:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/01_tables/05_bdev_hierarchical_policy_decisions.tsv.gz
+    sha256: 6b12fbfa61acecaadebd212c6deb83c3dc3fd80c0a07359085297066ad7beeca
+  policy_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/01_tables/06_bdev_policy_summary.tsv
+    sha256: 52f382dd8112eb9a3803df0138238a546197628a59733faa95aa1aec79625b76
+  population_thresholds:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/01_tables/02_population_margin_calibration.tsv
+    sha256: 2204c3a26674597e49e0eaf1d18a3ceea8685962a21cc4fc11e59012e471a333
+  parent_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/06_manifests/03_final_run_manifest.json
+    sha256: 88cbff73366ca656005ef9a7197bd0c249221f7eac5736880fc6f10061c281e1
+
+bundle:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/05_objects/03_fresh_session_bundle
+  manifest_sha256: a2a6f94d108a9df7d261e4b3fdbe564a12a7d329db75185049a53681ad8fbd5b
+  fingerprint: 16b3d4160164bce7ad152f6d821bf9bef17fa6fa8b957500dd890c5fa445985b
+  space_id: umap.atac
+
+plot:
+  primary_policy: population_calibrated
+  comparison_policies: [no_margin, fixed_margin_0.1, population_calibrated]
+  minimum_cells_for_direct_population_label: 5
+  point_size: 7
+  point_alpha: 0.82
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/20_plot_hierarchical_population_umap/immgen_hierarchical_population_umap_20261102T203953Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  labels_accepted: false
+  artifacts_promoted: false
+  bundle_mutated: false

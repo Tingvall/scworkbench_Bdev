@@ -1,0 +1,48 @@
+schema_version: bdev.immgen_bdev_hierarchical_labeling_inputs.v1
+status: frozen_for_bounded_development_qualification
+
+parent_execution:
+  step: 15_qualify_immgen_bdev_labeling
+  execution_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/05_objects/01_bdev_reference_schema11_execution_clone
+  bundle_fingerprint: 16b3d4160164bce7ad152f6d821bf9bef17fa6fa8b957500dd890c5fa445985b
+  manifest_sha256: a00f80c0df487ed83c58ee7e1c6637f05a5c562aaf8f33a90fa2af0858a2bdff
+  final_run_manifest: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/06_manifests/04_final_run_manifest.json
+  final_run_manifest_sha256: b76d0be8aacf159d59c3e96da69fcba36240056b5ab04378cae3f212d7b7e47a
+  fixture_cells: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/01_tables/01_fixture_cells.tsv
+  fixture_cells_sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  fixture_preflight: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/03_reports/01_fixture_preflight.json
+  fixture_preflight_sha256: 259204fbace0c11d17155a575619c55623cf64045afd188a5cb5b7ffbb7f65ee
+
+bdev_reference:
+  archived_bundle_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle
+  archived_manifest_sha256: 9219e0b9ef9d11d63acad0e882e49c184045ead55b0e5a9a9fb1e2306dc61225
+  expected_cells: 26723
+  authoritative_pseudotime:
+    field: pt
+    defined_cells: 12642
+    missing_cells: 14081
+    binary_sha256: 2a9e9b9b8cd85daa00a85c3897cb2706844a306513efe70956bda7cd4745d6ee
+
+broad_lineage_collection:
+  source_membership: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/13_small_panel_parse_exception/01_tables/02_complete_membership.tsv.gz
+  source_membership_sha256: c06bc05410c9fc30800b77bc23f21080ceb5aaeee753dae81a16735d0610b633
+  source_summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/13_small_panel_parse_exception/01_tables/03_target_summary.tsv
+  source_summary_sha256: 3687600a7777ae342c0491f0336b484f7265ec6dfb5018ce30db845aeacfdcd2
+  family: broad_lineage
+  expected_sets: 9
+  construction_status: diagnostic_only
+
+population_collection:
+  source_gmt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/03_candidate_population_genesets.gmt
+  source_gmt_sha256: 1bffe1b2412bfab390261e9193ad740e198c1d2be63cdd710dd839bc807e0691
+  target_summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/02_population_geneset_summary.tsv
+  target_summary_sha256: cf3cde368266132915276715ac1edc9300b78f87c06ab569ca221e5625334e4c
+  expected_sets: 64
+  construction_status: diagnostic_only
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  scworkbench_version: 0.1.0
+  scwb_gene_programs_version: 0.1.0
+  scwb_gene_programs_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2

@@ -5,28 +5,61 @@ numbering_width: 2
 identifiers_immutable_after_reference: true
 capabilities:
   - capability_id: 01_bulk_marker_boundary
-    status: complete_27_target_diagnostic_collection_biological_review_required
+    status: provisional_development_default_selected_no_labels_accepted
     purpose: Qualify reproducible outside-scWorkbench bulk marker discovery and the gene-set import boundary used for ImmGen and related datasets.
     preferred_owner: bdev_outside_preprocessing_plus_scworkbench_gene_set_import
     core_change_indicated: false
     notes: >-
       Replicate-aware bulk analysis remains outside scWorkbench. The production
-      workflow and all completed diagnostics remain unchanged. Following user
-      authorization, a five-gene small-panel floor matching the earlier Parse
-      discovery minimum was applied only to two-fold stable intersections that
-      failed the latest Parse 20-gene floor. This retains committed marrow B
-      with 13 genes and mature conventional B with nine, producing a complete
-      27-target diagnostic collection: 14 high three-fold, eight standard
-      two-fold, three provisional singleton, and two small two-fold panels.
-      All aggregate discovery medians rank their target first, and the unchanged
-      nine-set broad panel calls all three validation-only broad populations
-      correctly. Evidence remains unequal: committed marrow B has a small gap
-      and only one of two target populations above its strongest competitor,
-      singleton panels lack replication, two-fold evidence is weak, and
-      full-data results are optimistic. No set is accepted and no single-cell
-      expression was used. Freeze biological/confounding review and evaluation
-      policy before single-cell evaluation. No core or operation-pack change is
-      required.
+      workflow and all completed diagnostics remain unchanged. The current
+      provisional Bdev development default is the 64-population ImmGen-only
+      simple mean-contrast top-20 collection from run
+      simple_mean_contrast_20261102T235008Z. It is paired with raw UCell argmax
+      reduction, no percentile calibration or broad gate, and a raw margin of
+      0.01. It supersedes the earlier complete Parse and 27-target collections
+      for working use while preserving them as historical provenance.
+      The default covers 61 discovery populations and three held-out-derived
+      populations, with replication and fallback evidence labeled explicitly.
+      Evidence remains unequal: singleton panels lack replication, two-fold
+      evidence is weak, held-out-derived panels do not retain an independent
+      validation claim, and full-data refinement is optimistic. A bounded
+      1,746-cell Bdev development fixture subsequently confirmed that all 64
+      sets import and pass the declared RNA-count overlap gate. The endorsed
+      flat 64-way percentile-calibrated reduction assigned only 21 cells at the
+      conservative score and margin thresholds; most assignments were non-B
+      programs and 1,685 cells abstained for insufficient margin. Therefore the
+      64-set collection remained the score and lookup default at that stage,
+      but flat winner labels were not accepted. A subsequent unpromoted
+      broad-state-first exploration used nine globally contrasted lineage
+      panels, retained multiple borderline states, and restricted fine
+      competition accordingly. It assigned 357/1,746 cells with the original
+      population panels. A comparison that removed 158 genes shared across at
+      least three broad lineages assigned fewer cells (332) and changed
+      assignment status or label for 310 cells, so that simple filter was not
+      selected. The hierarchy is promising exploratory evidence but remains
+      insufficient for annotation acceptance. An ImmGen-only global-local
+      reconstruction then recovered the correct unthresholded population
+      winner for all 126 reference libraries, but only one library cleared the
+      frozen flat score and margin gates and zero programs qualified as labels.
+      Direct greedy optimization of the actual percentile classifier margin
+      also failed: its maximum complete-atlas margin was 0.079365, below the
+      0.10 default, and it assigned no libraries. This rules out simple
+      shared-gene filtering, raw-score refinement, and direct one-gene
+      percentile-margin pruning as compatible repairs for the 64-way flat
+      reducer. A final hierarchy test retained the correct broad lineage for
+      115/118 held-out libraries. Population-specific margins increased Bdev
+      fine-call coverage from 312 to 385 relative to the fixed 0.10 margin,
+      with broad-only fallback, but thresholds were estimable for only 32/64
+      populations and their apparent precision was optimistic resubstitution
+      evidence. A final ImmGen-only population-balanced mean-contrast
+      reconstruction was then compared post hoc to the user-supplied sets:
+      519/580 supplied genes ranked in the generated top 100 and 224/580 in the
+      top 20. With raw UCell and a 0.01 margin it assigned 1416/1746 Bdev cells,
+      gave B-heavy calls in sampleIds 3 and 4, and removed the earlier DP/ISP
+      failure. The user selected this collection and rule as the provisional
+      development default. No artifacts were promoted to implementation or
+      scWorkbench core, no labels were accepted as truth, and no core or
+      operation-pack change is required.
   - capability_id: 02_slingshot_trajectory_semantics
     status: gap_analysis_required
     purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.

@@ -1,0 +1,80 @@
+schema_version: bdev.simple_mean_contrast_genesets.v1
+status: approved_for_exploratory_execution
+run_identity: simple_mean_contrast_20261102T235008Z
+execution_boundary: immgen_only_simple_population_balanced_mean_contrast_then_bounded_bdev_test
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  supplied_sets_for_posthoc_comparison:
+    path: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/06_user_narrow47_genesets.tsv
+    sha256: e3965cfd6c8aa7ef4561e2ef53c43d15c45caacfff93dbeea47d545699dd6646
+    used_for_selection: false
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  execution_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/01_execution_bundle
+    manifest_sha256: 79fc89cda7d64ea0735c9fb02553f69fb55a9e8cb3d0887ac41b62d78479c04e
+    fingerprint: 2149ca4e6b1896bed98a512701ad01238ecec197fff9585c2b14d5436ece61bb
+  prior_raw_comparison:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/25_raw_ucell_geneset_comparison/raw_ucell_geneset_comparison_20261102T233016Z/03_reports/01_raw_ucell_comparison_summary.json
+    sha256: b3f8775de3087b1dae09d8ff43d4b61504ccec27250826d9ec9f38aa5dc3515c
+
+discovery:
+  data_source: ImmGen_only
+  expected_populations: 64
+  normalization: log2_CPM_plus_0.5
+  target_summary: median_across_target_libraries
+  competitor_summary: mean_of_other_population_medians
+  population_balanced: true
+  ranking_score: target_log2_cpm_minus_competitor_mean_log2_cpm
+  minimum_target_log2_cpm: 1.0
+  require_positive_contrast: true
+  genes_per_population: 20
+  gene_reuse_across_populations: allowed
+
+fixture:
+  expected_cells: 1746
+  sample_field: orig.ident
+  reported_sample_field: sampleId
+  pseudotime_field: pt
+
+scoring:
+  matrix_id: RNA_counts
+  ucell_max_rank: 1500
+  ncores: 1
+  parallel_backend: serial
+  chunk_size: 500
+  missing_features_policy: drop
+  reduction_rule: argmax
+  minimum_raw_score: 0.0
+  minimum_raw_margin: 0.01
+  unknown_label: unassigned
+  ties: unknown
+  tie_tolerance: 1.0e-8
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39cee557b8e344d84b52f2
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  bdev_used_for_gene_selection: false
+  supplied_sets_used_for_gene_selection: false
+  percentile_calibration_used: false
+  broad_or_lineage_gate_used: false
+  artifacts_promoted: false
+  accepted_labels_emitted: false
+  implementation_unlocked: false
+  core_or_operation_pack_changed: false
+

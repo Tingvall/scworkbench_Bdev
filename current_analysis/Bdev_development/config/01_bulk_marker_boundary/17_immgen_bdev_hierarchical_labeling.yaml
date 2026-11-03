@@ -1,0 +1,76 @@
+schema_version: bdev.immgen_bdev_hierarchical_labeling.v1
+status: approved_for_exploratory_execution
+run_identity: immgen_bdev_hierarchical_exploration_20261102T1835Z
+random_seed: 20261102
+execution_boundary: bounded_Bdev_development_exploration_without_promotion
+
+purpose:
+  - Assign one or more plausible broad ImmGen states before population-level competition.
+  - Compare the original 64 population panels with a prospectively defined shared-gene-filtered variant.
+  - Retain complete score, eligibility, margin, abstention, and comparison evidence without emitting accepted Bdev annotations.
+
+inputs_manifest: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/05_bdev_hierarchical_labeling_inputs.yaml
+
+fixture:
+  expected_cells: 1746
+  cluster_field: peaks_snn_res.1.2
+  pseudotime_field: pt
+
+shared_gene_filter:
+  applies_to: population_sets_only
+  definition: remove_gene_if_present_in_population_sets_from_at_least_n_distinct_broad_lineages
+  minimum_distinct_lineages: 3
+  minimum_retained_genes_per_set: 5
+  selection_effect: comparison_only
+
+scoring:
+  matrix_id: RNA_counts
+  feature_set_qc:
+    minimum_mapped_genes: 5
+    minimum_detected_fraction: 0.5
+    deduplicate_sets: true
+  ucell:
+    max_rank: 1500
+    ncores: 1
+    parallel_backend: serial
+    chunk_size: 500
+    missing_features_policy: drop
+  calibration:
+    method: percentile
+    ties_method: average
+
+hierarchy:
+  broad_state:
+    minimum_calibrated_score: 0.8
+    maximum_delta_from_top: 0.1
+    ties_are_retained: true
+    unknown_label: unassigned
+  population:
+    eligibility: population_lineage_must_be_one_of_the_cells_eligible_broad_states
+    minimum_calibrated_score: 0.8
+    minimum_calibrated_margin: 0.1
+    tie_tolerance: 1.0e-8
+    unknown_label: unassigned
+  preserve_multiple_broad_states: true
+
+evaluation:
+  variants: [original, shared_gene_filtered]
+  retain_all_scores: true
+  accepted_labels_emitted: false
+  winner_cell_sets_registered: false
+  implementation_acceptance_effect: none
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z
+  session_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/05_objects/01_session_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/05_objects/02_sessions
+
+acceptance_boundary:
+  diagnostic_gene_sets_accepted: false
+  accepted_labels_emitted: false
+  implementation_stage_unlocked: false
+  scworkbench_artifacts_promoted: false
+  feature_sets_registered: false
+  operation_pack_change_required_for_exploration: false
+  reusable_hierarchical_reducer_requires_future_pack_implementation_if_accepted: true

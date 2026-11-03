@@ -1,0 +1,134 @@
+schema_version: bdev.immgen_global_local_population_genesets.v1
+status: approved_for_exploratory_execution
+run_identity: immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z
+random_seed: 20261102
+execution_boundary: outside_scworkbench_immgen_only
+
+purpose:
+  - Reconstruct all 64 population programs for compatibility with flat global scWorkbench reduction.
+  - Require simultaneous cross-lineage and within-lineage evidence during discovery.
+  - Separate the complete score collection from the subset eligible for discrete flat labeling.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  gene_annotation:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/04_freeze_immgen_analysis_preflight/01_tables/01_gene_annotation.tsv.gz
+    sha256: b7c909ecb1e2e83c749a26501415a9ea4d3c163f8861491d662ba9fe065c5f6f
+  statistical_contract:
+    path: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/config/01_bulk_marker_boundary/02_immgen_marker_statistical_contract.yaml
+    sha256: f8a7f01442d92e71a1a924ece0cd714c66e698c85942fddee79f69c400886fb2
+  local_fold_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/01_fold_plan.tsv
+    sha256: cf54a73b64af3c4b215d2167b5f2852b83b4ff49b3aab0c6bcad76932491c0b8
+  local_fold_rankings:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/02_fold_rankings.tsv.gz
+    sha256: a9d0fd245e536b335254efe3b02db35d1884f4409f130497dad3d69c2540d308
+  local_model_audit:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/03_model_audit.tsv
+    sha256: 3848a1f47ea19af3c1424a71784b121972575f2a687fe138fa4f578f71b3b87a
+
+target_scope:
+  expected_populations: 64
+  expected_discovery_populations: 61
+  expected_held_out_validation_populations: 3
+  discovery_role: discovery
+  held_out_role: held_out_validation
+  held_out_rule: Add only the held-out target to the frozen discovery atlas; never add other held-out populations.
+
+method:
+  direction: positive_only
+  cross_lineage_contrast: target_mean_log2_cpm_minus_equal_weight_mean_of_other_broad_lineages_with_equal_population_weight_within_lineage
+  within_lineage_contrast: reuse_the_pinned_target_library_crossfit_edgeR_rankings_from_step_14
+  joint_gene_rule: gene_must_pass_minimum_positive_effect_in_both_contrasts
+  minimum_cross_lineage_log2_cpm_difference: 0.5
+  minimum_within_lineage_log2_fold_change: 0.5
+  strict_fdr: 0.05
+  fold_top_genes: 100
+  standard_minimum_genes: 20
+  small_panel_minimum_genes: 5
+  crossfit_folds_for_three_or_more_units: 3
+  evidence_tiers:
+    replicated_threefold: intersection_of_three_target_library_holdout_rankings
+    moderate_twofold: intersection_of_two_target_library_holdout_rankings
+    provisional_singleton: full_data_ranking_without_replication_claim
+  empty_intersection_fallback:
+    maximum_genes: 100
+    status: score_only_ranked_union_fallback
+  ranking:
+    order:
+      - within_lineage_strict_significance
+      - minimum_of_cross_lineage_log2_cpm_difference_and_within_lineage_log2_fold_change
+      - within_lineage_F_statistic
+      - within_lineage_FDR
+      - gene_symbol
+  scoring:
+    type: ucell_capped_rank_on_raw_immgen_library_counts
+    max_rank: 1500
+  refinement:
+    objective: standardized_target_minus_strongest_population_among_all_other_populations
+    operation: greedy_one_gene_deletion_on_complete_immgen_evaluation_profiles
+    standard_floor: 20
+    small_panel_rule: preserve_complete_nonempty_crossfold_intersection
+  limitations:
+    - Cross-lineage screening is a deterministic population-balanced log2-CPM effect screen, not a second edgeR significance claim.
+    - Full-data refinement and the complete-atlas confusion matrix are optimistic.
+    - Target-membership holdout validation replaces only the target program with its fold-specific training membership; competitor memberships remain complete-data candidates.
+    - Singleton populations cannot qualify for discrete labels.
+    - No Bdev expression, label, embedding, or pseudotime enters discovery or qualification.
+
+flat_default_qualification:
+  calibration: per_program_percentile_across_immgen_libraries
+  minimum_calibrated_score: 0.8
+  minimum_calibrated_margin: 0.1
+  ties: unassigned
+  minimum_target_membership_holdout_assigned_correct_fraction: 0.67
+  label_eligible_requirements:
+    - at least two independent target libraries
+    - at least five final genes
+    - target population ranks first on complete ImmGen population means
+    - target-membership holdout assigned-correct fraction is at least 0.67
+  output_policy:
+    score_collection: all_nonempty_64_programs
+    label_collection: only_programs_passing_every_label_eligible_requirement
+    acceptance_effect: none_diagnostic_only
+
+runtime:
+  python_packages: [numpy, pandas, pyyaml]
+  reused_local_model_runtime: edgeR_4.6.3_R_4.5.2
+
+outputs:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z
+  intermediate_tables:
+    fold_plan: 01_tables/01_fold_plan.tsv
+    fold_rankings: 01_tables/02_joint_fold_rankings.tsv.gz
+    model_audit: 01_tables/03_model_audit.tsv
+    refinement_trace: 01_tables/04_global_refinement_trace.tsv.gz
+  result_tables:
+    membership: 01_tables/01_population_geneset_membership.tsv.gz
+    target_summary: 01_tables/02_population_geneset_summary.tsv
+    score_gmt: 01_tables/03_score_collection.gmt
+    label_gmt: 01_tables/04_flat_label_candidate_collection.gmt
+    full_confusion: 01_tables/05_complete_atlas_flat_decisions.tsv
+    full_confusion_summary: 01_tables/06_complete_atlas_confusion_summary.tsv
+    holdout_validation: 01_tables/07_target_membership_holdout_validation.tsv
+    qualification_summary: 01_tables/08_flat_label_qualification.tsv
+  reports:
+    model_summary: 03_reports/01_model_summary.json
+    final_summary: 03_reports/02_final_summary.json
+    report: 03_reports/03_global_local_discovery_report.md
+  manifest: 06_manifests/01_run_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  feature_sets_registered: false
+  artifacts_promoted: false
+  accepted_sets_emitted: 0
+  candidate_score_gmt_created: true
+  candidate_label_gmt_created: true
+  core_or_pack_change_required: false

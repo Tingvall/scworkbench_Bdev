@@ -1,0 +1,36 @@
+schema_version: bdev.immgen_bdev_labeling_inputs.v1
+status: frozen_for_bounded_development_acceptance
+
+bdev_reference:
+  role: read_only_legacy_source_for_execution_clone
+  bundle_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle
+  archived_registry_path: /home/jtg/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/config/bundles.yml
+  archived_config_path: /home/jtg/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/config/bdev_reference.yml
+  bundle_id: bdev_reference
+  accepted_state_fingerprint: 43918bc3fe79b5d7d0dad3a5b7aebc7450e63f16e41e843edd2c20cd3866f988
+  manifest_sha256: 9219e0b9ef9d11d63acad0e882e49c184045ead55b0e5a9a9fb1e2306dc61225
+  source_dataset_sha256: c880abb2cd41a80a6a1af30f8065a71baee12101cb9bab3d7118d9719020b8f9
+  expected_cells: 26723
+  authoritative_pseudotime:
+    field: pt
+    defined_cells: 12642
+    missing_cells: 14081
+    policy: Preserve exact values and missing entries; never overwrite or impute.
+
+immgen_collection:
+  default_declaration: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/config/01_bulk_marker_boundary/15_default_immgen_geneset_collection.yaml
+  run_identity: immgen_vm25_20261102_all_population_parse
+  scope: 64
+  candidate_gmt: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/03_candidate_population_genesets.gmt
+  candidate_gmt_sha256: 1bffe1b2412bfab390261e9193ad740e198c1d2be63cdd710dd839bc807e0691
+  target_summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/02_population_geneset_summary.tsv
+  target_summary_sha256: cf3cde368266132915276715ac1edc9300b78f87c06ab569ca221e5625334e4c
+  construction_status: diagnostic_only
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  scworkbench_version: 0.1.0
+  scwb_gene_programs_version: 0.1.0
+  scwb_gene_programs_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+

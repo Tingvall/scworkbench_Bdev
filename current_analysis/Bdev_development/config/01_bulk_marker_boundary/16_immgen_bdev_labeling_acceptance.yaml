@@ -1,0 +1,77 @@
+schema_version: bdev.immgen_bdev_labeling_acceptance.v1
+status: approved_for_execution
+run_identity: immgen_64_bdev_labeling_acceptance_20261102
+random_seed: 20261102
+execution_boundary: bounded_Bdev_development_acceptance_fixture
+
+purpose:
+  - Qualify the native scWorkbench labeling chain with the selected 64-population ImmGen candidate collection.
+  - Retain all score and abstention evidence without creating accepted Bdev labels.
+  - Evaluate technical specificity and obvious confounding on a bounded, deterministic Bdev fixture.
+
+inputs_manifest: /home/jtg/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/04_bdev_labeling_acceptance_inputs.yaml
+
+fixture:
+  cluster_field: peaks_snn_res.1.2
+  pseudotime_field: pt
+  strata: cluster_by_pseudotime_defined
+  maximum_cells_per_stratum: 50
+  expected_cells: 1746
+  selection: smallest_sha256_of_seed_and_cell_id_within_each_stratum
+
+scoring:
+  matrix_id: RNA_counts
+  namespace: immgen_vm25_20261102_all_population_parse
+  feature_set_qc:
+    minimum_mapped_genes: 5
+    minimum_detected_fraction: 0.5
+    deduplicate_sets: true
+  ucell:
+    max_rank: 1500
+    ncores: 1
+    parallel_backend: serial
+    chunk_size: 500
+    missing_features_policy: drop
+  raw_family_qc:
+    correlation_methods: [pearson, spearman]
+    tie_tolerance: 1.0e-8
+    grouping: peaks_snn_res.1.2
+  calibration:
+    method: percentile
+    ties_method: average
+  reduction:
+    rule: argmax
+    minimum_calibrated_score: 0.8
+    minimum_calibrated_margin: 0.1
+    unknown_label: unassigned
+    ties: unknown
+    tie_tolerance: 1.0e-8
+
+evaluation:
+  retain_all_scores: true
+  required_strata:
+    - peaks_snn_res.1.2
+    - pt_defined
+    - Phase
+  confounder_fields:
+    - nFeature_RNA
+    - S.Score
+    - G2M.Score
+    - CC.Score
+    - pt
+  review_evidence_tiers_separately: true
+  production_acceptance_effect: none
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling
+  execution_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/05_objects/01_bdev_reference_schema11_execution_clone
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/05_objects/02_sessions
+
+acceptance_boundary:
+  source_bundle_mutated: false
+  implementation_stage_unlocked: false
+  accepted_labels_emitted: false
+  winner_cell_sets_registered: false
+  operation_pack_change_required: false
+

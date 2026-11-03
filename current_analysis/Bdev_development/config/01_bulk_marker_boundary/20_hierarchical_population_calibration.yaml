@@ -1,0 +1,81 @@
+schema_version: bdev.immgen_hierarchical_population_calibration.v1
+status: approved_for_exploratory_execution
+run_identity: immgen_global_local_hierarchy_calibration_20261102T201305Z
+execution_boundary: bounded_reference_and_Bdev_development_fixture_without_promotion
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  fold_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/01_fold_plan.tsv
+    sha256: cf54a73b64af3c4b215d2167b5f2852b83b4ff49b3aab0c6bcad76932491c0b8
+  fold_rankings:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/02_joint_fold_rankings.tsv.gz
+    sha256: 11f40520f1ef171429cb907c148da5a6e5cd7a64219006167975653dc0bc520a
+  population_membership:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/01_population_geneset_membership.tsv.gz
+    sha256: 9573fbb7fdd9df28120149de6464a5320734f92cd3638780945a50d8bfcb0cb8
+  population_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/02_population_geneset_summary.tsv
+    sha256: 53dab0aadeb3cfa986148c35764fef0a1257c6a0a5cfe0fb8cc9b3bce1848b48
+  population_gmt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/03_score_collection.gmt
+    sha256: e20c58787fe961104acc4fb59dbdbf00411173b34c0770a6e9c7b38a48796080
+  broad_gmt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/02_broad_lineage_genesets.gmt
+    sha256: b29f11ee8372092a67f9974f84091c7792926fb07c7809e1592706b55b474bc8
+  broad_map:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/03_broad_lineage_set_map.tsv
+    sha256: de8e4c30a777dd252e69b1adc07a7038cb2ec86d211107daa8129318265f25f9
+  bdev_broad_decisions:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/12_broad_state_decisions.tsv
+    sha256: 70cd4086d6aa29a03581b7142e5ba9fae5e8986056bba2fd3ffdb660e28d86cd
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  parent_hierarchy_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/06_manifests/04_final_run_manifest.json
+    sha256: 4d11068462dd78868e397185e47b1b3219cce355525f8dbcb676443e757dd1d4
+
+reference_test:
+  ucell_max_rank: 1500
+  broad_minimum_score: 0.8
+  broad_maximum_delta_from_top: 0.1
+  population_minimum_score: 0.8
+  tie_tolerance: 1.0e-8
+  calibration:
+    method: lowest_observed_margin_with_perfect_precision
+    minimum_predictions: 2
+    required_observed_precision: 1.0
+    limitation: resubstitution_calibration_is_optimistic_and_support_is_small
+
+bdev_test:
+  expected_cells: 1746
+  matrix_id: RNA_counts
+  ucell_max_rank: 1500
+  session_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/05_objects/01_session_bundle
+  session_bundle_manifest_sha256: a5231bcfe65a76fd42af6d29d46f762c4e1bd2481eeb0817817adf009f670925
+  bundle_fingerprint: 16b3d4160164bce7ad152f6d821bf9bef17fa6fa8b957500dd890c5fa445985b
+  session_id: global_local_hierarchy_calibration_fixture_v1
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+  policies: [no_margin, fixed_margin_0.1, population_calibrated]
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  accepted_labels_emitted: false
+  feature_sets_registered: false
+  artifacts_promoted: false
+  implementation_unlocked: false
+  core_or_pack_change_required: false

@@ -1,0 +1,86 @@
+schema_version: bdev.lineage_anchored_narrow_genesets.v1
+status: approved_for_exploratory_execution
+run_identity: immgen_lineage_anchored_narrow_20261102T213318Z
+execution_boundary: ImmGen_only_discovery_then_bounded_Bdev_fixture_without_promotion
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  fold_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/01_fold_plan.tsv
+    sha256: cf54a73b64af3c4b215d2167b5f2852b83b4ff49b3aab0c6bcad76932491c0b8
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/05_objects/03_fresh_session_bundle
+    manifest_sha256: a2a6f94d108a9df7d261e4b3fdbe564a12a7d329db75185049a53681ad8fbd5b
+    fingerprint: 16b3d4160164bce7ad152f6d821bf9bef17fa6fa8b957500dd890c5fa445985b
+
+discovery:
+  data_source: ImmGen_only
+  populations: 64
+  lineages: 9
+  ucell_max_rank: 1500
+  target_consistency_quantile: 0.25
+  anchor_competitor_summary: population_median_then_maximum_other_lineage_median
+  local_competitor_summary: maximum_other_same_lineage_population_median
+  require_positive_target_contribution: true
+  require_positive_specificity_margin: true
+  anchor_genes_per_population: 15
+  local_genes_per_population: 15
+  exclude_anchor_genes_from_local_module: true
+
+composite:
+  formula: 2_times_anchor_plus_local_minus_strongest_incompatible_anchor
+  anchor_weight: 2.0
+  local_weight: 1.0
+  conflict_weight: 1.0
+  comparison_note: weights_selected_by_ImmGen_only_exploratory_ablation_with_lineage_accuracy_primary
+
+acceptance:
+  minimum_anchor_score: 0.80
+  minimum_anchor_contrast: 0.00
+  minimum_composite_margin: 0.10
+  within_lineage_errors_tolerated: true
+  unknown_when_gate_fails: true
+
+internal_evaluation:
+  method: target_membership_library_holdout
+  calibration: training_library_empirical_percentile
+  heldout_libraries_expected: 118
+  limitation: competitor_programs_are_full_atlas_and_weight_ablation_uses_the_same_holdouts
+
+bdev_test:
+  expected_cells: 1746
+  matrix_id: RNA_counts
+  sample_field: orig.ident
+  reported_sample_field: sampleId
+  pseudotime_field: pt
+  ucell_max_rank: 1500
+  session_id: lineage_anchored_narrow_fixture_v1
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/22_lineage_anchored_narrow_genesets/immgen_lineage_anchored_narrow_20261102T213318Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/22_lineage_anchored_narrow_genesets/immgen_lineage_anchored_narrow_20261102T213318Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  Bdev_used_for_gene_selection: false
+  all_64_populations_compete: true
+  broad_gate_used: false
+  accepted_labels_emitted: false
+  feature_sets_registered: false
+  artifacts_promoted: false
+  bundle_mutated: false
+  implementation_unlocked: false
+  core_or_pack_change_required: false

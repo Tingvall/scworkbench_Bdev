@@ -1,0 +1,50 @@
+schema_version: bdev.user_narrow47_margin001.v1
+status: approved_for_exploratory_execution
+run_identity: user_narrow47_margin001_20261102T230537Z
+execution_boundary: threshold_sensitivity_on_existing_native_scworkbench_calibration
+
+inputs:
+  parent_run: user_narrow47_default_20261102T220931Z
+  calibrated_signal:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/02_sessions/score_user_narrow47_v1/stage/operation_pack_v2/transition_i1fp3b6sd5v8vbf9/outputs/calibrated_signal/payload.rds
+    sha256: d69787bf64f7518c61791fa0fd26df4bd75b7447762620f89542d2a3b11cb927
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  execution_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/01_execution_bundle
+    manifest_sha256: 6a2a83171c3a20a1199f34d4c84b25871e6e6aaeb820c834c6b6314167fa63f0
+    fingerprint: 2149ca4e6b1896bed98a512701ad01238ecec197fff9585c2b14d5436ece61bb
+
+fixture:
+  expected_cells: 1746
+  sample_field: orig.ident
+  reported_sample_field: sampleId
+  pseudotime_field: pt
+
+reduction:
+  rule: argmax
+  minimum_calibrated_score: 0.80
+  minimum_calibrated_margin: 0.01
+  unknown_label: unassigned
+  ties: unknown
+  tie_tolerance: 1.0e-8
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39cee557b8e344d84b52f2
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/24_user_narrow47_margin001/user_narrow47_margin001_20261102T230537Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/24_user_narrow47_margin001/user_narrow47_margin001_20261102T230537Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  native_scworkbench_reduction: true
+  broad_or_lineage_gate_used: false
+  score_artifacts_promoted: false
+  accepted_labels_emitted: false
+  implementation_unlocked: false
+  core_or_operation_pack_changed: false
+

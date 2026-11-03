@@ -1,0 +1,60 @@
+schema_version: bdev.raw_ucell_geneset_comparison.v1
+status: approved_for_exploratory_execution
+run_identity: raw_ucell_geneset_comparison_20261102T233016Z
+execution_boundary: native_raw_ucell_reduction_comparing_user47_to_generated64_local_modules
+
+inputs:
+  user47_raw_signal:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/02_sessions/score_user_narrow47_v1/stage/operation_pack_v2/transition_u6d7i1l4vt7xkb25/outputs/signature_scores/payload.rds
+    sha256: 123d21a5371fbbc396454dea77420be783ddfe83c80a7dc521bda110f33e40c3
+    populations: 47
+  generated64_raw_signal:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/22_lineage_anchored_narrow_genesets/immgen_lineage_anchored_narrow_20261102T213318Z/05_objects/02_sessions/lineage_anchored_narrow_fixture_v1_fresh1/stage/operation_pack_v2/transition_gcmpefmb2axg3qtx/outputs/signature_scores/payload.rds
+    sha256: 377bb208fdd05c21e1bcef77043de3b1bffc7bd31aa1762d929a007c9f66a62e
+    scored_modules: 128
+  generated64_module_map:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/22_lineage_anchored_narrow_genesets/immgen_lineage_anchored_narrow_20261102T213318Z/01_tables/01_module_map.tsv
+    sha256: 17a57e41552c8874c7430728f66fde0b3eff3bcbfcfbb49d7751e263e218e869
+    comparison_subset: local
+  fixture_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/01_tables/01_fixture_cells.tsv
+    sha256: faf277feeb6d12cec0cb2378766fcdb974bc1946b413c8ea0395e5f3e362599b
+  execution_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/23_user_narrow47_default_labeling/user_narrow47_default_20261102T220931Z/05_objects/01_execution_bundle
+    manifest_sha256: 53f29dce67aba174e6555540ab0d62a87dfc110cd446f731bd6fed470c5fe401
+    fingerprint: 2149ca4e6b1896bed98a512701ad01238ecec197fff9585c2b14d5436ece61bb
+
+fixture:
+  expected_cells: 1746
+  sample_field: orig.ident
+  reported_sample_field: sampleId
+  pseudotime_field: pt
+
+reduction:
+  rule: argmax
+  minimum_raw_score: 0.0
+  minimum_raw_margin: 0.01
+  unknown_label: unassigned
+  ties: unknown
+  tie_tolerance: 1.0e-8
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39cee557b8e344d84b52f2
+  operation_pack_manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/25_raw_ucell_geneset_comparison/raw_ucell_geneset_comparison_20261102T233016Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/25_raw_ucell_geneset_comparison/raw_ucell_geneset_comparison_20261102T233016Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  native_scworkbench_reduction: true
+  percentile_calibration_used: false
+  broad_or_lineage_gate_used: false
+  generated_anchor_modules_excluded: true
+  artifacts_promoted: false
+  accepted_labels_emitted: false
+  implementation_unlocked: false
+  core_or_operation_pack_changed: false
+

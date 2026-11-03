@@ -1,50 +1,165 @@
 schema_version: bdev.immgen_geneset_default.v1
-status: active_default_candidate
+status: active_provisional_development_default
 selected_on: 2026-11-02
-selection_reason: User selected the complete all-population Parse collection as the working default pending Bdev integration evaluation.
+selection_reason: User selected the ImmGen-only population-balanced mean-contrast top-20 collection and raw-UCell labeling rule as the Bdev development default for ongoing exploration.
 
 selected_collection:
-  run_identity: immgen_vm25_20261102_all_population_parse
+  run_identity: simple_mean_contrast_20261102T235008Z
   scope: 64 ImmGen populations
   construction_status: complete_diagnostic_only
   run_config:
-    path: 14_all_population_parse_genesets.yaml
-    sha256: 9bf8d1a84f88d1e51d94728c745f3e737e9e19be7493f9d0ae54a9ba38b26d9b
+    path: 27_simple_mean_contrast_genesets.yaml
+    sha256: 047052fcdd1d9a6984d512a252f8320931159e5c03e7b54aeb4563d0966fc667
   candidate_gmt:
-    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/03_candidate_population_genesets.gmt
-    sha256: 1bffe1b2412bfab390261e9193ad740e198c1d2be63cdd710dd839bc807e0691
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/03_simple_mean_contrast_sets.gmt
+    sha256: ff9a20765121ac349da69dd6946d87debb2b45a85a77ba59dd676c965dbb812c
   membership:
-    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/01_population_geneset_membership.tsv.gz
-    sha256: d8ac2ea0581049c01de9782ef7fb32c5c03c7495aa499459946204c36140b641
-  target_summary:
-    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/01_tables/02_population_geneset_summary.tsv
-    sha256: cf3cde368266132915276715ac1edc9300b78f87c06ab569ca221e5625334e4c
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/02_selected_membership.tsv
+    sha256: e7192eb121d5d695745dcbaba1631740774665378fa6f5323dd4066085488805
+  ranked_candidates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/01_top100_rankings.tsv.gz
+    sha256: 52b73aff8c9ccd4501d8850695c7e69ff0d5a7197b6b2525bcdfb5e4e74b6bca
+  discovery_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/03_reports/01_discovery_summary.json
+    sha256: 3354d7931670787735326639067ad0abacdedda01fd1bc2450d797c9aa9af39b
+  bdev_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/03_reports/02_bdev_summary.json
+    sha256: af29fc7e947e948778670a2d4f066744169f6713401b539ff9c99cacad26761b
   run_manifest:
-    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/14_all_population_parse_genesets/06_manifests/01_run_manifest.json
-    sha256: 40ed3095ae67025b3c4db5c4cb6e1f892852ec6b7efdeea17f8b6f22db091e3a
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/06_manifests/02_final_run_manifest.json
+    sha256: 8e5059b4c6f02cf148a41e86a573ecbc7f3ae47287b57229f2cd086356d4171b
+
+selected_discovery_policy:
+  source: ImmGen_only
+  normalization: log2_CPM_plus_0.5
+  population_summary: median_across_replicates
+  ranking_score: target_population_median_minus_mean_of_other_population_medians
+  minimum_target_log2_cpm: 1.0
+  require_positive_contrast: true
+  genes_per_population: 20
+  bdev_used_for_selection: false
+  supplied_sets_used_for_selection: false
+
+selected_labeling_policy:
+  matrix_id: RNA_counts
+  scorer: UCell
+  ucell_max_rank: 1500
+  reduction_rule: raw_score_argmax
+  percentile_calibration: false
+  broad_or_lineage_gate: false
+  minimum_raw_score: 0.0
+  minimum_raw_margin: 0.01
+  ties: unassigned
+  unknown_label: unassigned
 
 default_policy:
   use_for:
-    - Bdev integration planning
-    - Bdev integration evaluation
-    - population-level ImmGen geneset lookups
+    - ongoing Bdev development exploration
+    - Bdev diagnostic population labeling
+    - population-level ImmGen gene-set lookup
   do_not_treat_as:
-    - production-accepted genesets
-    - an approved scworkbench import
+    - production-accepted gene sets
+    - an implementation-stage default
     - independently validated Bdev annotations
+    - a scWorkbench core default
   supersedes_for_working_default:
+    - the complete 64-population Parse collection from immgen_vm25_20261102_all_population_parse
     - the prior 27-target replication-adaptive collection
     - the prior two-set small-panel exception collection
 
 deferred_evaluation:
   stage: Bdev integration
   required_before_production_promotion:
-    - Evaluate population-score specificity and abstention on Bdev cells.
-    - Review singleton-provisional and held-out-derived sets separately.
-    - Check state, tissue, laboratory, and progenitor-program confounding.
+    - Qualify the discovery and labeling policy independently of the exploratory Bdev observations.
+    - Resolve stages such as FrD that do not map directly to one of the 64 ImmGen populations.
+    - Review rare labels and the biological meaning of unassigned cells.
     - Freeze any approved changes as a new version rather than mutating this collection.
+
+evaluation_history:
+  - run_identity: simple_mean_contrast_20261102T235008Z
+    scope: ImmGen_only_population_balanced_mean_contrast_then_bounded_Bdev_diagnostic
+    result: selected_as_provisional_Bdev_development_default_by_user
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/03_reports/02_bdev_summary.json
+    interpretation:
+      - The selection rule uses only ImmGen expression and does not tune genes on Bdev or on the supplied comparison sets.
+      - Of 580 supplied genes in 29 directly mapped labels, 224 appeared in the generated top 20, 399 in the top 50, and 519 in the top 100.
+      - Raw UCell with a 0.01 margin assigned 1416 of 1746 Bdev cells and produced B-heavy calls for sampleIds 3 and 4 without the earlier DP/ISP failure.
+      - The user selected this gene-set collection and labeling rule as the current development default for ongoing exploration.
+      - The selection does not promote labels, unlock implementation, or change scWorkbench core or an operation pack.
+  - run_identity: immgen_64_bdev_labeling_acceptance_20261102
+    scope: bounded_1746_cell_development_fixture
+    result: technical_scoring_chain_complete_flat_64_way_labeling_not_accepted
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/15_qualify_immgen_bdev_labeling/03_reports/02_labeling_summary.json
+    interpretation:
+      - All 64 sets imported and passed the declared RNA-count overlap gate.
+      - Conservative flat reduction assigned 21 of 1746 cells and left 1725 unassigned.
+      - Most provisional assignments were non-B programs, so margin relaxation is not justified.
+      - Retain all 64 scores and require an approved ontology-aware hierarchical labeling policy before another reduction.
+  - run_identity: immgen_bdev_hierarchical_exploration_20261102T1835Z
+    scope: bounded_1746_cell_broad_state_first_exploration
+    result: hierarchical_exploration_complete_no_labels_accepted
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/16_qualify_immgen_bdev_hierarchy/immgen_bdev_hierarchical_exploration_20261102T1835Z/03_reports/02_hierarchical_summary.json
+    interpretation:
+      - The nine-panel broad gate retained one state for 741 cells, multiple borderline states for 658, and abstained for 347.
+      - Lineage-restricted competition assigned 357 of 1746 cells with the original population panels, including 29 B and 86 Stem/Prog calls.
+      - Removing 158 genes shared across at least three broad lineages reduced assignments to 332 and changed assignment status or label for 310 cells.
+      - Retain the original 64 panels; do not adopt the simple shared-gene prevalence filter from this exploration.
+      - No feature sets or score artifacts were promoted and no accepted labels were emitted.
+  - run_identity: immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z
+    scope: immgen_only_global_and_local_specificity_discovery
+    result: correct_complete_atlas_winners_but_default_flat_margins_not_qualified
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/03_reports/02_final_summary.json
+    interpretation:
+      - All 64 programs remained scoreable and the unthresholded winner was correct for all 126 complete-atlas libraries.
+      - Only 1 of 126 complete-atlas libraries and 1 of 118 target-membership holdouts cleared the unchanged default gates.
+      - Zero programs qualified as flat-label candidates; retain the collection as diagnostic evidence only.
+  - run_identity: immgen_vm25_20261102_percentile_margin_population_refinement
+    scope: immgen_only_direct_default_percentile_margin_refinement
+    result: direct_margin_refinement_failed_no_flat_labels_accepted
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/18_percentile_margin_population_genesets/immgen_vm25_20261102_percentile_margin_population_refinement/03_reports/01_summary.json
+    interpretation:
+      - Direct optimization against the actual 64-way percentile margin assigned 0 of 126 complete-atlas libraries and 0 of 118 target-membership holdouts.
+      - The maximum complete-atlas margin was 0.079365, below the frozen 0.10 requirement.
+      - Do not adopt the pruned programs; no feature sets or artifacts were promoted.
+  - run_identity: immgen_global_local_hierarchy_calibration_20261102T201305Z
+    scope: heldout_ImmGen_calibration_and_bounded_Bdev_hierarchical_coverage_test
+    result: hierarchy_supported_population_thresholds_insufficiently_validated
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/19_hierarchical_population_calibration/immgen_global_local_hierarchy_calibration_20261102T201305Z/03_reports/02_combined_summary.json
+    interpretation:
+      - The broad gate retained the correct lineage for 115 of 118 held-out ImmGen libraries.
+      - No-margin local winners were correct for 78 of 101 non-tied predictions; forced fine labeling remains unsafe.
+      - Exploratory thresholds were available for only 32 of 64 populations and their apparent perfect precision is optimistic resubstitution evidence.
+      - On Bdev, population thresholds produced 385 fine calls versus 312 with the fixed margin, while retaining 1014 broad-only calls and 347 fully unassigned cells.
+      - Retain the hierarchy as diagnostic evidence; do not accept fine labels without independent threshold validation.
+  - run_identity: immgen_stable_broad_lineages_20261102T205257Z
+    scope: ImmGen_only_population_balanced_stable_broad_programs_then_bounded_Bdev_test
+    result: stable_single_program_broad_strategy_failed_internal_and_Bdev_checks
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/21_stable_immgen_broad_genesets/immgen_stable_broad_lineages_20261102T205257Z/03_reports/03_combined_report.md
+    interpretation:
+      - Nested leave-one-population-out broad winners were correct for 90 of 126 ImmGen libraries.
+      - The fixed default-compatible gate accepted 50 libraries with 45 correct; 90 percent internal precision is insufficient.
+      - Alpha/beta T and combined myeloid were the principal internal failures, showing that one universal positive program cannot represent these heterogeneous lineages.
+      - On Bdev, 564 of 1746 cells passed the gate, but only 111 accepted calls were B and sampleId 1 had no accepted B calls.
+      - Do not adopt these broad sets; retain all artifacts as diagnostic evidence only.
+  - run_identity: immgen_lineage_anchored_narrow_20261102T213318Z
+    scope: ImmGen_only_lineage_anchored_all_population_competition_then_bounded_Bdev_test
+    result: strong_within_ImmGen_lineage_control_failed_Bdev_transfer
+    summary: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/22_lineage_anchored_narrow_genesets/immgen_lineage_anchored_narrow_20261102T213318Z/03_reports/03_combined_report.md
+    interpretation:
+      - All 64 populations competed directly without a broad gate.
+      - The unthresholded winner had the correct lineage for 114 of 118 held-out ImmGen libraries and the exact population for 102.
+      - The fixed anchored rule accepted 78 held-out libraries; all had the correct lineage and 75 had the exact population.
+      - On Bdev, 454 cells passed the same rule, but only 89 accepted calls were B-lineage and sampleId 1 had only 6 accepted B calls.
+      - Do not adopt these programs; strong within-reference discrimination did not establish cross-dataset portability.
 
 scworkbench_boundary:
   imported: false
+  bounded_development_execution_clone_imported: true
+  provisional_development_default_selected: true
+  hierarchical_exploration_promoted: false
+  discovery_compatibility_explorations_promoted: false
+  hierarchical_population_calibration_promoted: false
+  stable_broad_program_exploration_promoted: false
+  lineage_anchored_narrow_exploration_promoted: false
   accepted_sets_emitted: 0
   importable_artifact_created: false

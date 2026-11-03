@@ -1,0 +1,88 @@
+schema_version: bdev.immgen_percentile_margin_population_genesets.v1
+status: approved_for_exploratory_execution
+run_identity: immgen_vm25_20261102_percentile_margin_population_refinement
+execution_boundary: outside_scworkbench_immgen_only
+
+purpose:
+  - Refine the completed global-local candidates against the exact percentile margin used by the default flat reducer.
+  - Apply the same refinement inside target-library holdouts before qualifying discrete label candidates.
+  - Retain all nonempty programs as scores while separating the label-eligible subset.
+
+inputs:
+  selected_counts:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/01_selected_counts.tsv.gz
+    sha256: 56739e8972b0ea6611cbe7694d76d25322bdb60bfdf698f44e5111c0b46eb418
+  metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/workflows/01_bulk_marker_boundary/07_execute_immgen_vm25_markers/01_tables/02_library_metadata.tsv
+    sha256: 8b3c16f301ae516b8a6392a8c73b41cbfd8270dfda670b2928cedeaddc932cdd
+  joint_fold_plan:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/01_fold_plan.tsv
+    sha256: cf54a73b64af3c4b215d2167b5f2852b83b4ff49b3aab0c6bcad76932491c0b8
+  joint_fold_rankings:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/01_tables/02_joint_fold_rankings.tsv.gz
+    sha256: 11f40520f1ef171429cb907c148da5a6e5cd7a64219006167975653dc0bc520a
+  parent_run_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/17_global_local_population_genesets/immgen_vm25_20261102_global_local_population_parse_adaptive_20261102T1910Z/06_manifests/01_run_manifest.json
+    sha256: 94edc9dce30b1be977498003fbcfcc2acbdf336a29f1855c7aba7d8848b7ea09
+
+method:
+  candidate_membership:
+    multiple_folds: intersection
+    singleton: full_data_joint_top100
+    empty_intersection: ranked_union_by_fold_presence_then_mean_rank
+  scoring:
+    type: ucell_capped_rank_on_raw_immgen_library_counts
+    max_rank: 1500
+  calibration:
+    method: percentile
+    ties_method: average
+  refinement:
+    objective: mean_target_library_target_program_percentile_minus_strongest_competing_program_percentile
+    operation: greedy_one_gene_deletion
+    complete_program_schedule: repeated_coordinate_passes_in_population_order
+    standard_floor: 20
+    small_panel_rule: preserve_complete_candidate_below_floor
+    improvement: strict
+  evaluation_atlas:
+    discovery_targets: all_discovery_libraries
+    held_out_derived_targets: frozen_discovery_atlas_plus_target_only
+  limitations:
+    - Complete-data memberships and margins are optimistic.
+    - Fold-specific refinement can overfit the remaining one or more target training libraries; target-library holdout results remain the qualification evidence.
+    - Competitor memberships in a target holdout are complete-data refined programs.
+    - No Bdev data enter refinement or qualification.
+
+flat_default_qualification:
+  minimum_calibrated_score: 0.8
+  minimum_calibrated_margin: 0.1
+  tie_tolerance: 1.0e-8
+  minimum_target_membership_holdout_assigned_correct_fraction: 0.67
+  minimum_genes: 5
+  require_two_target_libraries: true
+  require_complete_population_mean_rank_one: true
+  acceptance_effect: none_diagnostic_only
+
+outputs:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/18_percentile_margin_population_genesets
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/18_percentile_margin_population_genesets
+  trace: 01_tables/01_refinement_trace.tsv.gz
+  tables:
+    membership: 01_tables/01_population_geneset_membership.tsv.gz
+    target_summary: 01_tables/02_population_geneset_summary.tsv
+    score_gmt: 01_tables/03_score_collection.gmt
+    label_gmt: 01_tables/04_flat_label_candidate_collection.gmt
+    full_decisions: 01_tables/05_complete_atlas_flat_decisions.tsv
+    holdout_validation: 01_tables/06_target_membership_holdout_validation.tsv
+    qualification: 01_tables/07_flat_label_qualification.tsv
+    refinement_summary: 01_tables/08_refinement_summary.tsv
+  reports:
+    summary: 03_reports/01_summary.json
+    report: 03_reports/02_percentile_margin_report.md
+  manifest: 06_manifests/01_run_manifest.json
+
+scworkbench_boundary:
+  invoked: false
+  feature_sets_registered: false
+  artifacts_promoted: false
+  accepted_sets_emitted: 0
+  core_or_pack_change_required: false

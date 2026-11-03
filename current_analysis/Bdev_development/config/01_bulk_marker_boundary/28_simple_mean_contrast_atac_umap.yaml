@@ -1,0 +1,30 @@
+schema_version: bdev.simple_mean_contrast_atac_umap.v1
+status: approved_for_diagnostic_plotting
+run_identity: simple_mean_contrast_atac_umap_20261103T000408Z
+
+inputs:
+  coordinates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/20_plot_hierarchical_population_umap/immgen_hierarchical_population_umap_20261102T203953Z/01_tables/01_bdev_umap_atac_coordinates.tsv.gz
+    sha256: d604bc81d48d924b32f3672828cf01caf4b9e95effed0efcc530c937782869dd
+    space_id: umap.atac
+  decisions:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/06_bdev_raw_decisions.tsv
+    sha256: 5f686568cf89c99d46cf10d021369a55dcefd5ee9c922b74fdc0900fa208ffa7
+
+plot:
+  sample_field: sampleId
+  unassigned_label: unassigned
+  minimum_cells_for_direct_label: 5
+  highlight_label_minimum_cells_exclusive: 20
+  point_size_overall: 11
+  point_size_facet: 10
+  point_alpha: 0.86
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/27_simple_mean_contrast_atac_umap/simple_mean_contrast_atac_umap_20261103T000408Z
+
+acceptance_boundary:
+  diagnostic_only: true
+  labels_accepted: false
+  artifacts_promoted: false
+  bundle_mutated: false
