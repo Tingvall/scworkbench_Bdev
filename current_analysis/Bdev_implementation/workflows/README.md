@@ -10,7 +10,9 @@ Store the reproducible Bdev paper workflows here. Workflows must:
 - activate the frozen official operation-pack profile explicitly;
 - use qualified operation names and recorded parameters;
 - preserve source bundles and write joint state only to derived bundles;
-- preserve the authoritative Bdev `pt` values and missing entries; and
+- use authenticated fitted Slingshot lineage `L4` as the default pseudotime
+  trajectory, while preserving the legacy Bdev `pt` values and missing entries
+  as validation and fallback state; and
 - write generated state only to the implementation storage paths.
 
 Method development or runtime patching is out of scope for this directory.

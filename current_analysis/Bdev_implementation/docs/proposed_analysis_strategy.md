@@ -21,11 +21,12 @@ approved.
 
 ## Governing constraints
 
-- Preserve `Bdev@meta.data$pt` as the selected Bdev pseudotime. Preserve its
-  values and missing entries exactly when importing and using the reference.
-- Any regenerated trajectory is a validation candidate and must not overwrite
-  the authoritative `pt` field unless the user explicitly changes this project
-  decision.
+- Use authenticated fitted Slingshot lineage `L4` as the default Bdev
+  pseudotime trajectory, in native Slingshot orientation. Use `-L4` only for an
+  explicit comparison with the legacy scalar `pt` orientation.
+- Preserve `Bdev@meta.data$pt` values and missing entries exactly. Retain the
+  scalar field as validation evidence, a fallback when fitted L4 is
+  unavailable, or an explicitly requested legacy source; never overwrite it.
 - Treat `archived_analysis/` and its paired storage as read-only.
 - Put all new repository work under `current_analysis/` and all generated
   bundles and results under the paired active storage root.
@@ -166,8 +167,10 @@ reducer operations support this strategy.
 
 ### 3. Regenerate the original pseudotime trajectory and compare it with `pt`
 
-**Current status:** the archived import preserved and validated the existing
-`pt` metadata; it did not regenerate the trajectory. Relevant scripts are:
+**Current status:** recreated successfully as a bounded development validation
+with scwbTrajectory 0.1.3; not activated in the reserved implementation stage.
+The archived import preserved and validated the existing `pt` metadata.
+Relevant archived scripts are:
 
 - [`01_inspect_bdev_reference.R`](../../../archived_analysis/legacy_scworkbench_exploratory/processing/bdev_reference/01_inspect_bdev_reference.R)
 - [`02_create_bdev_reference.R`](../../../archived_analysis/legacy_scworkbench_exploratory/processing/bdev_reference/02_create_bdev_reference.R)
@@ -179,14 +182,29 @@ The relevant recipe excludes ATAC clusters 9, 15, 18, 19, 22, and 23; starts
 Slingshot at cluster 5; uses `omega = TRUE` and `omega_scale = 5`; selects
 lineage 4; and reverses its sign.
 
-**Proposed boundary:** validation only. The current native Slingshot operations
-do not expose all parameters needed for an exact reproduction. Two candidates
-require approval:
+**Development result:** the audit completed on 2026-11-02 and the required
+updates were implemented in core commit `da9477d` and scwbTrajectory 0.1.3
+commit `080a192`. The full 26,723-cell reference fit retained 23,710 cells and
+produced eight lineage families. Negated L4 shared 12,510 finite cells with
+preserved `pt`, with Spearman correlation 0.999817 and Pearson correlation
+0.999942. Membership and exact values differed slightly (941 recreated-only
+cells, 132 preserved-only cells, mean absolute difference 0.5732), so this is a
+near-exact ordering recreation rather than byte-identical recovery. Preserved
+`pt` values and missingness were unchanged. The user accepted this as
+sufficiently close and selected fitted L4 as the default pseudotime trajectory
+for subsequent Bdev work. The audit, result, and decision are recorded
+in
+[`01_slingshot_semantics_gap_analysis.md`](../../Bdev_development/docs/02_slingshot_trajectory_semantics/01_slingshot_semantics_gap_analysis.md),
+[`02_bdev_trajectory_recreation.md`](../../Bdev_development/docs/02_slingshot_trajectory_semantics/02_bdev_trajectory_recreation.md),
+and
+[`03_l4_default_trajectory.md`](../../Bdev_development/docs/02_slingshot_trajectory_semantics/03_l4_default_trajectory.md).
 
-1. run an exact, dependency-pinned outside reproduction and adopt the resulting
-   model or vector into scworkbench; or
-2. implement a small `scwbTrajectoryCompat` operation pack exposing the
-   required omega parameters and lineage/orientation selection.
+**Proposed boundary:** the reusable updates now exist in the official
+`scwbTrajectory` pack, supported by the approved generic mixed-scalar core
+change. Fitted lineage-family pseudotime is the default trajectory source, with
+lineage keys selected explicitly. The preserved scalar `pt` is used only when
+lineage output is unavailable, when specifically requested, or as the
+validation reference for the published trajectory. PyBench is unchanged.
 
 Comparison should cover the exact defined and missing cell IDs, selected
 lineage membership, direction, rank correlation, numerical differences, and
@@ -194,9 +212,10 @@ the effects of package-version changes. The authoritative `pt` values remain
 unchanged regardless of the comparison result unless a later explicit decision
 states otherwise.
 
-**Approval gate:** approve the purpose of the comparison, exact dependency
-versions, outside-script versus pack implementation, and numerical equivalence
-criteria.
+**Activation gate:** include the pinned core and pack commits in a new immutable
+SIF, qualify and accept that SIF, then explicitly activate this workflow in the
+implementation stage. The development session and figures are validation
+evidence, not paper-analysis outputs.
 
 ### 4. Project selected bulk ATAC reference populations and align them to Bdev
 
@@ -216,7 +235,7 @@ The provisional design is to:
 2. fit PeakVI to Bdev only and freeze the reference model;
 3. project bulk libraries without allowing them to affect the reference fit;
 4. validate the behavior using Bdev pseudobulks and depth-matched pseudo-cells;
-5. map supported query points to the authoritative Bdev pseudotime; and
+5. map supported query points to the default fitted Bdev L4 pseudotime; and
 6. report uncertainty and out-of-reference behavior instead of forcing every
    sample onto the trajectory.
 
@@ -295,10 +314,11 @@ Additional reports are under the archived `figure_scripts/bdev_reference/`
 directory, particularly scripts 05 and 08 through 14.
 
 **Proposed boundary:** use native UCell scoring and native trajectory signal or
-gene-set dynamics. The explicit trajectory operations expect a pseudotime
-family, while the authoritative Bdev field is a scalar metadata vector. A small
-adapter operation should form a one-lineage family over the cells with defined
-`pt`, without changing or imputing the original metadata.
+gene-set dynamics. Use authenticated fitted L4 pseudotime in native Slingshot
+orientation by default. If fitted L4 is unavailable, or scalar `pt` is
+specifically requested, the fallback adapter should form a one-lineage family
+over cells with defined `pt` without changing or imputing the original
+metadata.
 
 **Approval gate:** approve the cytokine signature collection, score layer,
 pseudotime domain, smoothing/binning method, significance test, display scaling,

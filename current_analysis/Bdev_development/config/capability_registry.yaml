@@ -66,10 +66,38 @@ capabilities:
       to implementation or scWorkbench core, no labels were accepted as truth,
       and no core or operation-pack change is required.
   - capability_id: 02_slingshot_trajectory_semantics
-    status: gap_analysis_required
+    status: source_updates_focused_tests_passed_bdev_recreation_complete
     purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.
     preferred_owner: scwbTrajectory
-    core_change_indicated: false
+    core_change_indicated: true
+    notes: >-
+      The 2026-11-02 audit confirmed that scwbtrajectory::slingshot_fit already
+      supports the ATAC fit space, cluster filtering, start cluster, stretch,
+      contained model, and lineage-family outputs, but it does not expose the
+      omega or omega_scale arguments accepted by Slingshot 2.16.0. A separate
+      gap exists because the preserved scalar Bdev pt cell_vector cannot be
+      wrapped as a lineage-keyed cell_vector_family for explicit trajectory
+      consumers. The smallest solution is to extend slingshot_fit with the two
+      parameters and add a value-preserving scalar-to-lineage adapter in
+      scwbTrajectory. Supporting the typed boolean-or-number omega parameter
+      required the explicitly approved generic bool_or_dbl primitive in core.
+      Core commit da9477d and scwbTrajectory 0.1.3 commit 080a192 implement the
+      changes; the four focused new contracts passed in the baseline SIF.
+      The existing core slingshot_adopt operation is unchanged and cannot
+      recover a fit that was not retained. PyBench is unchanged. Fitted
+      lineage-family pseudotime is the selected default;
+      the scalar pt adapter is a fallback for unavailable lineage output or an
+      explicitly requested scalar analysis. A full-reference development fit
+      then reproduced eight lineages with the published recipe. Negated L4
+      shared 12,510 finite cells with preserved pt and gave Spearman 0.999817
+      and Pearson 0.999942, but membership and numeric values were not exact
+      (941 recreated-only cells, 132 preserved-only cells, mean absolute
+      difference 0.5732). Preserved pt and its missingness were unchanged.
+      The user accepted this as sufficiently close and selected fitted lineage
+      L4 as the default Bdev pseudotime trajectory. New analyses use native L4
+      orientation; negated L4 is reserved for explicit legacy-pt alignment.
+      The preserved scalar pt remains a validation reference and fallback.
+      Outputs remain staged and no paper implementation has been activated.
   - capability_id: 03_trajectory_preranked_gsea
     status: gap_analysis_required
     purpose: Add classical preranked trajectory GSEA as a distinct operation from cell-score permutation dynamics.

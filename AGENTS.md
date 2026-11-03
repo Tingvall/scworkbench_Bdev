@@ -8,9 +8,13 @@ This repository develops the B-cell development use case for scWorkbench. It
 contains one frozen exploratory generation, a development stage for extending
 and qualifying scWorkbench, and an implementation stage for the paper analysis.
 
-For the Bdev reference, use the existing `Bdev@meta.data$pt` field as
-pseudotime, as selected by the user. Preserve its values and missing entries
-when importing and using the reference.
+For Bdev trajectory analyses, use the authenticated fitted Slingshot lineage
+`L4` from the approved ATAC-UMAP recipe as the default pseudotime trajectory.
+Use its native Slingshot orientation unless a legacy-`pt` comparison explicitly
+requires `-L4`. Preserve the existing `Bdev@meta.data$pt` values and missing
+entries exactly; use that scalar field only as a validation reference, as a
+fallback when fitted lineage output is unavailable, or when explicitly
+requested.
 
 ## Archived analysis
 
