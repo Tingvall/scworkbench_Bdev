@@ -60,7 +60,7 @@ for that specific change. Approval is never inferred from the broader analysis
 or operation-pack work.
 
 The scWorkbench core source is a separate sibling Git repository at
-`/home/jtg/msi_projects/scworkbench`; this Bdev repository contains analysis
+`/home/jtg/msi_projects/scworkbench_code/scworkbench`; this Bdev repository contains analysis
 coordination and exact source pins only. See
 [`docs/repository_layout.md`](docs/repository_layout.md).
 

@@ -23,6 +23,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scworkbench.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
     default_branch: main
+    checkout_branch: development
     checkout_commit: da9477d7ebe3010cedcaff6867e1e6eebbd617a3
     checkout_clean: true
     baseline_sif_commit: 9f10e7c0a849a87249573a2ef78d8ff7643dccba
@@ -33,6 +34,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/pybench.git
     local_path: /home/jtg/msi_projects/scworkbench_code/pybench
     default_branch: main
+    checkout_branch: main
     checkout_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
     checkout_clean: true
     baseline_sif_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
@@ -43,6 +45,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbStatistics.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbStatistics
     default_branch: main
+    checkout_branch: main
     checkout_commit: 00d1ba6a63d853b146916243bb8035d32528d575
     checkout_clean: true
     baseline_sif_commit: 00d1ba6a63d853b146916243bb8035d32528d575
@@ -53,6 +56,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbGenePrograms.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbGenePrograms
     default_branch: main
+    checkout_branch: main
     checkout_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
     checkout_clean: true
     baseline_sif_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
@@ -63,6 +67,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbRNA.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbRNA
     default_branch: main
+    checkout_branch: main
     checkout_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
     checkout_clean: true
     baseline_sif_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
@@ -73,6 +78,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbRepresentation.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
     default_branch: main
+    checkout_branch: main
     checkout_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
     checkout_clean: true
     baseline_sif_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
@@ -83,6 +89,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbTrajectory.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
     default_branch: main
+    checkout_branch: development
     checkout_commit: 2f7ff12719da0edd52c538eb214b5039b1da55d4
     checkout_clean: true
     baseline_sif_commit: de6e0810578e918cf9425858eddd0549e41195be
@@ -93,6 +100,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbLatent.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
     default_branch: main
+    checkout_branch: main
     checkout_commit: 003dcd3530e0b5e5aec631eda99071ca0e3876d4
     checkout_clean: true
     baseline_sif_commit: 5a6baaf32fbbe5a663933ed91ef1d1681c891a19
@@ -103,6 +111,7 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbATAC.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbATAC
     default_branch: main
+    checkout_branch: main
     checkout_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
     checkout_clean: true
     baseline_sif_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5

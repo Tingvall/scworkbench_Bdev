@@ -128,3 +128,24 @@ capabilities:
       archived reference exactly. The user selected this 38-set collection for
       later Bdev implementation. The current work is development-only and does
       not activate the implementation scaffold or promote results.
+  - capability_id: 07_trajectory_signal_regions
+    status: source_available_qualification_pending
+    purpose: Qualify permutation-supported local cytokine and other continuous-signal regions over fitted Bdev L4 pseudotime.
+    preferred_owner: scwbTrajectory
+    core_change_indicated: false
+    notes: >-
+      scwbTrajectory 0.1.4 commit
+      2f7ff12719da0edd52c538eb214b5039b1da55d4 adds the generic
+      scwbtrajectory::trajectory_signal_regions operation. Its operation-pack
+      manifest has SHA-256
+      981f69802fdddbb73161c0f09ca5ec65d0169d85c4b1b9640398063d72c43e52.
+      The intended Bdev use is to analyze authenticated UCell score families,
+      including the selected 38 Parse cytokine signatures, over native fitted
+      Slingshot lineage L4. The operation supports explicit lineage selection,
+      optional continuous technical-covariate adjustment, sample-blocked
+      permutations, local elevated and reduced intervals, and complete
+      permutation metadata. It is not classical preranked GSEA and does not
+      provide group-aware occupancy, signal, or motif contrasts, so
+      capabilities 03 and 05 remain open. Bdev-specific qualification and a
+      new immutable derived SIF remain pending; no implementation workflow or
+      result is activated by this source record.

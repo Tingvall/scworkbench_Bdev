@@ -6,7 +6,17 @@ component_policy:
   scworkbench: inherit_from_baseline_unless_specific_core_change_is_explicitly_approved
   pybench: inherit_from_baseline_unless_specific_core_change_is_explicitly_approved
   operation_packs: install_qualified_updates_from_pinned_source_commits
-source_branches: []
+source_branches:
+  - component: scworkbench
+    branch: development
+    commit: da9477d7ebe3010cedcaff6867e1e6eebbd617a3
+    qualification_status: focused_contracts_passed_candidate_sif_pending
+  - component: scwbTrajectory
+    branch: development
+    commit: 2f7ff12719da0edd52c538eb214b5039b1da55d4
+    version: 0.1.4
+    manifest_sha256: 981f69802fdddbb73161c0f09ca5ec65d0169d85c4b1b9640398063d72c43e52
+    qualification_status: signal_regions_qualification_pending
 resolved_components: []
 sif:
   path: null
