@@ -1,0 +1,37 @@
+schema_version: bdev.parse38_standalone_inputs.v1
+status: frozen_for_development_reconstruction
+
+archived_source_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory
+
+inputs:
+  specificity_fits:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines/reports/signature_discovery_20260921T221102Z/limma_voom_fits.rds
+    sha256: bd9326c21b455685c18582f2fef911632221ab07f37b569d1df26412f8ae3f88
+  bdev_sct_counts_features:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle/mat/mat_frag_SCT_counts_20260914_162226/row_names
+    sha256: 07aec4dab95394f371f4f303efe562886ce346069df98f89a886c0f2d1179765
+    expected_features: 20533
+  bdev_sct_data_features:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle/mat/mat_frag_SCT_data_20260914_162228/row_names
+    sha256: 07aec4dab95394f371f4f303efe562886ce346069df98f89a886c0f2d1179765
+    expected_features: 20533
+  sample_rank_cache:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/top100_union_sample_rank_cache.rds
+    sha256: aa5de5ca6014c00b1cffc1ca931df4ba5473475473dc5bb209e00031ff6c5550
+    precision_note: The full-precision RDS is required; the TSV export rounds one borderline IL-6-up deletion comparison.
+  sample_metadata_source:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/sample_metrics.tsv
+    sha256: acf011ea36034fc46d1c785c2ceb1fcf3b87f2f6d2208e63cd91f702af96e386
+
+reference_only:
+  report_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925
+  final_gene_membership_sha256: ca534f3b05d367f1691184d9ec0a670537084bb1cec4329693676dea34193ad7
+  signature_summary_sha256: fb2fb017e5d254d79ef76597f4517a9f40038aa3a510834dbb329a3a4c31e970
+
+provenance:
+  archived_generator:
+    path: archived_analysis/legacy_scworkbench_exploratory/processing/parse_cytokines/17_flt3_il7_competitor_refinement_pilot.R
+    sha256: e11be3b35905fcb97fb3face2e623416a1b4e57cc127ccaeb3a022cf79effe2c
+  archived_launcher:
+    path: archived_analysis/legacy_scworkbench_exploratory/processing/parse_cytokines/18_all_cytokine_competitor_refinement.R
+    sha256: d3e090c5c11f5856e0d8b23bdaf2dfe14b0f08d515be871487d2da3fc398b3d7

@@ -1,0 +1,51 @@
+schema_version: bdev.parse38_standalone_reconstruction.v1
+status: exploratory_development_validation
+run_identity: parse38_standalone_reconstruction_20261103T052911Z
+capability_id: 06_parse_cytokine_signatures
+
+scope:
+  purpose: Reconstruct the selected 38-set all-cytokine Parse collection outside scWorkbench and freeze reusable code for later Bdev implementation.
+  stage: Bdev_development
+  paper_analysis: false
+  promotion_required: false
+  outside_scworkbench_authorization: user_approved_2026-11-02
+
+method:
+  targets: 26
+  directions: [up, down]
+  folds: 3
+  candidate_top_n: 100
+  minimum_final_size: 20
+  minimum_oriented_log2fc: 0.5
+  strict_fdr: 0.05
+  max_rank: 1500
+  refinement: greedy_one_gene_deletion_maximizing_target_to_strongest_competitor_standardized_gap
+  selection: target_has_strongest_median_sample_mean
+  expected_attempts: 52
+  expected_constructed: 43
+  expected_selected: 38
+
+inputs_manifest: current_analysis/Bdev_development/inputs/06_parse_cytokine_signatures/01_all_cytokine_refinement_inputs.yaml
+workflow:
+  path: current_analysis/Bdev_development/workflows/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/01_recreate_all_cytokine_genesets.R
+  sha256: de05c8db3a518a7103a8523f4eac0bd495671409d8ce2bd5ffcd7687ec84ba5c
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z
+
+output_policy:
+  preserve_archived_inputs: true
+  modify_scworkbench: false
+  use_scworkbench_runtime: false
+  implementation_status: deferred_until_qualified_sif
+  require_exact_archived_membership: true
+  require_exact_archived_selection: true
+
+validated_result:
+  selected_gene_sets: 38
+  selected_memberships: 934
+  distinct_selected_genes: 753
+  passing_gmt_sha256: 22f041528a1e882c0bec7bd920b7638646b20589020669bf0f42b59880e0bdb7
+  passing_membership_sha256: 2e2b04b6e5835465b5edb7958c32a1bb13597c4c30a8744018a17257b3049562
+  reconstruction_summary_sha256: a6d7f60ba216d10dd560b03d54cbed7bdeaaf3c398c181c75b9c219ccb61be58
+  output_manifest_sha256: 6d885a3f3e61d0e40ceca7d98717e5a19ec359122f5eca35d75d73f4311aceb8

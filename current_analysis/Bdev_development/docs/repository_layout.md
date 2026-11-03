@@ -5,7 +5,7 @@ different responsibilities:
 
 ```text
 /home/jtg/msi_projects/
-├── scworkbench/       # scWorkbench core source and its Git history
+├── scworkbench_code/  # scWorkbench core, pybench, and operation-pack repositories
 └── scworkbench_Bdev/  # Bdev analysis coordination, configuration, and workflows
 ```
 
@@ -20,10 +20,11 @@ storage rather than either Git repository.
 The authoritative standalone checkout is:
 
 ```text
-path: /home/jtg/msi_projects/scworkbench
-remote: https://gitlab.liu.se/hende58/scworkbench.git
-branch: master
-commit: d85353c3f8acfd181cc9d179a98f2c6339cc020d
+path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+remote: https://github.com/Tingvall/scworkbench.git
+upstream: https://gitlab.liu.se/hende58/scworkbench.git
+branch: development
+commit: da9477d7ebe3010cedcaff6867e1e6eebbd617a3
 ```
 
 The corrected development SIF contains core commit
@@ -31,8 +32,8 @@ The corrected development SIF contains core commit
 public remote. The SIF remains the immutable toolchain and image base; this
 source mismatch is provenance, not a requirement to reconstruct the SIF.
 
-No development branch has been created yet because its correct base must be
-chosen explicitly. Creating a branch does not authorize core changes. Before
+The development branch is maintained in the user-owned GitHub repository.
+The original GitLab repository is retained only as a read-only upstream. Before
 any scWorkbench edit, document the pressing core gap, explain why an operation
 pack cannot solve it, motivate the smallest change and its qualification impact,
 and obtain explicit user approval for that specific edit.

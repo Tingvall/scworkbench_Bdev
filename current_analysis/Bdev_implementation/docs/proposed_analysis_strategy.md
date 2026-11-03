@@ -297,6 +297,14 @@ The archived original, rest-only, and all-cytokine competitor-aware signature
 collections should be treated as alternatives for review, not silently merged
 or assumed to be accepted for the redo.
 
+**Selection recorded 2026-11-02:** use the 38 passing signatures from the
+all-cytokine top-100 competitor refinement. A development-stage standalone
+reconstruction now reproduces its candidate membership, final membership, and
+selected-set identity exactly; see
+[`01_standalone_parse38_reconstruction.md`](../../Bdev_development/docs/06_parse_cytokine_signatures/01_standalone_parse38_reconstruction.md).
+This records the collection for later implementation but does not activate the
+implementation stage or authorize reuse of the archived bundle.
+
 **Approval gate:** approve input release, QC criteria, treatment map, comparator
 design, replicate handling, signature-discovery method, feature-set selection,
 and which archived refinements should be reproduced.
@@ -497,7 +505,8 @@ At minimum, resolve the following before implementation:
 1. approve the immutable scworkbench runtime;
 2. confirm the selected ImmGen and bulk ATAC datasets and sample identities;
 3. confirm whether the knockout is Flt3, Flt3l, or another recorded condition;
-4. select which archived Parse signature design, if any, should be reproduced;
+4. implement the selected 38-set Parse design from its frozen standalone
+   development reconstruction after the qualified runtime is accepted;
 5. define whether “trajectory GSEA” means dynamic feature-set testing,
    classical preranked GSEA, or both;
 6. select mapping-support and enrichment-region methods;

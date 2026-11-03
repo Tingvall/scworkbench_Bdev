@@ -113,3 +113,18 @@ capabilities:
     purpose: Qualify support-aware occupancy, signal, and motif contrasts between biological groups.
     preferred_owner: scwbTrajectory_or_new_official_contrast_pack
     core_change_indicated: false
+  - capability_id: 06_parse_cytokine_signatures
+    status: standalone_reconstruction_complete_selected_for_later_implementation
+    purpose: Reconstruct and freeze the selected 38-set Parse cytokine collection outside scWorkbench for later import and Bdev trajectory analysis.
+    preferred_owner: bdev_outside_preprocessing_plus_scworkbench_gene_set_import
+    core_change_indicated: false
+    notes: >-
+      The archived all-cytokine top-100 competitor-refinement method was
+      reconstructed from frozen limma fits, Bdev SCT feature identifiers, and
+      the full-precision sample-level capped-rank cache without calling
+      scWorkbench. All 52 directions were attempted, 43 candidates were
+      constructible, and 38 mean-passing signatures were selected. Candidate
+      membership, final membership, and selected-set identity match the
+      archived reference exactly. The user selected this 38-set collection for
+      later Bdev implementation. The current work is development-only and does
+      not activate the implementation scaffold or promote results.

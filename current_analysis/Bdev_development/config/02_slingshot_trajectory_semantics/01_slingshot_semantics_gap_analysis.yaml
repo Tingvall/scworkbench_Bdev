@@ -15,7 +15,7 @@ runtime_evidence:
   scwbTrajectory:
     version: 0.1.2
     source_commit: de6e0810578e918cf9425858eddd0549e41195be
-    checkout: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/scwbTrajectory
+    checkout: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
   slingshot:
     version: 2.16.0
     inspected_method: getLineages_matrix_matrix

@@ -31,13 +31,12 @@ The authoritative scWorkbench core checkout is a sibling of this analysis
 repository:
 
 ```text
-/home/jtg/msi_projects/scworkbench
+/home/jtg/msi_projects/scworkbench_code/scworkbench
 ```
 
-The remaining core and operation-pack checkouts currently remain under paired
-development storage at
-`/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/source_repositories/`.
-Their explicit local paths, public remotes, branches, pull-time commits, and
+The remaining core and operation-pack checkouts are colocated under
+`/home/jtg/msi_projects/scworkbench_code/`.
+Their explicit local paths, GitHub remotes, read-only upstreams, branches, commits, and
 relationship to the corrected SIF are pinned in
 `../config/source_repositories.yaml`.
 
