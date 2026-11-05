@@ -1,0 +1,104 @@
+schema_version: bdev.parse38_trajectory_methods.v1
+status: bounded_development_qualification_passed
+capability_id: 03b_parse_cytokine_trajectory_analysis
+paper_analysis: false
+
+runtime:
+  component: scwbTrajectory
+  version: 0.1.5
+  commit: 34c792d39a7a9950294bf3e29e1cb65ebf1aba6c
+  manifest_sha256: 576156623f04d8d34f07062eb17a1612ce1e4d20926516afbc06a74af141c8f9
+  bounded_bdev_qualification_complete: true
+  immutable_sif_qualification_required: true
+  qualification_run: bdev_cytokine_trajectory_20261105T153001Z
+
+trajectory:
+  source: fitted_slingshot_lineage
+  lineage: L4
+  orientation: native
+  preserved_pt_role: validation_reference_or_documented_fallback_only
+
+analysis_state:
+  signal_stage: 03a_parse_cytokine_signal_generation
+  bundle_policy: one_writable_derived_bundle_shared_by_03a_and_all_03b_methods
+  signal_matrix: RNA_counts
+  gsea_matrix: SCT_data
+  sample_id_role: orig.ident_reporting_audit_only
+
+common_comparison_scale:
+  fraction: 0.05
+  summary: median
+  rationale: >-
+    Dynamics uses 20 five-percent bins. Signal intervals and local GSEA use
+    width 0.05 and step 0.025, so all three methods resolve the trajectory at
+    the same nominal five-percent scale. All inferential windows remain in
+    their respective multiplicity corrections.
+
+methods:
+  dynamics:
+    operation: scwbtrajectory::trajectory_signal_dynamics_explicit
+    input: parse38_ucell_cell_vector_family
+    parameters:
+      pseudotime_direction: as_is
+      n_bins: 20
+      summary_fun: median
+      smooth_method: none
+      bootstrap_n: 0
+    role: descriptive_shape_and_transient_peak_classification
+
+  intervals_primary:
+    operation: scwbtrajectory::trajectory_signal_intervals
+    input: parse38_ucell_cell_vector_family
+    parameters:
+      pseudotime_direction: as_is
+      window_width_fraction: 0.05
+      window_step_fraction: 0.025
+      summary_fun: median
+      permutation_mode: unblocked
+      n_permutations: 1000
+      global_q_cutoff: 0.05
+      local_q_cutoff: 0.05
+    eventual_primary_override:
+      n_permutations: 5000
+    comparison_view: report_the_every_other_windows_matching_dynamics_bins_without_recomputing_q_values
+    role: global_gate_supported_intervals_and_boundary_robust_comparison
+
+  preranked_gsea:
+    operation: scwbtrajectory::trajectory_preranked_gsea
+    input: SCT_data
+    parameters:
+      analysis_scope: both
+      pseudotime_direction: as_is
+      global_rank_method: monotonic_association
+      window_width_fraction: 0.05
+      window_step_fraction: 0.025
+      permutation_mode: unblocked
+      n_permutations: 1000
+      min_set_size: 15
+      max_set_size: 150
+      score_type: std
+      gsea_param: 1
+      sample_size: 101
+      n_perm_simple: 1000
+      p_adjust_method: BH
+      global_q_cutoff: 0.05
+      local_q_cutoff: 0.05
+      consensus_leading_edge_fraction: 0.5
+    sensitivity:
+      global_rank_method: early_late_contrast
+      early_fraction: 0.20
+      late_fraction: 0.20
+    role: coordinated_rank_enrichment_and_leading_edge_discovery
+
+qualification_gates:
+  - scwbTrajectory commit 34c792d39a7a9950294bf3e29e1cb65ebf1aba6c is published and pinned
+  - fgsea 1.34.2 and BiocParallel 1.42.2 were used
+  - 12 focused intervals and GSEA contracts passed
+  - all 38 feature sets passed RNA_counts and SCT_data overlap qualification
+  - all three methods completed on the 1810-cell bounded L4 fixture
+  - orig.ident was audited but was not used to block permutations
+  - no implementation activation before immutable SIF acceptance
+
+storage:
+  repository_workflow_root: current_analysis/Bdev_development/workflows/03b_parse_cytokine_trajectory_analysis
+  paired_results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03b_parse_cytokine_trajectory_analysis

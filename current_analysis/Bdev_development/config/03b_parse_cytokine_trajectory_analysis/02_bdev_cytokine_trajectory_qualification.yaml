@@ -1,0 +1,146 @@
+schema_version: bdev.parse38_trajectory_qualification.v1
+status: approved_development_qualification
+run_identity: bdev_cytokine_trajectory_20261105T153001Z
+capability_id: 03b_parse_cytokine_trajectory_analysis
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Bounded Bdev qualification of the three Parse38 cytokine trajectory methods on fitted Slingshot L4.
+  outputs_promoted: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle
+    manifest_sha256: 9219e0b9ef9d11d63acad0e882e49c184045ead55b0e5a9a9fb1e2306dc61225
+    expected_cells: 26723
+  gene_sets:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z/01_tables/05_passing_gene_sets.gmt
+    sha256: 22f041528a1e882c0bec7bd920b7638646b20589020669bf0f42b59880e0bdb7
+    expected_sets: 38
+    expected_memberships: 934
+  fit_space: umap.atac
+  cluster_field: peaks_snn_res.1.2
+  sample_field: orig.ident
+  preserved_pseudotime_field: pt
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench:
+    version: 0.1.0
+    source_commit: da9477d7ebe3010cedcaff6867e1e6eebbd617a3
+  scwbGenePrograms:
+    version: 0.1.0
+    source_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+    source_manifest_file_sha256: 29e071596984f0e4930e072db58c76386a058fb40be55a70ffb8a541921feaee
+  scwbTrajectory:
+    version: 0.1.5
+    source_commit: 34c792d39a7a9950294bf3e29e1cb65ebf1aba6c
+    manifest_sha256: 5afd786c35a40e88972f800d34c8b96fc7b56f586104980554c13718c18c0a0d
+    source_manifest_file_sha256: 576156623f04d8d34f07062eb17a1612ce1e4d20926516afbc06a74af141c8f9
+  fgsea: 1.34.2
+  BiocParallel: 1.42.2
+  slingshot: 2.16.0
+
+fit:
+  start_cluster: "5"
+  exclude_clusters: ["9", "15", "18", "19", "22", "23"]
+  stretch: 0
+  omega: true
+  omega_scale: 5
+  lineage: L4
+  orientation: native
+
+fixture:
+  n_bins: 20
+  cells_per_bin: 100
+  maximum_cells: 2000
+  deterministic_selection: evenly_spaced_in_bundle_order_within_l4_bin
+
+gene_set_import:
+  namespace: parse38_cytokine_20261103
+  collection: Parse38 all-cytokine competitor-refined signatures
+  species: Mus musculus
+  gene_id_type: gene_symbol
+
+signal_generation:
+  matrix: RNA_counts
+  max_rank: 1500
+  ncores: 1
+  parallel_backend: serial
+  chunk_size: 500
+  missing_features_policy: drop
+
+common_scale:
+  fraction: 0.05
+  overlapping_step: 0.025
+
+methods:
+  dynamics:
+    operation: scwbtrajectory::trajectory_signal_dynamics_explicit
+    n_bins: 20
+    summary_fun: median
+    smooth_method: none
+    bootstrap_n: 0
+    min_cells_per_bin: 20
+    min_bins_observed: 10
+  intervals:
+    operation: scwbtrajectory::trajectory_signal_intervals
+    window_width_fraction: 0.05
+    window_step_fraction: 0.025
+    summary_fun: median
+    permutation_mode: unblocked
+    n_permutations: 99
+    seed: 3101
+    min_cells_per_window: 20
+    min_samples_per_window: 1
+    global_q_cutoff: 0.05
+    local_q_cutoff: 0.05
+    merge_gap_fraction: 0.025
+  gsea:
+    operation: scwbtrajectory::trajectory_preranked_gsea
+    matrix: SCT_data
+    analysis_scope: both
+    global_rank_method: monotonic_association
+    window_width_fraction: 0.05
+    window_step_fraction: 0.025
+    permutation_mode: unblocked
+    n_permutations: 99
+    seed: 3201
+    min_cells_per_window: 20
+    min_samples_per_window: 1
+    min_set_size: 15
+    max_set_size: 150
+    score_type: std
+    gsea_param: 1
+    sample_size: 51
+    n_perm_simple: 500
+    eps: 1.0e-8
+    p_adjust_method: BH
+    global_q_cutoff: 0.05
+    local_q_cutoff: 0.05
+    merge_gap_fraction: 0.025
+    consensus_leading_edge_fraction: 0.5
+    chunk_size: 128
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z
+  execution_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/03_execution_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions
+
+acceptance:
+  bounded_fixture_only: true
+  use_full_authenticated_matrix_feature_universe: true
+  require_all_38_signatures: true
+  require_unblocked_permutations: true
+  require_native_l4: true
+  preserve_archived_source: true
+  preserve_pt_values_and_missingness: true
+  promote_outputs: false
+  implementation_unlocked: false

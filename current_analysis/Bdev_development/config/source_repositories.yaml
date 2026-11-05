@@ -1,5 +1,5 @@
 schema_version: bdev.scworkbench_source_repositories.v1
-retrieved_at: "2026-11-03T10:00:21-08:00"
+retrieved_at: "2026-11-04T17:58:07-08:00"
 analysis_repository: /home/jtg/msi_projects/scworkbench_Bdev
 checkout_layout:
   scworkbench_core: /home/jtg/msi_projects/scworkbench_code/scworkbench
@@ -90,8 +90,11 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
     default_branch: main
     checkout_branch: development
-    checkout_commit: 2f7ff12719da0edd52c538eb214b5039b1da55d4
+    checkout_commit: 34c792d39a7a9950294bf3e29e1cb65ebf1aba6c
     checkout_clean: true
+    publication_status: matches_origin_development
+    package_version: 0.1.5
+    operation_pack_manifest_sha256: 576156623f04d8d34f07062eb17a1612ce1e4d20926516afbc06a74af141c8f9
     baseline_sif_commit: de6e0810578e918cf9425858eddd0549e41195be
     baseline_sif_commit_present: true
   - component: scwbLatent

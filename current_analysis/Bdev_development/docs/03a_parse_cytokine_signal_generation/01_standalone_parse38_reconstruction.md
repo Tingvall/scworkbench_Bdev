@@ -1,4 +1,4 @@
-# Standalone reconstruction of the selected 38 Parse cytokine gene sets
+# 03a signal generation: standalone reconstruction of the selected 38 Parse cytokine gene sets
 
 ## Decision
 
@@ -47,10 +47,12 @@ pins the RDS checksum and treats the TSV only as a display export.
 
 ## Outputs
 
-The paired-storage result is:
+The paired-storage result was relabeled from the provisional capability `06`
+to the stable signal-generation capability `03a` without changing file
+contents or checksums:
 
 ```text
-/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z/
+/mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z/
 ```
 
 Primary files are:
@@ -63,7 +65,8 @@ Primary files are:
 - `06_manifests/01_input_manifest.tsv` and `02_output_manifest.tsv` — exact
   provenance and checksums.
 
-For later paper implementation, this outside-scWorkbench construction should
-feed the qualified scWorkbench feature-set import and scoring operations. It
-does not justify copying or promoting the archived bundle.
-
+This reconstruction supplies the gene-set definition but does not by itself
+complete 03a. The remaining 03a operation is matrix-bound import followed by
+UCell scoring on `RNA_counts` with `maxRank=1500`, producing the authenticated
+cell-level signal family consumed by 03b. It does not justify copying or
+promoting the archived bundle.

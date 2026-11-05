@@ -19,14 +19,14 @@ requires exact agreement with the archived 38-set result.
 Run from the repository root:
 
 ```bash
-Rscript current_analysis/Bdev_development/workflows/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/01_recreate_all_cytokine_genesets.R \
+Rscript current_analysis/Bdev_development/workflows/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/01_recreate_all_cytokine_genesets.R \
   --fits /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines/reports/signature_discovery_20260921T221102Z/limma_voom_fits.rds \
   --bdev-sct-count-features /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle/mat/mat_frag_SCT_counts_20260914_162226/row_names \
   --bdev-sct-data-features /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle/mat/mat_frag_SCT_data_20260914_162228/row_names \
   --rank-cache /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/top100_union_sample_rank_cache.rds \
   --sample-metrics /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925/sample_metrics.tsv \
   --reference-report /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/parse_cytokines_rest_only/reports/all_cytokine_competitor_refinement_top100_v1_20260925 \
-  --output /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z
+  --output /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z
 ```
 
 Generated outputs use numbered table, report, log, and manifest directories.

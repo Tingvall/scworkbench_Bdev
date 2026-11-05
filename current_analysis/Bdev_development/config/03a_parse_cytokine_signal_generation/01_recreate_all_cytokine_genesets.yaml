@@ -1,7 +1,7 @@
 schema_version: bdev.parse38_standalone_reconstruction.v1
 status: exploratory_development_validation
 run_identity: parse38_standalone_reconstruction_20261103T052911Z
-capability_id: 06_parse_cytokine_signatures
+capability_id: 03a_parse_cytokine_signal_generation
 
 scope:
   purpose: Reconstruct the selected 38-set all-cytokine Parse collection outside scWorkbench and freeze reusable code for later Bdev implementation.
@@ -25,13 +25,13 @@ method:
   expected_constructed: 43
   expected_selected: 38
 
-inputs_manifest: current_analysis/Bdev_development/inputs/06_parse_cytokine_signatures/01_all_cytokine_refinement_inputs.yaml
+inputs_manifest: current_analysis/Bdev_development/inputs/03a_parse_cytokine_signal_generation/01_all_cytokine_refinement_inputs.yaml
 workflow:
-  path: current_analysis/Bdev_development/workflows/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/01_recreate_all_cytokine_genesets.R
+  path: current_analysis/Bdev_development/workflows/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/01_recreate_all_cytokine_genesets.R
   sha256: de05c8db3a518a7103a8523f4eac0bd495671409d8ce2bd5ffcd7687ec84ba5c
 
 storage:
-  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/06_parse_cytokine_signatures/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z
 
 output_policy:
   preserve_archived_inputs: true
