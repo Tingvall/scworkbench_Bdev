@@ -1,0 +1,145 @@
+schema_version: bdev.reference_mapping_development_default.v1
+status: retired_superseded_development_default
+selected_on: 2026-11-16
+superseded_on: 2026-11-17
+superseded_by: 25_scwbatac_hvp_depth20k_default.yaml
+selection_authority: explicit_user_decision_after_frozen_external_benchmark
+capability_id: 04_reference_mapping
+
+selection:
+  candidate: overall20k
+  display_name: Depth-adjusted variable 20k
+  feature_count: 20000
+  selection_was_automatic: false
+  selection_reason: >-
+    The user selected overall20k as the then-current development default after
+    reviewing the same-query four-model external ImmGen benchmark and the
+    common-coordinate fixed-ATAC-UMAP comparison. It had the strongest bulk
+    mapping geometry, perfect replicate cluster agreement, the broadest
+    reference-neighbor use, and the lowest reference-hub concentration among
+    the four frozen candidates.
+
+selected_frozen_model:
+  source_run_identity: full_bdev_peakvi_immgen_4way_20261116T202157Z
+  source_cells: 26723
+  latent_dimensions: 10
+  model_artifact_id: model_ref_20261116_205800_1jpahcw1
+  fit_summary_artifact_id: obs_table_20261116_205800_owa996mt
+  reference_space_id: peakvi_space_id_4jwxr9dkpcn5
+  model_payload_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/05_objects/02_frozen_candidate_bundle/artifact_models/commit_20261116_205754_rsfhk8f4/model_tree_cbc0f14c57f5973f9976bedee38f090f70eb73f14c428699d30d754b02cfcc21/model.pt
+  model_payload_sha256: 65b49a97bc11caaf9b02622e1b4d47ffc7746007b19ed3631a92648cbf2d093a
+  feature_order_sha256: f88c1786827d1fec0225c985a6f5ad2369d2fde9edce83074614a09a599ae545
+  reference_latent_sha256: 4ffadfacd3b1051967392160f7ad98fa6b0eba75f6637a7369b9c17fe52ec5f0
+  model_tree_manifest_sha256: cbc0f14c57f5973f9976bedee38f090f70eb73f14c428699d30d754b02cfcc21
+
+evidence:
+  feature_axes:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/01_frozen_candidate_feature_axes.tsv.gz
+    sha256: e5aa404a76dcb4ae38eca5b3bc55aac952ccd76e668f5943641ccb18ca8faea8
+  model_registry:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/02_frozen_model_registry.tsv
+    sha256: 5c825c805d0863997c4a5e3a16ee50d5f1946336dc13bc018b912fe755950829
+  pre_external_freeze_receipt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/06_manifests/02_pre_external_freeze_receipt.json
+    sha256: c254b46b39784559ee5b986053e56323f4b0eaaa3ff96f95f3e64bba657fb2dc
+  external_metrics:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/06_external_candidate_metrics.tsv
+    sha256: d189fd4c24caafa89a63ea5c882f9dd35dcdd29560ce2f5c58ae5588f049ae17
+  external_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/03_reports/01_external_four_model_benchmark_summary.json
+    sha256: 28acd4f628212bf0d5ed6d91549a546f5d9add4a8bd038411c3f77dbc4790196
+  external_execution_receipt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/06_manifests/03_external_execution_receipt.json
+    sha256: 2c69d1db1e14279daac88fd14770bce89439a4eef2c5af9f76dbc247b15e9e7c
+  fixed_umap_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/12_plot_frozen_full_bdev_peakvi_fixed_umap/frozen_peakvi_fixed_umap_4way_20261116T232155Z/03_reports/01_fixed_umap_comparison_summary.json
+    sha256: 34c5c39ce1ff9734cf33bef9e3e909250bc8c00e9531b957d0c309761fb69396
+  fixed_umap_overview:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/12_plot_frozen_full_bdev_peakvi_fixed_umap/frozen_peakvi_fixed_umap_4way_20261116T232155Z/02_figures/01_four_model_fixed_atac_umap_overview.png
+    sha256: dcf2659748ba35a1c8584f081ce054930819acc750f0af4e786267bdbfc5ab91
+
+observed_external_metrics:
+  query_libraries: 28
+  within_population_to_between_population_latent_distance_ratio: 0.176141615096471
+  replicate_predicted_cluster_agreement: 1.0
+  unique_reference_neighbors: 477
+  maximum_reference_hub_fraction: 0.0107142857142857
+  median_nearest_distance_over_reference_median: 1.56496062968096
+  maximum_absolute_depth_latent_spearman: 0.49151614668856
+  maximum_absolute_saturation_latent_spearman: 0.736136007118883
+
+development_default_policy:
+  use_for:
+    - frozen-model bulk projection during ongoing Bdev development
+    - primary whole-reference Bdev neighborhood and fixed-UMAP mapping
+    - first-stage mapping before any conditional trajectory interpretation
+  required_sensitivity_model:
+    candidate: cluster20k
+    purpose: Flag mappings that are unstable to a cluster-discriminating axis with lower peak-saturation association.
+    agreement_use: qualitative_and_support_aware_sensitivity_not_coordinate_averaging
+  trajectory_policy:
+    default_trajectory: authenticated fitted Slingshot L4
+    orientation: native
+    assignment_stage: second_stage_after_whole_reference_mapping
+    current_bulk_output_status: diagnostic_unaccepted
+    force_non_l4_queries_onto_trajectory: false
+  uncertainty_policy:
+    - Retain reference-distance, neighbor diversity, hub use, and replicate coherence diagnostics.
+    - Treat discordance with cluster20k as mapping uncertainty rather than averaging the two latent or UMAP coordinates.
+    - Retain peak-saturation association as an explicit limitation of overall20k.
+
+boundaries:
+  do_not_treat_as:
+    - an implementation-stage default
+    - a production-qualified model
+    - an accepted bulk trajectory assignment model
+    - permission to tune or refit with ImmGen identities
+    - permission to modify scWorkbench core or an operation pack
+  implementation_unlocked: false
+  paper_analysis_authorized: false
+  selected_frozen_development_artifact_promoted_to_implementation: false
+  new_qualified_immutable_sif_still_required: true
+
+supersedes_for_current_development_default:
+  - hybrid20k
+  - cluster20k
+  - full191433
+
+preserved_as_sensitivity_or_historical_evidence:
+  cluster20k: required_sensitivity_model
+  hybrid20k: saturation_resistant_comparison
+  full191433: complete_peak_negative_comparator
+
+post_selection_validation:
+  run_identity: variance20k_vs_depth_adjusted_20261117T031433Z
+  comparator: variance20k
+  comparator_definition: Existing scwbrna::hvg_select raw-count variance mode on all Bdev ATAC peaks.
+  shared_features: 19174
+  features_unique_to_each_axis: 826
+  conclusion: >-
+    Retain overall20k. Raw variance improved some latent-geometry diagnostics
+    but reduced replicate predicted-cluster agreement, increased saturation
+    association and reference-hub use, and reduced neighbor-sample entropy.
+  default_changed: false
+  evidence_document: current_analysis/Bdev_development/docs/04_reference_mapping/14_variance20k_vs_depth_adjusted_comparison.md
+
+official_scwbatac_hvp_validation:
+  run_identity: hvp20k_depth_comparison_20261117T044105Z
+  adjusted_candidate: hvp_depth20k
+  raw_candidate: hvp_raw20k
+  conclusion: >-
+    Depth-adjusted HVP outperformed raw HVP on most bulk-mapping diagnostics,
+    but did not outperform the then-current overall20k default overall. Retain
+    overall20k and repair the scwbATAC sparse execution path before acceptance.
+  resource_qualification: failed_dense_coercion_2.9_GiB_per_2048_cell_chunk
+  default_changed: false
+  evidence_document: current_analysis/Bdev_development/docs/04_reference_mapping/15_scwbatac_hvp20k_depth_mode_comparison.md
+
+supersession:
+  authority: explicit_user_decision_after_official_scwbatac_hvp_benchmark
+  replacement_candidate: hvp_depth20k
+  replacement_operation: scwbatac::hvp_select
+  replacement_declaration: current_analysis/Bdev_development/config/04_reference_mapping/25_scwbatac_hvp_depth20k_default.yaml
+  note: >-
+    This file preserves the prior overall20k decision and its evidence. It is
+    no longer the active development-default declaration.

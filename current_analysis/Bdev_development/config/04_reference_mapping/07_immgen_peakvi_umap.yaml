@@ -1,0 +1,67 @@
+schema_version: bdev.immgen_peakvi_umap.v1
+status: active
+run_identity: immgen_peakvi_umap_20261111T025344Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Fit a deterministic UMAP on the qualified Bdev-only ten-dimensional PeakVI reference and transform the 28 ImmGen ATAC libraries through the frozen UMAP model.
+  source_bundle_mutation: prohibited
+  derived_bundle_only: true
+  builds_sif: false
+
+inputs:
+  mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    reference_space: peakvi_space_id_1yiwac5je9ww
+    query_space: step4_immgen_peakvi_queries
+    authenticated_union_space: step4_immgen_reference_and_queries
+    expected_reference_cells: 1382
+    expected_query_libraries: 28
+    expected_dimensions: 10
+  mapping_table:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/04_immgen_library_l4_mapping.tsv
+    sha256: fc7a3917176c0d171c24d921d71f28a94dc0e93f267eb037aa634366e40a6246
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+
+umap:
+  dimensions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  output_space: step4_immgen_peakvi_reference_umap
+  n_neighbors: 30
+  min_dist: 0.3
+  metric: euclidean
+  nn_method: nndescent
+  spread: 1.0
+  seed: 41017
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+  scwbRepresentation:
+    version: 0.1.1
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T025344Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T025344Z
+  derived_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T025344Z/05_objects/01_immgen_umap_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T025344Z/05_objects/02_sessions
+
+acceptance:
+  require_reference_only_umap_fit: true
+  require_frozen_model_query_transform: true
+  require_all_query_libraries: true
+  require_native_l4: true
+  require_source_manifest_unchanged: true
+  implementation_unlocked: false
+  sif_built: false
+

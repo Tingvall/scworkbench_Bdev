@@ -1,0 +1,74 @@
+schema_version: bdev.simple_mean_contrast_margin_comparison.v1
+status: approved_for_diagnostic_plotting
+run_identity: simple_mean_contrast_margins_20261106T234706Z
+capability_id: 01_bulk_marker_boundary
+
+scope:
+  stage: Bdev_development
+  purpose: Compare pure raw-UCell argmax with winner margins of 0.01 and 0.05 on the same 64-program Bdev fixture.
+  source_score_run_id: run_6mtqbnw55gc3
+  paper_analysis: false
+
+inputs:
+  raw_signature_scores:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/05_objects/01_sessions/simple_mean_contrast_bdev_v1/stage/operation_pack_v2/transition_3lrfz11otnrypu14/outputs/signature_scores/payload.rds
+    sha256: 58600bbb5b275ce4940c59ac355ac26e0439a5153517ef88e1b2fba2b1fd50ed
+  decisions_margin001:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/06_bdev_raw_decisions.tsv
+    sha256: 5f686568cf89c99d46cf10d021369a55dcefd5ee9c922b74fdc0900fa208ffa7
+  source_session_receipt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/06_manifests/01_session_receipt.json
+    sha256: 84a5b8a9ee392efaaeb2da6e1bbfcb2e529be0d02233d3de3533d21a327f1f2a
+  coordinates:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/20_plot_hierarchical_population_umap/immgen_hierarchical_population_umap_20261102T203953Z/01_tables/01_bdev_umap_atac_coordinates.tsv.gz
+    sha256: d604bc81d48d924b32f3672828cf01caf4b9e95effed0efcc530c937782869dd
+    space_id: umap.atac
+  parent_margin005_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/29_simple_mean_contrast_margin_sensitivity/simple_mean_contrast_margin005_20261106T230556Z/06_manifests/01_final_run_manifest.json
+    sha256: b9210aeabab2a04d95800d1a9bb3345e854dccd3a07bf900dbd3037093933a0e
+
+comparison:
+  rules:
+    - rule_id: pure_argmax
+      display_label: Pure winner
+      minimum_raw_margin: 0.0
+    - rule_id: margin001
+      display_label: Margin >= 0.01
+      minimum_raw_margin: 0.01
+    - rule_id: margin005
+      display_label: Margin >= 0.05
+      minimum_raw_margin: 0.05
+  tie_tolerance: 1.0e-8
+  ties: unassigned
+  unassigned_label: unassigned
+  sample_field: sampleId
+  minimum_cells_for_direct_label: 5
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/02_r_library
+  dependency_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/30_simple_mean_contrast_margin_comparison/simple_mean_contrast_margins_20261106T234706Z
+
+acceptance_boundary:
+  expected_cells: 1746
+  expected_programs: 64
+  expected_ties: 37
+  expected_assigned:
+    pure_argmax: 1709
+    margin001: 1416
+    margin005: 443
+  expected_assigned_labels:
+    pure_argmax: 33
+    margin001: 31
+    margin005: 17
+  diagnostic_only: true
+  labels_accepted: false
+  artifacts_promoted: false
+  bundle_mutated: false
+  implementation_unlocked: false

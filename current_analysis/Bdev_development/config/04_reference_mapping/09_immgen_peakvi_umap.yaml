@@ -1,0 +1,13 @@
+base_config: 08_immgen_peakvi_umap.yaml
+schema_version: bdev.immgen_peakvi_umap.v1
+status: active
+run_identity: immgen_peakvi_umap_20261111T030621Z
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T030621Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T030621Z
+  derived_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T030621Z/05_objects/01_immgen_umap_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/04_plot_immgen_peakvi_umap/immgen_peakvi_umap_20261111T030621Z/05_objects/02_sessions
+
+observed_limitation: null
+

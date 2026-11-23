@@ -1,0 +1,45 @@
+base_config: 23_hvp20k_two_model_blind_freeze.yaml
+schema_version: bdev.hvp20k_two_model_external_compare.v1
+status: planned_external_evaluation
+
+scope:
+  purpose: Project the same frozen ImmGen libraries through both externally blind official scwbATAC HVP 20k models.
+  external_query_use: evaluation_only_after_freeze
+  immgen_identity_use: evaluation_only_after_freeze
+  current_default_replacement: prohibited_automatic
+
+external_evaluation:
+  query_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    matrix: ImmGen_ATAC_Bdev_peak_counts
+    expected_libraries: 28
+  library_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/01_immgen_library_run_manifest.tsv
+    sha256: f01514a404500325e7a2b2fa8bac489cce2ac275421e07ad364b0a872c9cf7a5
+  neighbor_k: 30
+  minimum_l4_neighbors: 5
+  l4_weight_positive_threshold: 0.5
+  trajectory_output_status: diagnostic_unaccepted
+
+visualization:
+  fixed_space: umap.atac
+  candidate_order:
+    - hvp_depth20k
+    - hvp_raw20k
+  candidate_labels:
+    hvp_depth20k: scwbATAC depth-adjusted HVP 20k
+    hvp_raw20k: scwbATAC raw-binary HVP 20k
+  ellipse_scale: 1.5
+  placement_kernel: exp(-(distance/kth_distance)^2)
+  detailed_spokes_per_library: 5
+  label_seed: 41621
+  fixed_coordinate_padding_fraction: 0.03
+
+acceptance:
+  require_same_query_libraries: true
+  require_projection_without_refit: true
+  require_model_payloads_unchanged: true
+  require_no_automatic_default_replacement: true
+  require_native_l4: true
+  sif_built: false

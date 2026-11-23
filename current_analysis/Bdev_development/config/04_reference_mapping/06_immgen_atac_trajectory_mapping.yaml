@@ -1,0 +1,83 @@
+base_config: 05_bdev_peakvi_pseudocell_10d_qualification.yaml
+schema_version: bdev.immgen_atac_trajectory_mapping.v1
+status: active
+run_identity: immgen_atac_l4_20261110T202521Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Project the frozen 28-library ImmGen B-cell ATAC panel into the qualified ten-dimensional Bdev PeakVI reference and transfer native fitted Slingshot L4 pseudotime with support gating.
+  real_immgen_projection: true
+  categorical_cluster_mapping: false
+  outputs_promoted_to_source: false
+  builds_sif: false
+
+inputs:
+  selected_populations:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/01_tables/09_selected_immgen_atac_populations.tsv
+    sha256: bce59c03705ba6105e51f29fb564d59be1793036d05ace87abfc50e8edcad7f9
+    expected_populations: 16
+  selected_libraries:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/01_tables/10_selected_immgen_atac_libraries.tsv
+    sha256: d1fb1b295093ba3fd9e4c6156d8e542c1b3e28056006b2fae4a9922da06b32c4
+    expected_libraries: 28
+  ena:
+    study: SRP110978
+    report_url: https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRP110978&result=read_run&fields=run_accession,sample_accession,experiment_accession,secondary_sample_accession,sample_alias,fastq_ftp,fastq_md5,fastq_bytes,library_layout,library_strategy,instrument_model&format=tsv
+  archived_mm10:
+    disposition: declared_read_only_legacy_input
+    bowtie2_prefix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/gse259355_tcf3_prob/reference/mm10_ucsc/bowtie2/mm10
+    bowtie2_index_sha256:
+      mm10.1.bt2: b79eed1a9b9f8859ef0387f6930a69d3cd11145ad46d844747111b9c5bba4387
+      mm10.2.bt2: f255c9ad5cbb6a454b2d20cd3374e93bdda966f3e3f7135dc21b1a89da3f110b
+      mm10.3.bt2: 3e54034c7021be0a78e7fe9593d91994e9816090f770e31a14e6f135b5f965e0
+      mm10.4.bt2: 7965c80e51b325fa6edbd76557908b050fb27247e4cfa26b3d07f3d460f45500
+      mm10.rev.1.bt2: 551ce5a16e4f6515758b381d31346d76fc458ba3981df7aa4c1d0097216e051f
+      mm10.rev.2.bt2: 3cdc14971697dc9f85e46a591c7775c6271eee3813a67743ba51476b24d0d51c
+    blacklist: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/gse259355_tcf3_prob/reference/mm10_ucsc/mm10-blacklist.v2.bed
+    blacklist_sha256: 9638bbeb4be8d99ddf56f1b70700f6a9336ce7f54d87032bd262465ecf3bfac7
+
+preprocessing:
+  bowtie2: /home/jtg/miniforge3/pkgs/https/conda.anaconda.org/bioconda/linux-64/bowtie2-2.5.5-h63e9258_1/bin/bowtie2
+  bowtie2_version: 2.5.5
+  bowtie2_library_path: /home/jtg/miniforge3/envs/utils/lib
+  samtools: /usr/bin/samtools
+  samtools_version: "1.13"
+  bedtools: /usr/bin/bedtools
+  bedtools_version: 2.30.0
+  threads: 16
+  maximum_fragment_length: 2000
+  minimum_mapping_quality: 30
+  require_proper_pair: true
+  remove_duplicates: true
+  tn5_shift: true
+  exclude_mitochondrial: true
+  blacklist_filter: true
+
+peakvi:
+  expected_reference_latent_sha256: 3bb607f73151f8cc5ecc50c101da289eecfed50fdc43efd510c9db97b24eb818
+
+runtime:
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/01_r_library
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z
+  mapping_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+  raw_fastq: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/03_raw_fastq
+  peak_counts: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/04_peak_counts
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/05_sessions
+
+acceptance:
+  require_all_ena_runs_resolved: true
+  require_all_fastq_md5: true
+  require_exact_feature_axis: true
+  require_projection_without_refit: true
+  require_authenticated_model_bound_union: true
+  require_native_l4: true
+  require_no_categorical_cluster_transfer: true
+  minimum_mapped_fragments: 100000
+  implementation_unlocked: false
+  sif_built: false
+
+observed_limitation: null

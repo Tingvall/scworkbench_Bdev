@@ -1,0 +1,107 @@
+schema_version: bdev.hvp20k_two_model_blind_freeze.v1
+status: planned_bdev_only_freeze
+run_identity: hvp20k_depth_comparison_20261117T044105Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Freeze full-Bdev PeakVI models from the official scwbATAC depth-adjusted and raw-binary HVP 20k modes before external evaluation.
+  external_query_use: prohibited
+  immgen_identity_use: prohibited
+  source_bundle_mutation: prohibited
+  current_default_replacement: prohibited_during_benchmark
+  implementation_unlocked: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    expected_cells: 26723
+  count_matrix: ATAC_counts
+  expected_features: 191433
+  cluster_field: peaks_snn_res.1.2
+  sample_field: orig.ident
+  depth_field: nCount_ATAC
+  authenticated_l4:
+    model_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/model/model_tree/model.rds
+    model_sha256: c378f9a8e816752e07918857a4390bb7ff5f25d4237ca8c45302e98d83ddb688
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    weights_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/lineage_weights/payload.rds
+    weights_sha256: 7148b050f0ebb839b2e3df30aff8993d88a9c2fa7704394e2a96d0ebcee10fb7
+    key: L4
+    curve_name: Lineage4
+    orientation: native
+
+feature_selection:
+  operation: scwbatac::hvp_select
+  n_features: 20000
+  min_detection_pct: 0.18710474123564
+  max_detection_pct: 80
+  chunk_size: 2048
+  candidates:
+    hvp_depth20k:
+      depth_adjustment: true
+      expected_method: log_depth_residual_variance
+    hvp_raw20k:
+      depth_adjustment: false
+      expected_method: raw_binary_variance
+  preserve_source_feature_order_for_model: true
+
+model:
+  candidates:
+    - hvp_depth20k
+    - hvp_raw20k
+  external_query_slots: 28
+
+peakvi:
+  n_latent: 10
+  n_layers: 1
+  n_hidden: 64
+  dropout: 0.2
+  max_epochs: 20
+  learning_rate: 0.001
+  early_stopping: true
+  seed: 41621
+  chunk_size: 32
+  batch_key: null
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: 2e7cbbdf50e615504412c5f9bbda76ceabdbd148
+  scwbATAC:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbATAC
+    source_commit: e9fd2da14c105c4a8922f3de50c87db9e4fb2724
+    manifest_sha256: 3a61bc277357939c02a825246c960b61e2ee2a22f5a7ceff7cff7d67287443d3
+  scwbLatent:
+    version: 0.1.3
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    source_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z
+  selection_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/02_selection_bundle
+  frozen_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/03_frozen_hvp_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/04_sessions
+
+acceptance:
+  require_official_scwbatac_operation: true
+  require_exact_20000_features_each: true
+  require_all_source_cells: true
+  require_models_frozen_before_external_access: true
+  require_source_manifest_unchanged: true
+  require_current_default_unchanged_during_benchmark: true
+  sif_built: false

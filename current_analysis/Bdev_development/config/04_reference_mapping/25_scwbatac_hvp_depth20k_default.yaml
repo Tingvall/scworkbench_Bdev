@@ -1,0 +1,163 @@
+schema_version: bdev.reference_mapping_development_default.v2
+status: superseded_model_default_retained_feature_selection_and_sensitivity
+selected_on: 2026-11-17
+superseded_on: 2026-11-22
+superseded_by: 32_qualified_20d_reference_mapping_default.yaml
+selection_authority: explicit_user_decision_after_official_scwbatac_hvp_benchmark
+capability_id: 04_reference_mapping
+
+selection:
+  candidate: hvp_depth20k
+  display_name: scwbATAC depth-adjusted HVP 20k
+  feature_count: 20000
+  operation: scwbatac::hvp_select
+  operation_parameters:
+    n_features: 20000
+    depth_adjustment: true
+    method: log_depth_residual_variance
+    min_detection_pct: 0.18710474123564
+    max_detection_pct: 80
+    chunk_size: 2048
+  selection_was_automatic: false
+  selection_reason: >-
+    After reviewing the official scwbATAC depth-adjusted versus raw HVP
+    benchmark, the user explicitly selected the depth-adjusted HVP 20k model
+    as the current development default. This choice prioritizes the reusable,
+    ATAC-specific operation path. The earlier overall20k model remains a
+    required sensitivity comparator because it performed better on several
+    external bulk-mapping diagnostics.
+
+selected_frozen_model:
+  source_run_identity: hvp20k_depth_comparison_20261117T044105Z
+  source_cells: 26723
+  latent_dimensions: 10
+  model_artifact_id: model_ref_20261117_051703_wi5ql81y
+  fit_summary_artifact_id: obs_table_20261117_051704_minh5wju
+  selection_artifact_id: feature_table_20261117_050354_bi6svkqa
+  selection_summary_artifact_id: obs_table_20261117_050415_hzliadbq
+  reference_space_id: peakvi_space_id_n0cp39pv1pyi
+  model_payload_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/03_frozen_hvp_bundle/artifact_models/commit_20261117_051657_75gu36ac/model_tree_db4940d8c8bcc777877c4dffa89e9c23fcca2ff943bf155b67d187bfff176389/model.pt
+  model_payload_sha256: 024d11e3efb4822c31cd75c5371d6320860026f46dadd9ff80d680712df134a8
+  feature_order_sha256: 8ca9dbbe27d9640394fc31bb3d272ca6ae1e1061fa1aa973d5ea0bf6d5cf18e0
+  model_tree_manifest_sha256: db4940d8c8bcc777877c4dffa89e9c23fcca2ff943bf155b67d187bfff176389
+
+runtime_provenance:
+  scworkbench:
+    version: 0.1.2
+    source_commit: 2e7cbbdf50e615504412c5f9bbda76ceabdbd148
+  scwbATAC:
+    version: 0.1.1
+    source_commit: e9fd2da14c105c4a8922f3de50c87db9e4fb2724
+    manifest_sha256: 3a61bc277357939c02a825246c960b61e2ee2a22f5a7ceff7cff7d67287443d3
+  scwbLatent:
+    version: 0.1.3
+    source_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+
+evidence:
+  feature_axes:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/03_hvp20k_source_order_axes.tsv.gz
+    sha256: aeb453c86852d97b6d24a947f3b4e97d3a7954eec3d07b2821f107eab26f126a
+  model_registry:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/04_frozen_hvp_model_registry.tsv
+    sha256: 89785182179b3289ef9f92b62d3b47196e6314e7781a3b22cf37c089ae42d3a1
+  pre_external_freeze_receipt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/06_manifests/02_pre_external_freeze_receipt.json
+    sha256: 3218c2ab97e45904c2a4d40587bd39f08ca1682f21414743633af3bc41f7f5db
+  external_metrics:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/08_hvp_external_metrics.tsv
+    sha256: 5be8f57eb31b8e1f4f1d738ba89ce92e12eb72f92471a03e703908db1c8f3205
+  external_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/03_reports/01_hvp_external_summary.json
+    sha256: 337b160022dad70702dc72764f6453900dd4a6895569dde8b14232311181170c
+  external_execution_receipt:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/06_manifests/03_external_execution_receipt.json
+    sha256: 2c69e2c9395a3bd611f0121f523d98a0077b67b8bc9ab16549d9568170dab0c2
+  fixed_umap_summary:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/03_reports/02_hvp_fixed_umap_summary.json
+    sha256: 4ac9f71e7ade058ea0d8874ffef3781e432aa64e74e81570c9653c08a2304ceb
+  fixed_umap_overview:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/02_figures/01_hvp_depth_vs_raw_fixed_atac_umap.png
+    sha256: e6dd1e6bab759a8a3e0fc50facda9a439d3f20c717f092ebea0513812df439e1
+
+observed_external_metrics:
+  query_libraries: 28
+  within_population_to_between_population_latent_distance_ratio: 0.187270866600061
+  replicate_predicted_cluster_agreement: 0.923076923076923
+  unique_reference_neighbors: 508
+  maximum_reference_hub_fraction: 0.0107142857142857
+  median_nearest_distance_over_reference_median: 1.60099423822661
+  median_neighbor_sample_entropy: 0.284099766996362
+  maximum_absolute_depth_latent_spearman: 0.542419266557198
+  maximum_absolute_saturation_latent_spearman: 0.66913326658785
+  finite_native_l4_estimates: 10
+  median_native_l4_neighbor_weight: 0.0896038903514099
+
+historical_development_default_policy:
+  use_for:
+    - historical reproduction of the 10-dimensional benchmark
+    - feature-selection and model-sensitivity comparison
+  required_sensitivity_model:
+    candidate: overall20k
+    purpose: >-
+      Preserve the earlier depth-bin variable-peak model as a comparator because
+      it had stronger population separation, replicate agreement, support
+      distance, and neighbor-sample entropy in the same external benchmark.
+    agreement_use: qualitative_and_support_aware_sensitivity_not_coordinate_averaging
+  trajectory_policy:
+    default_trajectory: authenticated fitted Slingshot L4
+    orientation: native
+    assignment_stage: second_stage_after_whole_reference_mapping
+    current_bulk_output_status: diagnostic_unaccepted
+    force_non_l4_queries_onto_trajectory: false
+  uncertainty_policy:
+    - Retain reference-distance, neighbor diversity, hub use, and replicate coherence diagnostics.
+    - Treat discordance with overall20k as feature-selection uncertainty rather than averaging latent or UMAP coordinates.
+    - Retain depth and peak-saturation latent associations as explicit limitations.
+
+operation_acceptance:
+  development_default_selected_historically: true
+  current_model_default: false
+  source_contract_test: passed
+  real_data_resource_qualification: passed_in_subsequent_sparse_safe_full_bdev_reproduction
+  observed_failure: sparse_to_dense_coercion_2.9_GiB_per_2048_cell_chunk
+  source_fix_state:
+    repository: /home/jtg/msi_projects/scworkbench_code/scwbATAC
+    base_commit: e9fd2da14c105c4a8922f3de50c87db9e4fb2724
+    qualified_commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
+    required_scworkbench_commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+    state: qualified_source_fix_and_sparse_reader_reproduction_passed
+    required_changes:
+      - sparse_safe_binary_peak_by_log_depth_cross_product
+      - no_depth_cross_product_when_depth_adjustment_is_false
+      - large_sparse_axis_regression_contract
+  final_implementation_runtime_policy:
+    require_updated_scwbATAC: true
+    reject_base_commit_without_fix: e9fd2da14c105c4a8922f3de50c87db9e4fb2724
+    required_commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
+    required_qualification: exact_Bdev_axis_and_downstream_reproduction_passed
+  required_before_new_sif_acceptance:
+    - pin the qualified sparse-safe scwbATAC and scworkbench commits
+    - include the qualified components in the replacement immutable SIF
+    - repeat container-level qualification and explicitly accept the SIF
+  eligible_for_new_sif: false
+
+boundaries:
+  do_not_treat_as:
+    - an implementation-stage default
+    - a production-qualified model
+    - an accepted bulk trajectory assignment model
+    - permission to tune or refit with ImmGen identities
+    - acceptance of the current scwbATAC resource behavior
+  implementation_unlocked: false
+  paper_analysis_authorized: false
+  selected_frozen_development_artifact_promoted_to_implementation: false
+  new_qualified_immutable_sif_still_required: true
+
+historical_supersession_record:
+  declaration: 20_depth_adjusted_variable20k_default.yaml
+  candidate: overall20k
+
+preserved_as_sensitivity_or_historical_evidence:
+  overall20k: required_sensitivity_model
+  hvp_raw20k: non_depth_adjusted_official_operation_comparator
+  cluster20k: biology_oriented_historical_comparator

@@ -1,0 +1,182 @@
+schema_version: bdev.parse38_depth_adjusted_trajectory_qualification.v1
+status: approved_development_qualification
+run_identity: bdev_cytokine_depth_adjusted_20261106T145817Z
+capability_id: 03c_parse_cytokine_depth_adjusted_trajectory
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Bounded Bdev qualification of log1p-CP10K gene-level depth-adjusted Parse38 scores, matched signal dynamics and intervals, and SCT-based GSEA on fitted Slingshot L4.
+  parent_qualification: 03b_parse_cytokine_trajectory_analysis
+  supersedes_failed_runs:
+    - bdev_cytokine_depth_adjusted_20261105T225543Z
+    - bdev_cytokine_depth_adjusted_20261105T232903Z
+    - bdev_cytokine_depth_adjusted_20261105T234432Z
+  outputs_promoted: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/bdev_reference/bundle
+    manifest_sha256: 9219e0b9ef9d11d63acad0e882e49c184045ead55b0e5a9a9fb1e2306dc61225
+    expected_cells: 26723
+  gene_sets:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z/01_tables/05_passing_gene_sets.gmt
+    sha256: 22f041528a1e882c0bec7bd920b7638646b20589020669bf0f42b59880e0bdb7
+    expected_sets: 38
+    expected_memberships: 934
+  authenticated_l4:
+    source_run_identity: bdev_cytokine_trajectory_20261105T153001Z
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    model_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/model/model_tree/model.rds
+    model_sha256: c378f9a8e816752e07918857a4390bb7ff5f25d4237ca8c45302e98d83ddb688
+    fixture_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/01_tables/04_l4_fixture_cells.tsv
+    fixture_sha256: bcc1397ffa921b728f4342c15959f51dc07ddeb25d621a6409e49f325493c3d5
+  fit_space: umap.atac
+  cluster_field: peaks_snn_res.1.2
+  sample_field: orig.ident
+  depth_field: nCount_RNA
+  preserved_pseudotime_field: pt
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/02_r_library
+  dependency_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: e6289d5353fbdb1a0e14a7d3a806ce4b958f56ff
+  scwbRNA:
+    version: 0.1.0
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRNA
+    source_commit: 151dd29211b219343dce6247c5e48fc932b4c83d
+    manifest_sha256: 067db0625181775721a91f2188bb9f2ca72443fc8aa06d0b453669035ebad410
+    source_manifest_file_sha256: 067db0625181775721a91f2188bb9f2ca72443fc8aa06d0b453669035ebad410
+  scwbGenePrograms:
+    version: 0.1.0
+    source_commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    manifest_sha256: 092887663122e595eee85a4ee98941ac059d313f9c39cee557b8e344d84b52f2
+  scwbTrajectory:
+    version: 0.1.8
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
+    source_commit: f5b6863afc99ca7118b63fe915b759f9e38f6d2b
+    manifest_sha256: cc66ffd389761a115d24788be77ad0b0ba8655a42577d413fdb5466642e18d9c
+    source_manifest_file_sha256: 526a945e656cd7e58e99153bd3923c547fbdc040b12c1ccc09992c45b87ca352
+  fgsea: 1.34.2
+  BiocParallel: 1.42.2
+  slingshot: 2.16.0
+
+fit:
+  lineage: L4
+  orientation: native
+  display_orientation: LSK_to_CD19
+  source: authenticated_03b_fitted_slingshot_output
+
+fixture:
+  n_bins: 20
+  cells_per_bin: 100
+  maximum_cells: 2000
+  deterministic_selection: reuse_exact_authenticated_03b_fixture
+
+gene_set_import:
+  namespace: parse38_cytokine_20261103
+  collection: Parse38 all-cytokine competitor-refined signatures
+  species: Mus musculus
+  gene_id_type: gene_symbol
+
+normalization:
+  operation: scwbrna::matrix_log_normalize
+  source_matrix: RNA_counts
+  output_matrix: RNA_log1p_cp10k
+  scale_factor: 10000
+  chunk_size: 250
+  require_depth_match: true
+  depth_match_tolerance: 1.0e-8
+
+score_generation:
+  operation: scwbtrajectory::trajectory_geneset_scores
+  matrix: RNA_log1p_cp10k
+  score_method: mean
+  adjust_depth: true
+  adjustment_spline_df: 8
+  min_set_size: 15
+  max_set_size: 150
+  chunk_size: 128
+
+common_scale:
+  fraction: 0.05
+  overlapping_step: 0.025
+
+methods:
+  dynamics:
+    operation: scwbtrajectory::trajectory_signal_dynamics_explicit
+    n_bins: 20
+    summary_fun: median
+    smooth_method: none
+    bootstrap_n: 0
+    min_cells_per_bin: 20
+    min_bins_observed: 10
+  intervals:
+    operation: scwbtrajectory::trajectory_signal_intervals
+    window_width_fraction: 0.05
+    window_step_fraction: 0.025
+    summary_fun: median
+    permutation_mode: unblocked
+    n_permutations: 99
+    seed: 3301
+    min_cells_per_window: 20
+    min_samples_per_window: 1
+    global_q_cutoff: 0.05
+    local_q_cutoff: 0.05
+    merge_gap_fraction: 0.025
+  gsea:
+    operation: scwbtrajectory::trajectory_preranked_gsea
+    matrix: SCT_data
+    adjust_depth: false
+    analysis_scope: both
+    global_rank_method: monotonic_association
+    window_width_fraction: 0.05
+    window_step_fraction: 0.025
+    permutation_mode: unblocked
+    n_permutations: 99
+    seed: 3401
+    min_cells_per_window: 20
+    min_samples_per_window: 1
+    min_set_size: 15
+    max_set_size: 150
+    score_type: std
+    gsea_param: 1
+    sample_size: 51
+    n_perm_simple: 500
+    eps: 1.0e-8
+    p_adjust_method: BH
+    global_q_cutoff: 0.05
+    local_q_cutoff: 0.05
+    merge_gap_fraction: 0.025
+    consensus_leading_edge_fraction: 0.5
+    chunk_size: 128
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z
+  execution_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/04_sessions
+
+acceptance:
+  bounded_fixture_only: true
+  require_all_38_signatures: true
+  require_log1p_cp10k: true
+  require_depth_adjustment: true
+  require_adjustment_spline_df: 8
+  require_gsea_unadjusted: true
+  require_unblocked_permutations: true
+  require_native_l4_analysis: true
+  require_exact_03b_l4_reuse: true
+  require_lsk_to_cd19_display: true
+  preserve_archived_source: true
+  preserve_pt_values_and_missingness: true
+  promote_outputs: false
+  implementation_unlocked: false

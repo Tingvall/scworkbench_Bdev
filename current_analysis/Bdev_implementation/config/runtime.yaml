@@ -6,6 +6,18 @@ sif:
   sha256: null
   architecture: null
 components: []
+required_component_updates:
+  - component: scwbATAC
+    requirement: sparse_safe_hvp_select_update
+    base_commit_not_acceptable: e9fd2da14c105c4a8922f3de50c87db9e4fb2724
+    required_commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
+    qualification: source_contracts_7_of_7_and_full_bdev_sparse_hvp_reproduction_passed
+  - component: scwbReferenceMap
+    requirement: support_and_annotation_continuous_gate_for_selected_20d_default
+    required_commit: 390ec50f1ac65ed7c46bbd9d45d7b506741630e5
+    required_version: 0.2.0
+    required_manifest_sha256: 12a969c73bc92a18af2a663e3ab2b9ac1930d272e44f7e3d1600f9578ffaef98
+    qualification: support_annotation_gate_and_full_gated_20d_bdev_mapping_passed
 operation_catalog_identity: null
 qualification_report: null
 accepted: false

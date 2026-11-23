@@ -61,10 +61,16 @@ capabilities:
       found 71.2 percent overall cell-round agreement and 57.1 percent stable
       baseline-assigned cells at an 80 percent agreement threshold. Stability
       was strongest for the B-cell manifold and weaker among adjacent stem and
-      progenitor labels. The default remains provisional and bootstrap
-      agreement should be retained as uncertainty. No artifacts were promoted
-      to implementation or scWorkbench core, no labels were accepted as truth,
-      and no core or operation-pack change is required.
+      progenitor labels. A separate raw-margin 0.05 sensitivity retained only
+      443/1416 baseline assignments, made 973 additional cells unassigned, and
+      reduced represented labels from 31 to 17. A three-rule comparison found
+      1709 assignments across 33 labels for pure argmax, 1416/31 at margin
+      0.01, and 443/17 at margin 0.05; 37 exact top-score ties remained
+      unassigned. Neither alternative was selected over the 0.01 rule. The
+      default remains provisional and bootstrap agreement should be retained
+      as uncertainty. No artifacts were promoted to implementation or
+      scWorkbench core, no labels were accepted as truth, and no core or
+      operation-pack change is required.
   - capability_id: 02_slingshot_trajectory_semantics
     status: source_updates_focused_tests_passed_bdev_recreation_complete
     purpose: Qualify exact Slingshot omega behavior and scalar pseudotime-to-lineage adoption semantics.
@@ -121,7 +127,7 @@ capabilities:
   - capability_id: 03b_parse_cytokine_trajectory_analysis
     analysis_label: "03b"
     analysis_part: trajectory_analysis
-    status: bounded_bdev_development_qualification_passed_sif_pending
+    status: bounded_bdev_development_qualification_passed_remaining_development_analysis_then_sif_pending
     purpose: Qualify descriptive dynamics, permutation-supported intervals, and preranked GSEA for the Parse cytokine programs over fitted Bdev L4 pseudotime.
     preferred_owner: bdev_integration_using_scwbGenePrograms_and_scwbTrajectory
     core_change_indicated: false
@@ -145,18 +151,191 @@ capabilities:
       FLT3L-up and IL-7-up four-view figures are retained as the preliminary
       analysis for later implementation. The presentation convention is LSK
       (0) to CD19 (1), implemented only as one minus the native L4 fraction;
-      native fitted L4 remains the analysis trajectory. A new immutable SIF
-      must still be built, qualified, checksummed, and explicitly accepted
-      before implementation or paper analysis is activated, at which point
+      native fitted L4 remains the analysis trajectory. The remaining
+      development analyses must be completed before a new immutable SIF is
+      built, qualified, checksummed, and explicitly accepted. Only then may
+      implementation or paper analysis be activated, at which point
       the frozen analysis must be rerun rather than promoting these development
       outputs.
+  - capability_id: 03c_parse_cytokine_depth_adjusted_trajectory
+    analysis_label: "03c"
+    analysis_part: depth_adjusted_trajectory_qualification
+    status: bounded_bdev_development_qualification_passed_remaining_development_analysis_then_sif_pending
+    purpose: Qualify log1p-CP10K gene-level depth-adjusted Parse cytokine scores, matched dynamics and intervals, and SCT-based GSEA over fitted Bdev L4 pseudotime.
+    preferred_owner: bdev_integration_using_scwbRNA_scwbGenePrograms_and_scwbTrajectory
+    core_change_indicated: true
+    notes: >-
+      scwbTrajectory 0.1.8 commit
+      f5b6863afc99ca7118b63fe915b759f9e38f6d2b and scworkbench 0.1.1
+      commit e6289d5353fbdb1a0e14a7d3a806ce4b958f56ff authenticate the
+      multi-feature-set adjusted score family as an exact ordered
+      feature-set-by-cell Cartesian product. Run
+      bdev_cytokine_depth_adjusted_20261106T145817Z completed on the exact
+      1,810-cell authenticated native-L4 fixture from 03b. All 38 Parse38 sets
+      passed RNA_log1p_cp10k and SCT_data overlap checks. The run produced
+      68,780 cell-level scores from 753 successfully adjusted and standardized
+      genes, 72 supported adjusted-score intervals, and 46 supported GSEA
+      intervals. Interval inputs were uniformly recorded as already_adjusted;
+      GSEA used SCT_data with added depth adjustment disabled. RNA-count
+      library sizes matched nCount_RNA exactly, the archived source was not
+      mutated, and preserved pt values and missingness were unchanged. All 53
+      inventoried files rehashed successfully. Outputs remain unpromoted and a
+      remaining development analyses must be completed before a new immutable
+      SIF is built, qualified, checksummed, and explicitly accepted. Until
+      then implementation and paper analysis remain inactive.
   - capability_id: 04_reference_mapping
-    status: deferred_until_relevant_analysis_is_approved
+    status: qualified_20d_selected_later_implementation_default_bulk_reuse_recorded_sif_pending
     purpose: Qualify reference fitting, projection, support calibration, pseudotime transfer, uncertainty, and out-of-reference calls.
     preferred_owner: scwbRepresentation_scwbLatent_or_new_scwbReferenceMap
-    core_change_indicated: false
+    core_change_indicated: true
+    notes: >-
+      scwbRepresentation commit c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+      supplies the bounded exact RANN backend and scwbReferenceMap commit
+      12026fe6a9289e9e7b169e988ceecb80fa3fbafa supplies separate calibration
+      and transfer operations. Run bdev_l4_reference_mapping_20261110T042541Z
+      qualified their execution semantics on all 1,810 authenticated native-L4
+      fixture cells with each of four orig.ident samples held out once. Query
+      accounting, out-of-reference withholding, exact source-manifest
+      preservation, retained calibration promotion, and native-L4 use passed.
+      Run bdev_peakvi_pseudocell_10d_20261110T180851Z qualified the fixed
+      ten-dimensional PeakVI workflow on the exact 191,433-peak axis using
+      scWorkbench 0.1.2 commit 2e7cbbdf50e615504412c5f9bbda76ceabdbd148
+      and scwbLatent 0.1.3 commit
+      cc93bb713d9d66a32ab697a9fc2d949025d0c678. The retained model projected
+      428 held-out cells, 32 raw pseudobulks, and 96 depth-matched pseudo-cells
+      without refitting, preserved all ten latent dimensions, and completed an
+      authenticated model-bound union. All query classes had accepted fraction
+      1.0; native-L4 Spearman values were 0.940, 0.988, and 0.979,
+      respectively. Source-manifest preservation, exact feature and cell axes,
+      native-L4 use, pseudo-cell depths, and every performance threshold
+      passed. Controlled development run immgen_atac_l4_20261110T202521Z then
+      reprocessed all 28 frozen GSE100738/SRP110978 ImmGen ATAC libraries on
+      mm10 and counted 2,323,295 to 9,542,315 deduplicated,
+      blacklist-filtered Tn5-shifted fragments per library against the exact
+      Bdev peak universe. The qualified deterministic 10D Bdev-only PeakVI
+      reference checksum was reproduced, all libraries were projected without
+      refitting, and the authenticated model-bound union completed. Native-L4
+      support calls were 25 supported, 3 borderline, and 0 out-of-reference;
+      all 28 libraries therefore retained reportable L4 estimates. Categorical
+      cluster transfer remained disabled, the source-bundle manifest and
+      archive were unchanged, and the final result inventory contains 48
+      checksummed files. No new SIF was built and implementation remains
+      locked. A later full-Bdev comparison froze hybrid20k, cluster20k,
+      overall20k, and all-191433-peak references before exposing any model to
+      the same 28 ImmGen libraries. The three 20k axes substantially improved
+      external mapping over the complete peak axis. Overall20k gave the
+      strongest population geometry, perfect replicate cluster agreement, 477
+      distinct reference neighbors, and the lowest hub fraction, although its
+      maximum latent association with peak saturation was 0.736. A common-axis
+      fixed-UMAP diagnostic confirmed ordered overall20k mapping and broad,
+      overlapping support from the all-peak model. The user initially selected
+      overall20k as the provisional development default. A later comparison
+      applied the official scwbATAC hvp_select operation to all 26,723 cells
+      and selected 20,000 peaks with and without log-depth adjustment before
+      exposing either frozen model to ImmGen. Depth-adjusted HVP improved five
+      of eight paired HVP bulk-mapping diagnostics and had lower saturation
+      association than overall20k, although overall20k remained stronger on
+      population separation, replicate agreement, support distance,
+      neighbor-sample entropy, and depth association. On 2026-11-17 the user
+      explicitly selected the official depth-adjusted HVP 20k model as the
+      provisional development default; overall20k is now the required
+      sensitivity comparator. The real-matrix operation exposed a repeated
+      2.9 GiB sparse-to-dense coercion per 2,048-cell chunk. A sparse-safe
+      pack-side sparse fix and large-axis regression contract were committed
+      as scwbATAC 3dce524c4b54ac3b3951a1daea06eecb0793b56a. All seven
+      source contracts passed against the corrected baseline SIF, including
+      both HVP contracts. Exact full-Bdev reproduction attempt
+      scwbatac_hvp_sparse_requalification_20261117T201433Z nevertheless
+      reproduced the 2.9 GiB coercion on the first 191,433-feature by
+      2,048-cell chunks. A one-chunk diagnostic showed that scwbATAC's slice,
+      binarization, sparse multiplication, and summaries stay sparse. The
+      remaining coercion is upstream in scWorkbench core
+      .wb_operation_pack_v3_capability_adapter, where the authenticated
+      bundle-matrix reader unconditionally applies as.matrix() to the sparse
+      stream-reader result before the operation pack receives it. A genuinely
+      sparse-safe implementation therefore requires explicit approval for the
+      smallest core authenticated-reader change plus core and pack regression
+      qualification. Merely reducing chunk size would retain repeated dense
+      coercions and is not accepted as the final fix. The corrected components
+      still require exact Bdev reproduction and inclusion in the replacement
+      SIF before container acceptance. The aborted writable-handle
+      qualification refreshed only the source manifest's
+      publication.published_at field, changing its file checksum from cc8b92e8
+      to 40384e2f while leaving scientific-state fingerprint 4d53e5f7
+      unchanged; no output was promoted and the unavailable prior timestamp
+      was not guessed or overwritten.
+      scWorkbench commit 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+      then removed the authenticated typed-slice dense conversion and added a
+      sparse-preservation regression. That regression and all seven scwbATAC
+      source contracts passed. Full-Bdev run
+      scwbatac_hvp_sparse_source_requalification_20261118T004129Z completed
+      both official modes across all 26,723 cells and 191,433 peaks without a
+      dense-allocation warning, selecting exactly 20,000 peaks per mode. The
+      depth-adjusted feature axis, ranks, and numerical ledger reproduced
+      within 1e-12. Raw-mode score-driving columns and selected membership
+      reproduced; 94 rank/order changes were confined to tied scores with
+      maximum displacement three and zero selection changes. The new raw
+      residual, slope, and R-squared values matched the tested not-requested
+      sentinels introduced by the sparse pack fix. Tie-aware adjudication
+      scwbatac_hvp_sparse_tie_adjudication_20261118T011000Z passed and the run
+      was inventoried. The source scientific-state fingerprint remained
+      4d53e5f7; writable close refreshed only publication.published_at. No
+      operation output was promoted to the source.
+      scwbReferenceMap 0.2.0 commit
+      390ec50f1ac65ed7c46bbd9d45d7b506741630e5 added the reusable
+      support_and_annotation continuous gate. Bounded run
+      gated_continuous_transfer_20261122T192735Z passed on the fixed
+      depth-adjusted HVP20k reference using 20 latent dimensions, five
+      sample/trajectory-balanced folds, complete L4-domain labels, 30
+      neighbors, and a 0.51 annotation-confidence threshold. Calibration
+      covered all 26,723 reference cells; 7 of 28 balanced fixture queries
+      passed the complete gate and 21 were withheld by an out_domain vote.
+      Full run flt3lko_il7ko_full_gated_20d_20261122T202618Z then projected
+      and accounted for all 23,252 FLT3LKO/IL7KO query cells without model
+      refitting across 47 checksummed batches. It published accepted native-L4
+      values for 2,974 cells and withheld 20,278 values under the qualified
+      gate. The qualified source manifest remained unchanged. On 2026-11-22
+      the user explicitly selected this exact 20-dimensional HVP20k model,
+      calibration, reference-support limits, and native-L4 acceptance gate as
+      the default for later Bdev implementation. The same exact frozen model
+      and gate must be used for bulk ATAC mapping without a bulk-specific
+      refit. The selection and exact limits are pinned in
+      32_qualified_20d_reference_mapping_default.yaml. These runs do not
+      authorize paper analysis or unlock implementation. Remaining
+      development work must be completed before a new immutable SIF is built,
+      container-qualified, checksummed, and explicitly accepted.
   - capability_id: 05_trajectory_group_contrasts
-    status: deferred_until_relevant_analysis_is_approved
+    status: full_gated_mapping_qualified_descriptive_occupancy_operation_pending_inference_replication_blocked
     purpose: Qualify support-aware occupancy, signal, and motif contrasts between biological groups.
     preferred_owner: scwbTrajectory_or_new_official_contrast_pack
     core_change_indicated: false
+    notes: >-
+      On 2026-11-17 the user confirmed that the single-cell multiome query
+      contains Flt3l ligand knockout (FLT3LKO) and Il7 knockout (IL7KO), each
+      with its corresponding WT library, and authorized the next development
+      step. The immutable archived source and its 23,252-cell QC-selected set
+      remain read-only inputs. Its previously quantified 97,788-peak matrix is
+      tied to the legacy Bdev peak axis and has zero feature-ID overlap with
+      the selected current HVP-depth20k model axis, so it cannot be projected
+      into that frozen model. Development therefore begins with a bounded,
+      four-library-balanced fixture requantified from the immutable GRCm39
+      fragments over the exact selected HVP-depth20k peaks after reciprocal
+      mm10-to-mm39 liftOver. Run
+      flt3lko_il7ko_mapping_fixture_20261117T175427Z passed exact-axis
+      quantification and balanced 28-cell frozen-model projection: all 28
+      queries were supported and 18 had finite native-L4 values. Existing
+      scwbReferenceMap operations therefore cover calibrated support and
+      continuous transfer. The input has only one library per target/genotype
+      and no independent biological-sample field, so inferential WT/KO testing
+      would pseudoreplicate cells and is prohibited without additional sample
+      provenance. A reusable descriptive/reference-relative occupancy
+      operation remains the next official-pack development task. Bounded
+      gated-transfer qualification and the complete 23,252-cell gated 20D
+      mapping subsequently passed in runs
+      gated_continuous_transfer_20261122T192735Z and
+      flt3lko_il7ko_full_gated_20d_20261122T202618Z. The full run retained
+      accepted native-L4 values for 2,974 cells and explicitly withheld the
+      other 20,278. These coverage counts are mapping QC only. Biological
+      contrasts remain prohibited by the one-library-per-group design, and
+      paper figures remain locked until remaining development work is complete
+      and a new SIF is qualified and accepted.

@@ -1,0 +1,64 @@
+schema_version: bdev.immgen_atac_umap_overlay.v1
+status: active
+run_identity: immgen_atac_umap_20261111T032028Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Place the 28 mapped ImmGen ATAC libraries on the approved Bdev ATAC UMAP used for fitted Slingshot L4, using the authenticated PeakVI neighbor ledger.
+  source_bundle_mutation: prohibited
+  builds_sif: false
+
+inputs:
+  mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    joint_space: step4_immgen_reference_and_queries
+    reference_space: peakvi_space_id_1yiwac5je9ww
+    query_space: step4_immgen_peakvi_queries
+    expected_reference_cells: 1382
+    expected_query_libraries: 28
+  bdev_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    atac_umap_space: umap.atac
+    expected_cells: 26723
+  mapping_table:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/04_immgen_library_l4_mapping.tsv
+    sha256: fc7a3917176c0d171c24d921d71f28a94dc0e93f267eb037aa634366e40a6246
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+
+placement:
+  neighbor_k: 50
+  projection_k: 30
+  backend: rann_exact
+  space_chunk_size: 512
+  query_chunk_size: 128
+  weight_kernel: exp_neg_squared_distance_over_kth_distance
+  label_seed: 41017
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/01_r_library
+  scworkbench_version: 0.1.2
+  scwbRepresentation_version: 0.1.1
+  scwbRepresentation_manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z
+  execution_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/05_objects/01_execution_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/05_objects/02_sessions
+
+acceptance:
+  require_approved_atac_umap: true
+  require_all_query_labels: true
+  require_native_l4: true
+  require_source_manifests_unchanged: true
+  implementation_unlocked: false
+  sif_built: false
+

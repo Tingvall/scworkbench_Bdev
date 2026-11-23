@@ -41,3 +41,8 @@ The subsequent 30-round robustness result is documented in
 [`25_simple_mean_contrast_bootstrap_stability.md`](25_simple_mean_contrast_bootstrap_stability.md).
 It supports retaining bootstrap agreement as uncertainty, particularly for
 adjacent stem/progenitor labels, while leaving this provisional default intact.
+
+A separate 0.05 winner-margin sensitivity analysis is documented in
+[`26_simple_mean_contrast_margin_sensitivity.md`](26_simple_mean_contrast_margin_sensitivity.md).
+It retained only 443/1,416 baseline assignments and therefore did not replace
+the selected 0.01 development default.

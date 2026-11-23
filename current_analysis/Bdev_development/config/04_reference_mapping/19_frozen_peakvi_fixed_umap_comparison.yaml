@@ -1,0 +1,87 @@
+schema_version: bdev.frozen_peakvi_fixed_umap_comparison.v1
+status: planned_read_only_visualization
+run_identity: frozen_peakvi_fixed_umap_4way_20261116T232155Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Compare the same post-freeze ImmGen bulk mappings from four frozen full-Bdev PeakVI models on the approved fixed Bdev ATAC UMAP and authenticated native-L4 trajectory.
+  benchmark_mutation: prohibited
+  model_refit: prohibited
+  trajectory_acceptance: prohibited
+  automatic_model_promotion: prohibited
+  implementation_unlocked: false
+
+inputs:
+  bdev_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    fixed_space: umap.atac
+    expected_cells: 26723
+  authenticated_l4:
+    model_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/model/model_tree/model.rds
+    model_sha256: c378f9a8e816752e07918857a4390bb7ff5f25d4237ca8c45302e98d83ddb688
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    curve_name: Lineage4
+    orientation: native
+  frozen_benchmark:
+    results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z
+    mappings_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/04_immgen_candidate_mappings.tsv
+    mappings_sha256: a970d569cf66f01e6723a3924c247d4bea7bc2b44176f61c0e27874e1f9e8d80
+    neighbors_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/05_immgen_candidate_neighbors.tsv.gz
+    neighbors_sha256: c522ea603321e252fc17fd89ee6a815f76133e8c0d081f9db1afd31e528a38df
+    metrics_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/01_tables/06_external_candidate_metrics.tsv
+    metrics_sha256: d189fd4c24caafa89a63ea5c882f9dd35dcdd29560ce2f5c58ae5588f049ae17
+    summary_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/03_reports/01_external_four_model_benchmark_summary.json
+    summary_sha256: 28acd4f628212bf0d5ed6d91549a546f5d9add4a8bd038411c3f77dbc4790196
+    receipt_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/11_compare_frozen_full_bdev_peakvi/full_bdev_peakvi_immgen_4way_20261116T202157Z/06_manifests/03_external_execution_receipt.json
+    receipt_sha256: 2c69d1db1e14279daac88fd14770bce89439a4eef2c5af9f76dbc247b15e9e7c
+    expected_candidates: 4
+    expected_libraries_per_candidate: 28
+    expected_neighbors_per_library: 30
+
+visualization:
+  candidate_order:
+    - hybrid20k
+    - cluster20k
+    - overall20k
+    - full191433
+  candidate_labels:
+    hybrid20k: Hybrid 20k (10k cluster + 10k overall)
+    cluster20k: Cluster-discriminating 20k
+    overall20k: Depth-adjusted variable 20k
+    full191433: All 191,433 peaks
+  placement_kernel: exp(-(distance/kth_distance)^2)
+  ellipse_scale: 1.5
+  detailed_spokes_per_library: 5
+  label_seed: 41621
+  fixed_coordinate_padding_fraction: 0.03
+  trajectory_output_status: diagnostic_unaccepted
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  r_libraries:
+    - /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/02_r_library
+    - /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library
+    - /home/jtg/.local/lib/R/scworkbench-development
+  seed: 41621
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/12_plot_frozen_full_bdev_peakvi_fixed_umap/frozen_peakvi_fixed_umap_4way_20261116T232155Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/12_plot_frozen_full_bdev_peakvi_fixed_umap/frozen_peakvi_fixed_umap_4way_20261116T232155Z
+
+acceptance:
+  require_identical_fixed_umap_coordinates_across_models: true
+  require_all_28_libraries_per_model: true
+  require_all_30_frozen_neighbors_per_library: true
+  require_authenticated_native_l4_curve: true
+  require_common_axis_limits: true
+  require_no_model_refit: true
+  require_benchmark_inputs_unchanged: true
+  require_diagnostic_trajectory_label: true
+  sif_built: false

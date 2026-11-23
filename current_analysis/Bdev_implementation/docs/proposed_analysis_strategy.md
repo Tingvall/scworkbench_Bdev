@@ -219,33 +219,51 @@ evidence, not paper-analysis outputs.
 
 ### 4. Project selected bulk ATAC reference populations and align them to Bdev
 
-**Current status:** not started. The archived PeakVI work concerns single-cell
-knockout queries, not bulk ATAC population libraries.
+**Current status:** proposed later-implementation method selected on 2026-11-22
+after successful development bulk validation; implementation and paper execution
+remain locked pending the qualified SIF.
 
-**Proposed boundary:** scworkbench for peak-space preparation, reference-only
-PeakVI fitting, typed latent spaces, and projection where the data contract is
-valid. A limited outside proof of concept may be needed because projection of a
-bulk library into a model trained on single cells is not automatically a
-validated biological mapping.
+Use the exact frozen 20-dimensional depth-adjusted HVP20k PeakVI reference
+qualified in run `gated_continuous_transfer_20261122T192735Z`. The selected
+model is `model_ref_20261122_194532_hka11fvs`, and the selected calibration is
+`model_ref_20261122_195229_ewshintf`. The same model and calibration are used
+for both single-cell multiome queries and bulk ATAC libraries; do not fit a
+separate bulk-specific reference model by default.
 
-The provisional design is to:
+Bulk libraries must be quantified on the exact 20,000-feature order and
+projected without refitting. Apply the same primary-30 reference limits:
+supported through `2.02620492264996`, borderline through
+`2.56846898217638`, and out of reference above that value. Publish native L4
+only when the local domain vote is `in_domain`, confidence is at least `0.51`,
+and the estimate is finite. Retain the raw estimate and rejection reason for
+every library. Fixed-UMAP figures use neighbor-based placement on the unchanged
+Bdev `umap.atac`; neither UMAP nor Slingshot is refit.
 
-1. resolve genome builds and quantify or map all libraries to an approved Bdev
-   peak universe;
-2. fit PeakVI to Bdev only and freeze the reference model;
-3. project bulk libraries without allowing them to affect the reference fit;
-4. validate the behavior using Bdev pseudobulks and depth-matched pseudo-cells;
-5. map supported query points to the default fitted Bdev L4 pseudotime; and
-6. report uncertainty and out-of-reference behavior instead of forcing every
-   sample onto the trajectory.
+The proposed implementation method is `gated_20d_shared_reference_mapping`.
+Every valid query receives a distance-support call and fixed-UMAP placement.
+All raw native-L4 estimates and rejection reasons are retained, but an accepted
+native-L4 value is published only when the complete support, local-domain,
+confidence, and finite-estimate gate passes. In the fixed UMAP, queries that do
+not pass the complete L4 gate are shown in dark grey (`#343434`) and must not be
+interpreted as accepted trajectory positions. This reporting contract applies
+to both single-cell multiome and bulk ATAC queries using the same exact frozen
+model and calibration.
 
-A reusable bulk-query projection operation may be added to
-`scwbReferenceMap` after the proof of concept defines valid normalization,
-projection, and calibration contracts.
+The complete selection is pinned in
+[`32_qualified_20d_reference_mapping_default.yaml`](../../Bdev_development/config/04_reference_mapping/32_qualified_20d_reference_mapping_default.yaml)
+and mirrored as an inactive implementation default in
+[`reference_mapping.yaml`](../config/reference_mapping.yaml).
 
-**Approval gate:** approve the bulk ATAC datasets and populations, genome and
-peak-universe policy, projection semantics, validation controls, and support
-thresholds.
+Development validation run `immgen_bulk_gated_20d_20261123T001821Z` projected
+all 28 frozen ImmGen ATAC libraries through that exact model. All were within
+the calibrated distance-support limit; four passed the complete native-L4
+domain gate and 24 retained raw estimates but had accepted values withheld.
+This validates execution of the shared model and gate, not a paper result.
+
+**Activation gate:** pin and accept the new immutable SIF, verify the exact
+model and calibration payloads, and approve the bulk input manifest before
+implementation execution. Development figures remain qualification evidence,
+not paper outputs.
 
 ### 5. Identify gene sets that vary along the Bdev trajectory
 
@@ -346,22 +364,29 @@ Relevant scripts include:
 - [`11_peakvi_mapping_qc.R`](../../../archived_analysis/legacy_scworkbench_exploratory/processing/integration/11_peakvi_mapping_qc.R)
 - [`84_bdev_cutoff025_mapping_report.R`](../../../archived_analysis/legacy_scworkbench_exploratory/processing/integration/84_bdev_cutoff025_mapping_report.R)
 
-The archived source is described as **Flt3l ligand knockout** plus IL7 knockout,
-not necessarily Flt3 receptor knockout. That identity must be resolved before
-durable bundle names, labels, or biological conclusions are created.
+**Identity decision (2026-11-17):** the user confirmed **Flt3l ligand
+knockout (FLT3LKO)** plus **Il7 knockout (IL7KO)**, with corresponding WT
+libraries. This is not an *Flt3* receptor knockout. The permanent dataset ID
+`05_scmulti_flt3lko_il7ko` is therefore retained.
 
-**Proposed boundary:** use native CPU PeakVI and bounded k-nearest-neighbor
-operations. Add a `scwbReferenceMap` pack for the currently missing cohesive
-contract: reference-only cross-validation, calibrated similarity or distance
-thresholds, weighted pseudotime transfer, uncertainty, support categories, and
-out-of-reference calls. A trajectory-occupancy operation may then calculate
-genotype enrichment intervals and their null envelopes from the accepted
-mapped cells.
+**Development evidence (2026-11-17):** the bounded current-axis fixture passed
+native CPU PeakVI projection, exact k-nearest-neighbor mapping, Bdev-only
+support calibration, and native-L4 transfer through `scwbReferenceMap`. This
+qualifies the mapping contract, not the paper analysis. A trajectory-occupancy
+operation is still required for fixed-bin group summaries and declared
+reference-relative envelopes.
 
-**Approval gate:** confirm dataset/genotype identity; approve source-cell QC,
-peak universe, PeakVI configuration, candidate reference pool, neighbor count,
-distance/similarity statistic, cross-validation plan, mapping threshold, and
-enrichment-interval test.
+The available source has one library for each target/genotype combination and
+no independent mouse/donor field. Cells cannot serve as biological replicates.
+Unless independent sample provenance is supplied, the final workflow may show
+explicitly descriptive/reference-relative occupancy only; it must not report
+cell-level genotype p-values or call WT/KO differences significant.
+
+**Approval gate:** confirm any independent biological-replicate provenance;
+approve source-cell QC, peak universe, PeakVI configuration, candidate
+reference pool, neighbor count, distance/similarity statistic,
+cross-validation plan, mapping threshold, and whether occupancy remains
+descriptive or uses a replicate-aware inferential model.
 
 ### 9. Compare motifs through the FLT3L-enriched trajectory interval
 
@@ -398,8 +423,7 @@ bundle plan.
 3. `03_bulk_atac_reference` — selected bulk libraries, metadata, genome build, and
    peak mapping.
 4. `04_parse_cytokines` — reprocessed Parse source and QC state.
-5. `05_scmulti_flt3lko_il7ko` — knockout query source; final name awaits genotype
-   confirmation.
+5. `05_scmulti_flt3lko_il7ko` — confirmed FLT3LKO/IL7KO knockout query source.
 
 ### Derived bundles
 
@@ -504,7 +528,8 @@ At minimum, resolve the following before implementation:
 
 1. approve the immutable scworkbench runtime;
 2. confirm the selected ImmGen and bulk ATAC datasets and sample identities;
-3. confirm whether the knockout is Flt3, Flt3l, or another recorded condition;
+3. preserve the confirmed Flt3l-ligand/Il7 knockout identities in every input
+   and result manifest;
 4. implement the selected 38-set Parse design from its frozen standalone
    development reconstruction after the qualified runtime is accepted;
 5. define whether “trajectory GSEA” means dynamic feature-set testing,

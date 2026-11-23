@@ -1,0 +1,94 @@
+schema_version: bdev.flt3lko_il7ko_full_mapping_fixed_umap.v1
+status: quantification_passed_mapping_attempt_aborted_cross_bundle_model_self_link_gate
+run_identity: flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z
+capability_id: 05_trajectory_group_contrasts
+input_manifest: ../../inputs/05_trajectory_group_contrasts/01_flt3lko_il7ko_inputs.yaml
+
+scope:
+  stage: Bdev_development
+  purpose: Map every QC-selected FLT3LKO/IL7KO cell through the frozen HVP-depth20k model and display it on the unchanged Bdev ATAC UMAP.
+  expected_query_cells: 23252
+  paper_analysis: false
+  biological_inference: prohibited
+  model_refit: false
+  umap_refit: false
+  implementation_unlocked: false
+  sif_build_deferred_until_remaining_analysis_complete: true
+
+runtime:
+  base_sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  base_sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  development_r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/05_objects/01_r_library
+  scworkbench_source: /home/jtg/msi_projects/scworkbench_code/scworkbench
+  scworkbench_commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+  scwbRepresentation_source: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
+  scwbRepresentation_commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+  scwbReferenceMap_source: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+  scwbReferenceMap_commit: 12026fe6a9289e9e7b169e988ceecb80fa3fbafa
+
+inputs:
+  qc_metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/cell_qc_selection.tsv.gz
+    sha256: 522c6f2665c192b1d14b20a2f79e0ec3a09f02e76a70c1208c93595eef2019ed
+  fragments:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_fragments.tsv.gz
+    sha256: 006e5937205e2522f5955e8baf672c5ddde4fcd1384e8126a94e516c907114ef
+    index_sha256: a148c46e0e602e432294f4df9ebcc7a70b595a4c96b143e372ee2bb518f1b309
+  selected_axis:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/03_hvp20k_source_order_axes.tsv.gz
+    sha256: aeb453c86852d97b6d24a947f3b4e97d3a7954eec3d07b2821f107eab26f126a
+    candidate: hvp_depth20k
+    expected_features: 20000
+  reciprocal_liftover_map:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/01_qualify_flt3lko_il7ko_mapping_fixture/flt3lko_il7ko_mapping_fixture_20261117T175427Z/01_tables/03_hvp_depth20k_mm10_to_mm39.tsv.gz
+    sha256: 3b65b6a779a2f09d1906b17f6e442d938c32b61d693b95b9fecd77813a0a9e9e
+    expected_accepted_features: 19967
+  frozen_model_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/03_frozen_hvp_bundle
+    manifest_sha256: 1f9e399600a9ab74b6037301af8a6b521bf4669b8cfd4b76f80f2d07ba437b98
+    model_artifact_id: model_ref_20261117_051703_wi5ql81y
+    model_payload_sha256: 024d11e3efb4822c31cd75c5371d6320860026f46dadd9ff80d680712df134a8
+    reference_space: peakvi_space_id_n0cp39pv1pyi
+    expected_reference_cells: 26723
+  fixed_bdev_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: c54f0ef36effc37db30bf40b1f0f0d171ab701041b44dea41b26f3e58d1992f2
+    fixed_space: umap.atac
+  authenticated_l4:
+    model_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/model/model_tree/model.rds
+    model_sha256: c378f9a8e816752e07918857a4390bb7ff5f25d4237ca8c45302e98d83ddb688
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    curve_name: Lineage4
+    orientation: native
+
+mapping:
+  k_values: [15, 30, 50]
+  primary_k: 30
+  maximum_k: 50
+  space_chunk_size: 4096
+  query_chunk_size: 512
+  peakvi_chunk_size: 256
+  process_n: 2000
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+  fixed_umap_weight_kernel: exp_negative_squared_distance_over_kth_distance
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z
+  quantified_matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/05_objects/02_ATAC_hvp_depth20k_counts
+  mapping_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/05_objects/03_mapping_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/04_logs/01_sessions
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z
+
+acceptance:
+  require_exact_query_cells: 23252
+  require_all_four_libraries: true
+  require_exact_model_feature_axis: true
+  require_no_model_refit: true
+  require_no_umap_refit: true
+  require_complete_support_accounting: true
+  require_out_of_reference_l4_withheld: true
+  require_source_manifests_unchanged: true
+  require_no_sif_build: true

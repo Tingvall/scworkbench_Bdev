@@ -1,0 +1,87 @@
+schema_version: bdev.flt3lko_il7ko_gated_20d_mapping_visualization.v1
+status: approved_development_visualization
+run_identity: gated_20d_mapping_visualization_20261122T235003Z
+capability_id: 05_trajectory_group_contrasts
+
+scope:
+  stage: Bdev_development
+  purpose: >-
+    Display the accepted native-L4 mappings from the completed full gated 20D
+    run on the unchanged Bdev ATAC UMAP and on the source query ATAC and GEX
+    UMAPs.
+  expected_query_cells: 23252
+  expected_accepted_cells: 2974
+  expected_reference_cells: 26723
+  paper_analysis: false
+  biological_inference: prohibited
+  genotype_contrast: prohibited
+  model_refit: false
+  umap_refit: false
+  slingshot_refit: false
+  implementation_unlocked: false
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  r_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/01_r_library
+
+inputs:
+  mapping_table:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/01_tables/02_full_gated_20d_mapping.tsv.gz
+    sha256: aa6600bcd547020beeeee45d48c0ce1931473a26ac7b65dc5fba2038a7f3702d
+  mapping_inventory:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/06_manifests/03_run_inventory.json
+    sha256: 3893c316c31a400f9179f2615f8682f86e9ad17226fab025f2cd82c8070f5ca2
+  bounded_checkpoints:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/01_bounded_transfer_checkpoints
+    expected_files: 47
+    primary_k: 30
+  mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/02_mapping_bundle
+    manifest_sha256: 3aee7829fee9835ba7dc1d4163f2d07f9dd21165ca13671258bf83986baf0440
+  fixed_bdev_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: c54f0ef36effc37db30bf40b1f0f0d171ab701041b44dea41b26f3e58d1992f2
+    fixed_space: umap.atac
+  authenticated_l4:
+    model_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/model/model_tree/model.rds
+    model_sha256: c378f9a8e816752e07918857a4390bb7ff5f25d4237ca8c45302e98d83ddb688
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    curve_name: Lineage4
+    orientation: native
+  query_atac_umap:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/analysis/dimensionality_reduction/atac/umap_projection.csv
+    sha256: 961e9f3e71ce7554f8b0809604fc77f84aea605ad1064c05c62c92d9fb953c7b
+    provenance: read_only_cellranger_arc_source_output
+  query_gex_umap:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/analysis/dimensionality_reduction/gex/umap_projection.csv
+    sha256: 99c46ae0af340fb8371241403e1bfed6837dcfa1ec4b07988406d2f42ea4eb7c
+    provenance: read_only_cellranger_arc_source_output
+
+visualization:
+  acceptance_field: accepted_native_l4
+  require_accepted_true: true
+  fixed_umap_weight_kernel: exp_negative_squared_distance_over_kth_distance
+  background_color: "#D7D7D7"
+  color_scale: inferno
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/06_visualize_flt3lko_il7ko_gated_20d_mapping/gated_20d_mapping_visualization_20261122T235003Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/06_visualize_flt3lko_il7ko_gated_20d_mapping/gated_20d_mapping_visualization_20261122T235003Z
+
+acceptance:
+  require_exact_query_cells: 23252
+  require_exact_accepted_cells: 2974
+  require_all_four_libraries: true
+  require_complete_native_umap_alignment: true
+  require_fixed_reference_umap: true
+  require_native_l4_orientation: true
+  require_no_model_refit: true
+  require_no_umap_refit: true
+  require_no_slingshot_refit: true
+  require_source_manifests_unchanged: true
+  require_no_genotype_contrast: true
+  require_no_sif_build: true

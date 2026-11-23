@@ -1,5 +1,5 @@
 schema_version: bdev.scworkbench_source_repositories.v1
-retrieved_at: "2026-11-04T17:58:07-08:00"
+retrieved_at: "2026-11-17T11:30:13-08:00"
 analysis_repository: /home/jtg/msi_projects/scworkbench_Bdev
 checkout_layout:
   scworkbench_core: /home/jtg/msi_projects/scworkbench_code/scworkbench
@@ -24,8 +24,9 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
     default_branch: main
     checkout_branch: development
-    checkout_commit: da9477d7ebe3010cedcaff6867e1e6eebbd617a3
+    checkout_commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
     checkout_clean: true
+    package_version: 0.1.2
     baseline_sif_commit: 9f10e7c0a849a87249573a2ef78d8ff7643dccba
     baseline_sif_commit_present: false
   - component: pybench
@@ -35,7 +36,7 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/pybench
     default_branch: main
     checkout_branch: main
-    checkout_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
+    checkout_commit: 0b5f190d9953d051b9bd36979584786f4e9543d4
     checkout_clean: true
     baseline_sif_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
     baseline_sif_commit_present: true
@@ -78,9 +79,11 @@ repositories:
     upstream: https://gitlab.liu.se/hende58/scwbRepresentation.git
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
     default_branch: main
-    checkout_branch: main
-    checkout_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
+    checkout_branch: development
+    checkout_commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
     checkout_clean: true
+    package_version: 0.1.1
+    operation_pack_manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
     baseline_sif_commit: fa577d916c4c13dbf2283c48d5c602aa4888620c
     baseline_sif_commit_present: true
   - component: scwbTrajectory
@@ -90,11 +93,12 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
     default_branch: main
     checkout_branch: development
-    checkout_commit: 34c792d39a7a9950294bf3e29e1cb65ebf1aba6c
+    checkout_commit: f5b6863afc99ca7118b63fe915b759f9e38f6d2b
     checkout_clean: true
     publication_status: matches_origin_development
-    package_version: 0.1.5
-    operation_pack_manifest_sha256: 576156623f04d8d34f07062eb17a1612ce1e4d20926516afbc06a74af141c8f9
+    package_version: 0.1.8
+    operation_pack_manifest_sha256: 526a945e656cd7e58e99153bd3923c547fbdc040b12c1ccc09992c45b87ca352
+    loaded_manifest_sha256: cc66ffd389761a115d24788be77ad0b0ba8655a42577d413fdb5466642e18d9c
     baseline_sif_commit: de6e0810578e918cf9425858eddd0549e41195be
     baseline_sif_commit_present: true
   - component: scwbLatent
@@ -104,9 +108,26 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
     default_branch: main
     checkout_branch: main
-    checkout_commit: 003dcd3530e0b5e5aec631eda99071ca0e3876d4
+    checkout_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
     checkout_clean: true
+    package_version: 0.1.3
+    operation_pack_manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
     baseline_sif_commit: 5a6baaf32fbbe5a663933ed91ef1d1681c891a19
+    baseline_sif_commit_present: false
+  - component: scwbReferenceMap
+    role: operation_pack
+    remote: https://github.com/Tingvall/scwbReferenceMap.git
+    local_path: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+    default_branch: main
+    checkout_branch: development
+    checkout_commit: 390ec50f1ac65ed7c46bbd9d45d7b506741630e5
+    checkout_clean: true
+    package_version: 0.2.0
+    operation_pack_manifest_sha256: 12a969c73bc92a18af2a663e3ab2b9ac1930d272e44f7e3d1600f9578ffaef98
+    qualification_status: support_annotation_gate_and_full_gated_20d_mapping_passed
+    qualification_run: gated_continuous_transfer_20261122T192735Z
+    full_mapping_run: flt3lko_il7ko_full_gated_20d_20261122T202618Z
+    baseline_sif_commit: null
     baseline_sif_commit_present: false
   - component: scwbATAC
     role: operation_pack
@@ -115,7 +136,12 @@ repositories:
     local_path: /home/jtg/msi_projects/scworkbench_code/scwbATAC
     default_branch: main
     checkout_branch: main
-    checkout_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
+    checkout_commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
     checkout_clean: true
+    package_version: 0.1.1
+    operation_pack_manifest_sha256: 3a61bc277357939c02a825246c960b61e2ee2a22f5a7ceff7cff7d67287443d3
+    qualification_status: sparse_safe_hvp_contract_suite_and_full_bdev_reproduction_passed
+    qualification_run: scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+    adjudication_run: scwbatac_hvp_sparse_tie_adjudication_20261118T011000Z
     baseline_sif_commit: 0d0b2c0728e0db543442c1783fdc9398ee309eb5
     baseline_sif_commit_present: true

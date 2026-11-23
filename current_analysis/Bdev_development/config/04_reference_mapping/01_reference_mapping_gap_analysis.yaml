@@ -1,0 +1,99 @@
+schema_version: bdev.reference_mapping_gap_analysis.v1
+status: proposal_only_no_execution_authorized
+capability_id: 04_reference_mapping
+stage: Bdev_development
+
+scope:
+  purpose: Define the smallest reusable scWorkbench updates needed for calibrated Bdev reference mapping before any mapping workflow is run.
+  paper_analysis: false
+  operation_pack_edits_authorized: false
+  core_edits_authorized: false
+  workflow_execution_authorized: false
+
+selected_reference_contract:
+  latent_model: Bdev-only PeakVI fit followed by frozen-model query projection
+  reference_trajectory: authenticated fitted Slingshot L4 in native orientation
+  display_direction: LSK (0) to CD19 (1) is a visualization transform only
+  source_bundle_mutation: prohibited
+  forced_mapping: prohibited
+  out_of_reference_result: required
+
+existing_operations_to_reuse:
+  - scwblatent::peakvi_fit
+  - scwblatent::peakvi_project
+  - scwblatent::model_bound_latent_union
+  - scwbrepresentation::knn_neighbors
+  - scwbtrajectory::slingshot_fit
+  - scwbtrajectory::slingshot_lineage_weights
+
+proposed_updates:
+  - component: scwbRepresentation
+    change: Add a bounded scalable exact backend to scwbrepresentation::knn_neighbors while preserving its authenticated query/candidate-axis and output contracts.
+    proposed_backend: RANN exact search with eps 0 and query chunking
+    compatibility: Preserve the current brute-force backend for equivalence testing and explicit fallback.
+  - component: scwbReferenceMap
+    change: Create a new official operation pack containing reference_map_calibrate and reference_map_transfer.
+    operations:
+      - reference_map_calibrate
+      - reference_map_transfer
+
+generic_operation_contract:
+  dataset_specific_names_or_logic: prohibited
+  fixed_reference_label_field: prohibited
+  fixed_trajectory_key: prohibited
+  fixed_holdout_field: prohibited
+  reference_map_calibrate:
+    holdout_group_field:
+      type: categorical_metadata_field
+      default: orig.ident
+      caller_override_required_when_default_is_absent_or_inappropriate: true
+    holdout_policy: leave_one_category_out
+    required_behavior:
+      - Preserve and report every observed category.
+      - Record category-specific reference coverage limitations.
+      - Do not fail the complete calibration merely because one category lacks a state represented elsewhere.
+  reference_map_transfer:
+    annotation_inputs: optional_typed_reference_vectors
+    continuous_transfer_inputs: optional_named_typed_reference_vector_families
+    output_keys: caller_supplied
+
+not_proposed:
+  - scworkbench core change
+  - PyBench change
+  - scwbLatent change for single-cell query mapping
+  - scwbTrajectory change
+  - bulk-specific PeakVI projection operation before biological validity is demonstrated
+
+provisional_scientific_defaults_for_qualification:
+  calibration: leave-one-category-out reference calibration
+  holdout_group_field: orig.ident
+  holdout_group_field_scope: Bdev qualification fixture only; not hard-coded in the operation
+  neighbor_counts: [15, 30, 50]
+  primary_neighbor_count: 30
+  distance_statistic: median distance across the first 30 reference neighbors
+  support_categories:
+    supported: at_or_below_heldout_reference_q95
+    borderline: above_q95_and_at_or_below_q99
+    out_of_reference: above_heldout_reference_q99
+  distance_weights: exp(-(distance / kth_distance)^2)
+  pseudotime_summary: weighted_median
+  pseudotime_uncertainty: weighted_q25_q75_and_k_sensitivity_range
+  out_of_reference_pseudotime: withheld
+
+qualification_before_bdev_mapping:
+  - Synthetic exact-neighbor equivalence and deterministic ordering tests.
+  - Synthetic supported, borderline, and deliberately displaced out-of-reference queries.
+  - Missing-reference-pseudotime preservation and no-imputation tests.
+  - A bounded Bdev fixture with sample-held-out calibration and native-L4 transfer.
+  - Source-bundle immutability and identifier-alignment checks.
+  - Operation-pack manifest, dependency, replay, promotion-closure, and negative tests.
+
+decision_gate:
+  required_before_source_edits:
+    - Approve the proposed scwbRepresentation update.
+    - Approve creation of the scwbReferenceMap official pack and its two-operation boundary.
+    - Approve or revise the provisional calibration and transfer defaults.
+  required_before_full_mapping:
+    - Confirm the single-cell query dataset and genotype identities.
+    - Approve the shared peak universe and PeakVI configuration.
+    - Accept the focused operation-pack qualification results.

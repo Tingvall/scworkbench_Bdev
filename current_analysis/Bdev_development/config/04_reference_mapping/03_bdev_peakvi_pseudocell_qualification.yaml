@@ -1,0 +1,122 @@
+schema_version: bdev.peakvi_pseudocell_qualification.v1
+status: blocked_by_peakvi_projection_dimension_grant
+run_identity: bdev_peakvi_pseudocell_20261110T054149Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Qualify a Bdev-only frozen PeakVI model using held-out Bdev single cells, raw pseudobulks, and depth-matched pseudo-cells before any ImmGen projection.
+  real_immgen_projection: false
+  outputs_promoted_to_source: false
+  builds_sif: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    expected_cells: 26723
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+  fixture:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/01_tables/04_l4_fixture_cells.tsv
+    sha256: bcc1397ffa921b728f4342c15959f51dc07ddeb25d621a6409e49f325493c3d5
+    expected_cells: 1810
+    expected_samples: 4
+  count_matrix: ATAC_counts
+  expected_features: 191433
+  sample_field: orig.ident
+  annotation_field: peaks_snn_res.1.2
+
+split:
+  grouping: sample_by_native_l4_fixture_bin
+  minimum_group_cells: 8
+  held_out_rule: every_fourth_cell_in_bundle_order
+  expected_groups: 32
+  pseudocell_depth_quantiles: [0.25, 0.50, 0.75]
+  pseudocell_sampling: multinomial_from_held_out_group_pool
+  seed: 41017
+
+peakvi:
+  n_latent: 10
+  n_layers: 1
+  n_hidden: 64
+  dropout: 0.2
+  max_epochs: 20
+  learning_rate: 0.001
+  early_stopping: true
+  seed: 41017
+  chunk_size: 32
+  batch_key: null
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+
+mapping:
+  k_values: [15, 30, 50]
+  primary_k: 30
+  neighbor_k: 50
+  backend: rann_exact
+  support_quantiles: [0.95, 0.99]
+  space_chunk_size: 512
+  query_chunk_size: 128
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  python: /opt/pyenv/bin/python
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_20261110T054149Z/05_objects/01_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: e6289d5353fbdb1a0e14a7d3a806ce4b958f56ff
+  scwbRepresentation:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
+    source_commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+  scwbReferenceMap:
+    version: 0.1.0
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+    source_commit: 12026fe6a9289e9e7b169e988ceecb80fa3fbafa
+    manifest_sha256: b190a85b0a743af769e6625b6d94fa44f32cee477479bbda19281ee096cb0747
+  scwbLatent:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    source_commit: 003dcd3530e0b5e5aec631eda99071ca0e3876d4
+    manifest_sha256: 4167237205a554490c895bce659f3c3cf128f89bc89b141270059304ebe25b9b
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_20261110T054149Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_20261110T054149Z
+  qualification_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_20261110T054149Z/05_objects/02_peakvi_qualification_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_20261110T054149Z/05_objects/03_sessions
+
+acceptance:
+  held_out_single_cell:
+    minimum_accepted_fraction: 0.80
+    minimum_l4_spearman: 0.60
+  depth_matched_pseudocell:
+    minimum_accepted_fraction: 0.90
+    minimum_l4_spearman: 0.75
+    maximum_l4_mae: 4.0
+  raw_pseudobulk:
+    minimum_accepted_fraction: 0.75
+    minimum_l4_spearman: 0.70
+  require_projection_without_refit: true
+  require_exact_feature_axis: true
+  require_source_manifest_unchanged: true
+  require_native_l4: true
+  implementation_unlocked: false
+  sif_built: false
+
+observed_limitation:
+  stage: peakvi_project_prepublication_audit
+  fitted_dimensions: 10
+  granted_projection_dimensions: 2
+  message: Output space dimensions do not match the current operation-pack grant.
+  disposition: Preserve failed run; do not modify core or operation packs; qualify the currently supported two-dimensional contract in a new isolated run.

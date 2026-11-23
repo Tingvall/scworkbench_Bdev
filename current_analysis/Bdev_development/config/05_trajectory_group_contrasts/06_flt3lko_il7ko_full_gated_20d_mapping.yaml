@@ -1,0 +1,106 @@
+schema_version: bdev.flt3lko_il7ko_full_gated_20d_mapping.v1
+status: approved_full_development_mapping
+run_identity: flt3lko_il7ko_full_gated_20d_20261122T202618Z
+capability_id: 05_trajectory_group_contrasts
+
+scope:
+  stage: Bdev_development
+  purpose: >-
+    Map all QC-selected FLT3LKO/IL7KO cells through the qualified 20D HVP20k
+    reference and apply the qualified generic native-L4 acceptance gate.
+  expected_query_cells: 23252
+  expected_reference_cells: 26723
+  paper_analysis: false
+  biological_inference: prohibited
+  genotype_contrast: prohibited
+  model_refit: false
+  umap_refit: false
+  implementation_unlocked: false
+
+inputs:
+  qualified_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/16_qualify_gated_continuous_transfer/gated_continuous_transfer_20261122T192735Z/05_objects/02_qualification_bundle
+    manifest_sha256: 7f6e5fb2968ec86c69513be3ebd382884a23815b787215ad6326fa7fe6eea506
+    reference_matrix: hvp_depth20k_bdev_counts
+    reference_space: peakvi_space_id_ld8oxf02whge
+    model_artifact_id: model_ref_20261122_194532_hka11fvs
+    model_payload_sha256: 52879b6cf315f2a8d78c50cedad17d60feb96fed5b447f9765d1a10b78b0b512
+    calibration_artifact_id: model_ref_20261122_195229_ewshintf
+  qualification_report:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/16_qualify_gated_continuous_transfer/gated_continuous_transfer_20261122T192735Z/03_reports/01_gated_continuous_transfer_qualification.json
+    sha256: 262d34133467724eaf80e51ea4e41fd898feccdb5e402ec1ae4c10240c740e21
+  qualification_inventory:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/16_qualify_gated_continuous_transfer/gated_continuous_transfer_20261122T192735Z/06_manifests/03_run_inventory.json
+    sha256: 123ebbc304214cb3cdbbf79edb669fab9a57d5f7f7b36e894fa94f9ba69ec9e0
+  prepared_cells:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/01_tables/01_all_qc_selected_cells.tsv.gz
+    sha256: 37732dc8ee42ae95354ebe8ae422a57da80c3420dad3c7b7a4fea76608f6c888
+  quantified_matrix:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/05_objects/02_ATAC_hvp_depth20k_counts
+    expected_features: 20000
+    expected_cells: 23252
+  quantification_audit:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/04_map_flt3lko_il7ko_full/flt3lko_il7ko_full_mapping_fixed_umap_20261118T022951Z/03_reports/02_full_quantification_audit.json
+    sha256: d6e18d7944892fd2c29d224d4d818a2b21952baf1060b27b9da31a4586f0cab8
+
+mapping:
+  query_matrix_id: hvp_depth20k_flt3lko_il7ko_full_gated20d_counts
+  query_space_id: hvp_depth20k_flt3lko_il7ko_full_gated20d
+  joint_space_id: hvp_depth20k_bdev_flt3lko_il7ko_full_gated20d_union
+  query_cell_set: set:flt3lko_il7ko_full_gated20d_queries
+  union_cell_set: set:flt3lko_il7ko_full_gated20d_union
+  primary_k: 30
+  transfer_batch_size: 500
+  peakvi_chunk_size: 256
+  space_chunk_size: 4096
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+  accepted_annotation_value: in_domain
+  minimum_annotation_confidence: 0.51
+  continuous_output_key: mapped_native_L4
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+  scwbLatent:
+    version: 0.1.3
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    source_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+  scwbRepresentation:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
+    source_commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+  scwbReferenceMap:
+    version: 0.2.0
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+    source_commit: 390ec50f1ac65ed7c46bbd9d45d7b506741630e5
+    manifest_sha256: 12a969c73bc92a18af2a663e3ab2b9ac1930d272e44f7e3d1600f9578ffaef98
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/01_r_library
+  mapping_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/02_mapping_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/05_objects/03_sessions
+
+acceptance:
+  require_exact_query_cells: 23252
+  require_all_four_libraries: true
+  require_exact_model_feature_axis: true
+  require_20_latent_dimensions: true
+  require_no_model_refit: true
+  require_complete_support_accounting: true
+  require_complete_acceptance_accounting: true
+  require_rejected_values_withheld: true
+  require_qualified_source_manifest_unchanged: true
+  require_no_genotype_contrast: true
+  require_no_sif_build: true
+

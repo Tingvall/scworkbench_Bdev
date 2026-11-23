@@ -1,0 +1,33 @@
+base_config: 03_bdev_peakvi_pseudocell_qualification.yaml
+schema_version: bdev.peakvi_pseudocell_qualification.v1
+status: planned_fixed_contract_qualification
+run_identity: bdev_peakvi_pseudocell_10d_20261110T180851Z
+
+scope:
+  purpose: Qualify the fixed ten-dimensional Bdev-only PeakVI projection and authenticated model-bound latent union using held-out Bdev cells, raw pseudobulks, and depth-matched pseudo-cells.
+
+peakvi:
+  n_latent: 10
+
+runtime:
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_10d_20261110T180851Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: 2e7cbbdf50e615504412c5f9bbda76ceabdbd148
+  scwbLatent:
+    version: 0.1.3
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    source_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_10d_20261110T180851Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_10d_20261110T180851Z
+  qualification_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_10d_20261110T180851Z/05_objects/02_peakvi_qualification_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_10d_20261110T180851Z/05_objects/03_sessions
+
+acceptance:
+  require_authenticated_model_bound_union: true
+
+observed_limitation: null

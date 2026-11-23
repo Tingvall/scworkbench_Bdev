@@ -1,0 +1,82 @@
+schema_version: bdev.scwbatac_hvp_sparse_requalification.v1
+status: approved_development_qualification
+run_identity: scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Reproduce both official scwbATAC HVP modes on the complete Bdev reference with the verified sparse typed-slice core fix.
+  external_query_use: prohibited
+  knockout_query_use: prohibited
+  source_bundle_mutation: prohibited
+  implementation_unlocked: false
+
+inputs:
+  source_bundle:
+    role: committed_source_snapshot_only
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: 40384e2f8a17e862cd8d2cbf153ca5ccf15171fd11a97ab7046e58a53adac521
+    scientific_state_fingerprint: 4d53e5f7b85bb69159bb148a68100ddd86b63683c9a49e1ac264820cb05d2ce3
+    expected_cells: 26723
+    expected_features: 191433
+    count_matrix: ATAC_counts
+  prior_run:
+    run_identity: hvp20k_depth_comparison_20261117T044105Z
+    adjusted_ledger: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/01_hvp_depth20k_scores.tsv.gz
+    raw_ledger: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/01_hvp_raw20k_scores.tsv.gz
+
+feature_selection:
+  operation: scwbatac::hvp_select
+  n_features: 20000
+  min_detection_pct: 0.18710474123564
+  max_detection_pct: 80
+  chunk_size: 2048
+  modes:
+    hvp_depth20k:
+      depth_adjustment: true
+      expected_method: log_depth_residual_variance
+    hvp_raw20k:
+      depth_adjustment: false
+      expected_method: raw_binary_variance
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+  scwbATAC:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbATAC
+    source_commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
+    manifest_sha256: 3a61bc277357939c02a825246c960b61e2ee2a22f5a7ceff7cff7d67287443d3
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z/05_objects/02_sessions
+
+acceptance:
+  require_contract_suite_passed: true
+  require_official_scwbatac_operation: true
+  require_complete_bdev_axes: true
+  require_exact_20000_selected_per_mode: true
+  require_adjusted_selected_axis_identical_to_prior: true
+  require_raw_selected_axis_identical_to_prior: true
+  require_complete_ledger_numerical_equivalence: true
+  numerical_tolerance: 1.0e-12
+  require_source_scientific_state_unchanged: true
+  permit_qualification_parent_publication_timestamp_refresh: false
+  require_source_manifest_unchanged: true
+  sif_built: false
+
+verified_prerequisites:
+  sparse_typed_slice_regression: passed
+  scwbatac_contract_suite: 7_of_7_passed
+  prior_snapshot_parent_attempt: path_containment_refused_before_operation
+  verified_at: "2026-11-18T00:41:29Z"

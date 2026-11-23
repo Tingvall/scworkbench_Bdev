@@ -1,0 +1,116 @@
+schema_version: bdev.immgen_label_blind_sparsity_adapter.v1
+status: active_diagnostic
+run_identity: immgen_sparsity_adapter_20261116T012301Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Test a label-blind rank-weighted adapter that makes each ImmGen bulk library match the global Bdev single-cell fragment depth and sparsity structure before frozen-recipe PeakVI projection.
+  diagnostic_only: true
+  source_bundle_mutation: prohibited
+  labels_used_for_adapter: false
+  expected_positions_used_for_adapter: false
+  builds_sif: false
+
+inputs:
+  source_mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    reference_matrix: Bdev_ATAC_reference_counts
+    bulk_matrix: ImmGen_ATAC_Bdev_peak_counts
+    reference_space: peakvi_space_id_1yiwac5je9ww
+    full_query_space: step4_immgen_peakvi_queries
+    expected_features: 191433
+    expected_reference_cells: 1382
+    expected_libraries: 28
+  approved_atac_umap:
+    bundle_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    space: umap.atac
+    expected_cells: 26723
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+  audit_only_comparators:
+    full_depth_fixed_umap:
+      path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/01_tables/02_immgen_approved_atac_umap_placement.tsv
+      sha256: 50497aff2ebae0a9b6b91b2b0c7a3a08386110d6db168ac15aabb84ee8864ecb
+    depth_only_design:
+      path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/07_test_immgen_median_depth_downsampling/immgen_median_depth_downsample_20261115T235830Z/01_tables/01_pseudocell_design.tsv
+      sha256: 140dd5f6ad5146d35556e5bf09296d815976bb9dc40a13beeaac750ba1061e71
+
+adapter:
+  target_fragment_count_rule: global_reference_median
+  expected_target_fragment_count: 18952
+  sparsity_pool_rule: reference_cells_within_fraction_of_target_fragment_count
+  sparsity_depth_window_fraction: 0.10
+  expected_sparsity_pool_cells: 160
+  pseudocells_per_library: 100
+  peak_selection: successive_probability_proportional_to_within_library_count_rank
+  rank_power: 1.0
+  fragment_allocation: one_per_selected_peak_then_multinomial_by_selected_peak_rank
+  draw_oversampling_factor: 1.25
+  seed: 20261116
+  construction_forbidden_fields:
+    - population
+    - RNA_label
+    - expected_position
+    - cluster
+    - pseudotime
+    - sample_identity
+
+peakvi:
+  n_latent: 10
+  n_layers: 1
+  n_hidden: 64
+  dropout: 0.2
+  max_epochs: 20
+  learning_rate: 0.001
+  early_stopping: true
+  seed: 41017
+  chunk_size: 32
+  batch_key: null
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+  expected_reference_latent_sha256: 3bb607f73151f8cc5ecc50c101da289eecfed50fdc43efd510c9db97b24eb818
+
+mapping:
+  primary_k: 30
+  neighbor_k: 50
+  backend: rann_exact
+  space_chunk_size: 512
+  query_chunk_size: 128
+  weight_kernel: exp_neg_squared_distance_over_kth_distance
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+  scwbLatent:
+    version: 0.1.3
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+  scwbRepresentation:
+    version: 0.1.1
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/09_test_immgen_label_blind_sparsity_adapter/immgen_sparsity_adapter_20261116T012301Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/09_test_immgen_label_blind_sparsity_adapter/immgen_sparsity_adapter_20261116T012301Z
+  diagnostic_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/09_test_immgen_label_blind_sparsity_adapter/immgen_sparsity_adapter_20261116T012301Z/05_objects/01_sparsity_adapter_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/09_test_immgen_label_blind_sparsity_adapter/immgen_sparsity_adapter_20261116T012301Z/05_objects/02_sessions
+
+acceptance:
+  expected_pseudocells: 2800
+  require_exact_target_fragment_count: true
+  require_empirical_sparsity_draw: true
+  require_reference_latent_checksum: true
+  require_projection_without_refit: true
+  require_source_manifests_unchanged: true
+  require_label_blind_construction: true
+  implementation_unlocked: false
+  sif_built: false

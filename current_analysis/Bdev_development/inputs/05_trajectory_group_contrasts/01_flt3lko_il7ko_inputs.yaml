@@ -1,0 +1,94 @@
+schema_version: bdev.flt3lko_il7ko_inputs.v1
+status: approved_for_full_descriptive_development_mapping
+capability_id: 05_trajectory_group_contrasts
+recorded_on: 2026-11-17
+
+identity:
+  dataset_id: 05_scmulti_flt3lko_il7ko
+  biological_dataset: scmulti_flt3lko_il7ko
+  genotypes:
+    - knockout_target: Flt3l
+      display_name: FLT3LKO
+      biological_identity: Flt3l_ligand_knockout
+      groups: [WT, KO]
+    - knockout_target: Il7
+      display_name: IL7KO
+      biological_identity: Il7_knockout
+      groups: [WT, KO]
+  tissue: BM
+
+replication_audit:
+  available_grouping_field: library_id
+  biological_sample_or_donor_field: absent
+  libraries_per_target_genotype: 1
+  observed_libraries:
+    - {knockout_target: Flt3l, genotype: WT, library_id: FLT3LKO_BM_WT}
+    - {knockout_target: Flt3l, genotype: KO, library_id: FLT3LKO_BM_KO}
+    - {knockout_target: Il7, genotype: WT, library_id: IL7KO_BM_WT}
+    - {knockout_target: Il7, genotype: KO, library_id: IL7KO_BM_KO}
+  inferential_genotype_contrast_status: prohibited_without_independent_biological_replication_provenance
+  permitted_current_scope: full_descriptive_mapping_fixed_umap_and_reference_relative_occupancy_qualification
+
+immutable_archived_inputs:
+  policy: read_only_exact_path_provenance_no_archive_mutation
+  fragments:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_fragments.tsv.gz
+    sha256: 006e5937205e2522f5955e8baf672c5ddde4fcd1384e8126a94e516c907114ef
+    genome: GRCm39
+  fragments_index:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/datasets/scmulti_flt3ko_il7ko/FLT3LKO_IL7KO_BM/outs/atac_fragments.tsv.gz.tbi
+    sha256: a148c46e0e602e432294f4df9ebcc7a70b595a4c96b143e372ee2bb518f1b309
+  qc_metadata:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reports/qc_selection_v1_20260929/cell_qc_selection.tsv.gz
+    sha256: 522c6f2665c192b1d14b20a2f79e0ec3a09f02e76a70c1208c93595eef2019ed
+    selected_cells: 23252
+  source_bundle_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reports/source_bundle_v1_20260929/manifest.json
+    sha256: 4def016e9a3f2da9686feb35271daa17a8f440795c035ce51e7ea7d23e118598
+  mm10_to_mm39_chain:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reference_mapping_inputs/mm10ToMm39.over.chain.gz
+    sha256: 5e7589d8374e299706b5ef0ef06dbbc5818f3bd0aef72003f2d3b767225af9a1
+    execution_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reference_mapping_inputs/mm10ToMm39.over.chain
+    execution_sha256: c3b00d4b2238c173fa858de91e6bd1ca2e1bfd7c8003540ac8512ab328b6835c
+  mm39_to_mm10_chain:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reference_mapping_inputs/mm39ToMm10.over.chain.gz
+    sha256: da8e150bf79ddaa763f8a0c1784fdb20b50be0aa13207b4c74de6d06d5c7d793
+    execution_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/reference_mapping_inputs/mm39ToMm10.over.chain
+    execution_sha256: ca892978f675398e960e84072948bafd6ac9a824729835fd2f585f051e42c32d
+
+current_reference:
+  selected_axis:
+    candidate: hvp_depth20k
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/03_hvp20k_source_order_axes.tsv.gz
+    sha256: aeb453c86852d97b6d24a947f3b4e97d3a7954eec3d07b2821f107eab26f126a
+    expected_features: 20000
+    genome: mm10
+  frozen_model:
+    bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/05_objects/03_frozen_hvp_bundle
+    artifact_id: model_ref_20261117_051703_wi5ql81y
+    model_payload_sha256: 024d11e3efb4822c31cd75c5371d6320860026f46dadd9ff80d680712df134a8
+    feature_order_sha256: 8ca9dbbe27d9640394fc31bb3d272ca6ae1e1061fa1aa973d5ea0bf6d5cf18e0
+    latent_dimensions: 10
+
+excluded_as_projection_input:
+  legacy_quantified_matrix:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/archived_analysis/legacy_scworkbench_exploratory/intermediate_objects/scmulti_flt3ko_il7ko/prepared/bdev_peak_quantification_v1_20260930/ATAC_bdev_mm10_peaks_ko_counts
+    dimensions: [97788, 23252]
+    reason: legacy_Bdev_peak_axis_has_zero_feature_id_overlap_with_current_hvp_depth20k_axis
+
+bounded_fixture:
+  selection: first_100_qc_selected_cell_ids_in_lexicographic_order_per_library
+  cells_per_library: 100
+  expected_libraries: 4
+  expected_cells: 400
+  use_for: mapping_contract_and_resource_qualification_only
+  biological_inference: prohibited
+  full_dataset_mapping: authorized_for_descriptive_development_mapping_before_deferred_sif_build
+
+boundaries:
+  external_preprocessing_authorized: reciprocal_liftover_and_fragment_quantification_only
+  scworkbench_mapping_required: true
+  source_bundle_mutation: prohibited
+  archived_output_mutation: prohibited
+  paper_analysis: false
+  implementation_unlocked: false

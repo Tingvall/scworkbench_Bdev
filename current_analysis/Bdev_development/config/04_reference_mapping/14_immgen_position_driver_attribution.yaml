@@ -1,0 +1,71 @@
+base_config: 06_immgen_atac_trajectory_mapping.yaml
+schema_version: bdev.immgen_position_driver_attribution.v1
+status: active_diagnostic
+run_identity: immgen_position_drivers_20261116T003136Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Attribute ImmGen fixed-map positions to RNA-label neighborhoods, PeakVI latent dimensions, peak contrasts, and technical covariates.
+  diagnostic_only: true
+  source_bundle_mutation: prohibited
+  labels_accepted: false
+  builds_sif: false
+
+inputs:
+  source_mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    reference_matrix: Bdev_ATAC_reference_counts
+    bulk_matrix: ImmGen_ATAC_Bdev_peak_counts
+    reference_space: peakvi_space_id_1yiwac5je9ww
+  provisional_rna_labels:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/26_simple_mean_contrast_genesets/simple_mean_contrast_20261102T235008Z/01_tables/06_bdev_raw_decisions.tsv
+    sha256: 5f686568cf89c99d46cf10d021369a55dcefd5ee9c922b74fdc0900fa208ffa7
+    status: provisional_development_diagnostic_not_truth
+  label_bootstrap_stability:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/01_bulk_marker_boundary/28_simple_mean_contrast_bootstrap_stability/simple_mean_contrast_bootstrap_stability_20261103T010000Z/01_tables/06_per_cell_label_stability.tsv.gz
+    sha256: a0362d78f8bae1da96eb7fbaa6918069af072663bdc70596d2381f40fddbc35b
+  neighbor_driver_ledger:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/06_diagnose_immgen_l4_umap_drivers/immgen_l4_umap_drivers_20261115T233506Z/01_tables/01_neighbor_l4_umap_driver_ledger.tsv
+    sha256: ceea69c51e35c272c634f3df1e0f64d506f9da68f9d601a747a0da7557e4bcc7
+  immgen_qc:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/03_immgen_preprocessing_qc.tsv
+    sha256: b6d04f32f2e82e691537e7b3404815fdec3bca83953224dd01e4fce6105348b4
+
+diagnostic:
+  unknown_label: unassigned
+  minimum_label_cells_for_centroid: 5
+  top_peaks_per_library: 100
+  primary_k: 30
+  cluster_field: peaks_snn_res.1.2
+  cluster_of_interest: "6"
+  technical_fields:
+    - orig.ident
+    - peaks_snn_res.1.2
+    - nCount_ATAC
+    - nFeature_ATAC
+    - atac_fragments
+    - atac_peak_region_fragments
+    - TSS.enrichment
+    - nucleosome_signal
+    - nCount_RNA
+    - nFeature_RNA
+    - Phase
+  normalization_scale: 10000
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/08_attribute_immgen_position_drivers/immgen_position_drivers_20261116T003136Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/08_attribute_immgen_position_drivers/immgen_position_drivers_20261116T003136Z
+  diagnostic_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/08_attribute_immgen_position_drivers/immgen_position_drivers_20261116T003136Z/05_objects/01_position_driver_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/08_attribute_immgen_position_drivers/immgen_position_drivers_20261116T003136Z/05_objects/02_sessions
+
+acceptance:
+  expected_reference_cells: 1382
+  expected_immgen_libraries: 28
+  expected_label_fixture_cells: 1746
+  require_reference_latent_checksum: true
+  require_projection_without_refit: true
+  require_source_manifests_unchanged: true
+  implementation_unlocked: false
+  sif_built: false

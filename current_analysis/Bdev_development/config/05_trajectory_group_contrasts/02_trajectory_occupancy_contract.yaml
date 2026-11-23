@@ -1,0 +1,68 @@
+schema_version: bdev.trajectory_group_occupancy_contract.v1
+status: contract_defined_implementation_pending
+capability_id: 05_trajectory_group_contrasts
+owner_candidate: scwbTrajectory
+operation_candidate: trajectory_group_occupancy
+
+purpose:
+  primary: Summarize mapping-supported group occupancy along an authenticated trajectory.
+  paper_analysis: false
+  biological_conclusions: prohibited_during_development
+
+authenticated_inputs:
+  query_pseudotime:
+    kind: cell_vector_family
+    key: explicit_required
+    missing_policy: preserve_and_exclude_with_accounting
+  group:
+    kind: cell_vector
+    value_type: categorical
+  support:
+    kind: cell_vector
+    accepted_values: [supported, borderline]
+    rejected_values: [out_of_reference]
+  reference_pseudotime:
+    kind: cell_vector_family
+    key: explicit_required
+
+descriptive_mode:
+  bins: fixed_declared_count
+  smoothing: fixed_declared_centered_window
+  denominator: all_finite_supported_cells_in_group
+  reference_envelope:
+    method: cell_count_matched_multinomial_draws_from_reference_distribution
+    role: descriptive_reference_relative_envelope_not_genotype_null
+    random_seed: required
+    draws: required
+    quantile: required
+  outputs:
+    - occupancy_curve
+    - reference_envelope
+    - candidate_intervals
+    - accounting_summary
+
+inferential_mode:
+  status: reserved_not_authorized_for_current_dataset
+  required_unit: independent_biological_sample
+  minimum_samples_per_group: 2
+  current_dataset_samples_per_target_genotype: 1
+  required_behavior_when_under_replicated: hard_error_before_statistics
+  prohibited_substitutes:
+    - treating_cells_as_replicates
+    - cell_level_permutation_across_genotype
+    - unreplicated_pseudobulk_p_values
+
+qualification:
+  synthetic_fixture_must_include:
+    - known_occupancy_shift
+    - no_shift_null
+    - missing_pseudotime
+    - out_of_reference_cells
+    - unreplicated_inferential_rejection
+  bdev_fixture_use: structural_and_accounting_only
+  full_flt3lko_il7ko_execution: prohibited_until_accepted_runtime
+
+runtime_gate:
+  replacement_sif_required: true
+  scwbatac_requirement: immutable_qualified_post_fix_sparse_safe_hvp_select_commit
+  implementation_unlocked: false

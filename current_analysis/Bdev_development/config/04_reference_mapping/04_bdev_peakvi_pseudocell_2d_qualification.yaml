@@ -1,0 +1,23 @@
+base_config: 03_bdev_peakvi_pseudocell_qualification.yaml
+schema_version: bdev.peakvi_pseudocell_qualification.v1
+status: completed_bounded_2d_scientific_gate_with_contract_limitations
+run_identity: bdev_peakvi_pseudocell_2d_20261110T061200Z
+
+scope:
+  purpose: Qualify the currently supported two-dimensional Bdev-only PeakVI projection contract using held-out Bdev single cells, raw pseudobulks, and depth-matched pseudo-cells.
+
+peakvi:
+  n_latent: 2
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_2d_20261110T061200Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_2d_20261110T061200Z
+  qualification_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_2d_20261110T061200Z/05_objects/02_peakvi_qualification_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_2d_20261110T061200Z/05_objects/03_sessions
+
+runtime:
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/02_qualify_bdev_peakvi_pseudocells/bdev_peakvi_pseudocell_2d_20261110T061200Z/05_objects/01_r_library
+
+observed_limitation:
+  source_attempt: bdev_peakvi_pseudocell_20261110T054149Z
+  disposition: This run tests only the current two-dimensional projection contract and does not waive the higher-dimensional contract gap.

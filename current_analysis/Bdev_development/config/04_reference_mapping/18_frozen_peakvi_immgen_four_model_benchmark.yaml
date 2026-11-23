@@ -1,0 +1,39 @@
+base_config: 17_full_bdev_peakvi_four_model_freeze.yaml
+schema_version: bdev.frozen_peakvi_immgen_four_model_benchmark.v1
+status: planned_external_evaluation
+
+scope:
+  purpose: Apply the same frozen ImmGen bulk peak counts to all four already-frozen full-Bdev PeakVI models without refitting or feature changes.
+  external_query_use: evaluation_only_after_freeze
+  immgen_identity_use: evaluation_only_after_freeze
+  automatic_model_promotion: prohibited
+
+external_evaluation:
+  query_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    matrix: ImmGen_ATAC_Bdev_peak_counts
+    expected_libraries: 28
+  library_manifest:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/01_immgen_library_run_manifest.tsv
+    sha256: f01514a404500325e7a2b2fa8bac489cce2ac275421e07ad364b0a872c9cf7a5
+  neighbor_k: 30
+  minimum_l4_neighbors: 5
+  l4_weight_positive_threshold: 0.5
+  trajectory_output_status: diagnostic_unaccepted
+  comparison_metrics:
+    - within_population_to_between_population_latent_distance_ratio
+    - replicate_predicted_cluster_agreement
+    - unique_reference_neighbors
+    - maximum_reference_hub_fraction
+    - maximum_absolute_depth_latent_spearman
+    - maximum_absolute_saturation_latent_spearman
+  interpretation: External results compare frozen candidates but do not tune, refit, or automatically promote one.
+
+acceptance:
+  require_same_query_libraries_for_all_models: true
+  require_projection_without_refit: true
+  require_model_payload_checksum_before_and_after_projection: true
+  require_no_automatic_model_promotion: true
+  require_native_l4: true
+  sif_built: false

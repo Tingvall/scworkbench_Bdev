@@ -23,8 +23,12 @@ datasets:
     description: Reprocessed Parse cytokine source and QC state.
   - dataset_id: 05_scmulti_flt3lko_il7ko
     role: immutable_source
-    status: proposed_pending_genotype_confirmation
-    description: Single-cell multiome knockout query source; final slug requires genotype confirmation.
+    status: proposed_identity_confirmed_implementation_locked
+    description: Single-cell multiome query source containing Flt3l ligand knockout (FLT3LKO), Il7 knockout (IL7KO), and the corresponding WT libraries.
+    known_design_limitations:
+      biological_sample_field: absent
+      libraries_per_target_genotype: 1
+      inferential_genotype_testing: requires_independent_biological_replication_provenance
   - dataset_id: 06_bdev_annotation_trajectory
     role: derived
     status: proposed
@@ -36,9 +40,11 @@ datasets:
     proposed_labeling_strategy_record: ../docs/proposed_analysis_strategy.md
   - dataset_id: 07_bdev_atac_mapping
     role: derived
-    status: proposed
+    status: proposed_method_selected_implementation_locked
     parents:
       - 01_bdev_reference
       - 03_bulk_atac_reference
       - 05_scmulti_flt3lko_il7ko
+    proposed_reference_mapping_default: reference_mapping.yaml
+    proposed_method: gated_20d_shared_reference_mapping
     description: Reference and query projections, mapping QC, pseudotime transfer, chromVAR, and motif contrasts.

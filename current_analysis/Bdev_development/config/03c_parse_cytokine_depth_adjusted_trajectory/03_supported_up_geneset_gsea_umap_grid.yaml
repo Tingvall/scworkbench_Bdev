@@ -1,0 +1,57 @@
+schema_version: bdev.parse38_supported_up_gsea_umap_grid.v1
+status: approved_development_visualization
+run_identity: bdev_cytokine_supported_up_gsea_grid_20261106T211733Z
+capability_id: 03c_parse_cytokine_depth_adjusted_trajectory
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Combine all Parse38 up-signature ATAC-UMAPs having at least one supported local-GSEA interval into one shared-scale figure.
+  parent_run_identity: bdev_cytokine_up_gsea_umaps_20261106T210417Z
+  scientific_parent_run_identity: bdev_cytokine_depth_adjusted_20261106T145817Z
+  outputs_promoted: false
+
+inputs:
+  parent_results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/02_plot_up_geneset_gsea_umaps/bdev_cytokine_up_gsea_umaps_20261106T210417Z
+  parent_inventory:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/02_plot_up_geneset_gsea_umaps/bdev_cytokine_up_gsea_umaps_20261106T210417Z/06_manifests/02_run_file_inventory.json
+    sha256: 0b5ec2e7eab8e622f222a8c879aca5eeb76381a578568c15eb298ee502fd8e38
+  figure_index:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/02_plot_up_geneset_gsea_umaps/bdev_cytokine_up_gsea_umaps_20261106T210417Z/01_tables/01_up_geneset_gsea_umap_index.tsv
+    sha256: af5420d5ad3b51a3992359996b6f937a812a5789f8b9908c5d10c82e914dd04e
+  cell_assignments:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/02_plot_up_geneset_gsea_umaps/bdev_cytokine_up_gsea_umaps_20261106T210417Z/01_tables/02_up_geneset_gsea_cell_assignments.tsv
+    sha256: 5476b6b840ba95b3e1e7c0e92a359c5fe771db362c366630b27b728a5c15e21d
+  execution_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+  fit_space: umap.atac
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/02_r_library
+  dependency_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench_version: 0.1.1
+
+selection:
+  minimum_supported_intervals: 1
+  shared_nes_limit: 3
+  background_cells: all_bundle_cells
+  foreground_cells: fixture_cells_within_supported_merged_intervals
+  layout_rows: 2
+  layout_columns: 5
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03c_parse_cytokine_depth_adjusted_trajectory/03_combine_supported_up_geneset_gsea_umaps/bdev_cytokine_supported_up_gsea_grid_20261106T211733Z
+
+acceptance:
+  expected_supported_signatures: 10
+  require_one_combined_png_and_pdf: true
+  require_shared_nes_scale: true
+  preserve_parent_runs: true
+  promote_outputs: false
+  implementation_unlocked: false
+

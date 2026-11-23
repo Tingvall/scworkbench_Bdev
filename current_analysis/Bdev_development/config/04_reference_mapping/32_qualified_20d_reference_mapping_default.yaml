@@ -1,0 +1,136 @@
+schema_version: bdev.qualified_20d_reference_mapping_default.v1
+status: selected_later_implementation_default_pending_qualified_sif
+selected_on: 2026-11-22
+selection_authority: explicit_user_decision_after_full_gated_20d_mapping_review
+capability_id: 04_reference_mapping
+
+selection:
+  feature_axis: hvp_depth20k
+  feature_count: 20000
+  latent_dimensions: 20
+  reference_cells: 26723
+  primary_k: 30
+  trajectory: authenticated_fitted_slingshot_L4
+  trajectory_orientation: native
+  exact_frozen_model_reuse_required: true
+  model_refit_for_query_class: prohibited
+  applies_to:
+    - single_cell_multiome_reference_mapping
+    - bulk_atac_reference_mapping
+  selection_reason: >-
+    The user explicitly selected the qualified 20-dimensional depth-adjusted
+    HVP20k PeakVI reference and its calibrated reference-support/native-L4
+    gate as the default for later Bdev implementation. The same exact frozen
+    model and calibration must be used for bulk ATAC mapping; a separate
+    bulk-specific reference fit is not the default.
+
+qualified_reference:
+  source_run_identity: gated_continuous_transfer_20261122T192735Z
+  bundle_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/16_qualify_gated_continuous_transfer/gated_continuous_transfer_20261122T192735Z/05_objects/02_qualification_bundle
+  bundle_manifest_sha256: 7f6e5fb2968ec86c69513be3ebd382884a23815b787215ad6326fa7fe6eea506
+  reference_matrix: hvp_depth20k_bdev_counts
+  reference_space: peakvi_space_id_ld8oxf02whge
+  model_artifact_id: model_ref_20261122_194532_hka11fvs
+  model_payload_sha256: 52879b6cf315f2a8d78c50cedad17d60feb96fed5b447f9765d1a10b78b0b512
+  calibration_artifact_id: model_ref_20261122_195229_ewshintf
+  feature_order_sha256: 8ca9dbbe27d9640394fc31bb3d272ca6ae1e1061fa1aa973d5ea0bf6d5cf18e0
+  peakvi:
+    n_latent: 20
+    n_layers: 1
+    n_hidden: 64
+    dropout: 0.2
+    max_epochs: 20
+    learning_rate: 0.001
+    early_stopping: true
+    seed: 41621
+    batch_key: null
+
+reference_support_limits:
+  statistic: median_first_primary_k_distance
+  primary_k: 30
+  supported:
+    comparison: less_than_or_equal
+    upper: 2.02620492264996
+    calibration_quantile: 0.95
+  borderline:
+    comparison: less_than_or_equal
+    upper: 2.56846898217638
+    calibration_quantile: 0.99
+  out_of_reference:
+    comparison: greater_than
+    lower_exclusive: 2.56846898217638
+
+native_l4_acceptance_limits:
+  policy: support_and_annotation
+  annotation_field: reference_map_l4_domain
+  accepted_annotation: in_domain
+  in_domain_reference_definition:
+    minimum_l4_weight: 0.5
+    finite_native_l4_required: true
+  minimum_annotation_confidence: 0.51
+  continuous_key: L4
+  continuous_output_key: mapped_native_L4
+  accepted_value_field: accepted_native_l4
+  raw_value_retention_required: true
+  rejected_value_withholding_required: true
+  rejection_reasons_required: true
+
+bulk_mapping_policy:
+  dataset_id: 03_bulk_atac_reference
+  derived_dataset_id: 07_bdev_atac_mapping
+  use_same_reference_model_artifact: model_ref_20261122_194532_hka11fvs
+  use_same_calibration_artifact: model_ref_20261122_195229_ewshintf
+  projection_without_refit: required
+  exact_hvp_depth20k_feature_order: required
+  support_and_native_l4_gate: identical_to_single_cell_queries
+  raw_estimates_for_rejected_libraries: retain_with_reason
+  accepted_estimates_for_rejected_libraries: withhold
+  fixed_umap_display:
+    reference_space: umap.atac
+    placement: primary_30_neighbor_distance_kernel_barycenter
+    umap_refit: prohibited
+
+qualification_evidence:
+  bounded_qualification_report:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/16_qualify_gated_continuous_transfer/gated_continuous_transfer_20261122T192735Z/03_reports/01_gated_continuous_transfer_qualification.json
+    sha256: 262d34133467724eaf80e51ea4e41fd898feccdb5e402ec1ae4c10240c740e21
+  full_single_cell_mapping:
+    run_identity: flt3lko_il7ko_full_gated_20d_20261122T202618Z
+    query_cells: 23252
+    accepted_native_l4: 2974
+    withheld_native_l4: 20278
+    report_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/05_map_flt3lko_il7ko_gated_20d/flt3lko_il7ko_full_gated_20d_20261122T202618Z/03_reports/01_full_gated_20d_mapping.json
+  bulk_projection_timing_precedent:
+    run_identity: hvp20k_depth_comparison_20261117T044105Z
+    libraries: 28
+    observed_projection_seconds_per_frozen_model: 86
+    observed_fixed_umap_plot_seconds: 37
+    note: timing_precedent_used_for_estimation_not_20d_bulk_acceptance_evidence
+  selected_model_bulk_validation:
+    run_identity: immgen_bulk_gated_20d_20261123T001821Z
+    query_libraries: 28
+    supported: 28
+    borderline: 0
+    out_of_reference: 0
+    accepted_native_l4: 4
+    withheld_native_l4: 24
+    withholding_reason: local_reference_domain_vote_out_domain
+    model_refit: false
+    umap_refit: false
+    report_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/17_map_immgen_atac_gated_20d/immgen_bulk_gated_20d_20261123T001821Z/03_reports/01_immgen_bulk_gated_20d_mapping.json
+    figure_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/17_map_immgen_atac_gated_20d/immgen_bulk_gated_20d_20261123T001821Z/02_figures/01_immgen_bulk_gated_20d_fixed_atac_umap.png
+
+supersedes_as_default:
+  config: 25_scwbatac_hvp_depth20k_default.yaml
+  prior_model_latent_dimensions: 10
+  retained_role: historical_and_sensitivity_evidence
+
+activation_gate:
+  implementation_active: false
+  require_new_immutable_sif: true
+  require_sif_component_pins: true
+  require_container_qualification: true
+  require_sif_checksum: true
+  require_explicit_sif_acceptance: true
+  bulk_figure_generation_authorized_as_development_validation_only: false
+  paper_analysis_authorized: false

@@ -1,0 +1,114 @@
+schema_version: bdev.candidate_sif_build.v1
+status: approved_development_build
+run_identity: bdev_candidate_sif_with_fgsea_20261118T020633Z
+capability_id: 06_runtime_release
+supersedes_failed_build: bdev_candidate_sif_20261118T011341Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  implementation_unlocked: false
+  purpose: Build and qualify the immutable eight-pack Bdev runtime with the qualified fgsea dependency carried explicitly into the image.
+
+base_sif:
+  path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  architecture: amd64
+  inherited_pybench_commit: 608066e77583a37d9187a7bb5c8a5c49c082b17d
+
+runtime_dependencies:
+  - package: fgsea
+    version: 1.34.2
+    source_role: qualified_installed_tree_from_bdev_trajectory_runtime
+    source_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/02_r_library/fgsea
+    tree_sha256: ef578056a7a6b9371af4b947d3e2ef2ff0c02b1d826607428835aaf9e5b77355
+  - package: BiocParallel
+    version: 1.42.2
+    source_role: inherited_from_baseline_sif
+
+components:
+  - package: scworkbench
+    role: core
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    commit: 4aca71d1c75b4e1532911c7ce68d945f2a319ca8
+    version: 0.1.2
+  - package: scwbStatistics
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbStatistics
+    commit: 00d1ba6a63d853b146916243bb8035d32528d575
+    version: 0.1.0
+    manifest_sha256: 14b4610595e255f199c58748e387981b294825a145a3ffffa2e0c5e309c175ad
+  - package: scwbGenePrograms
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbGenePrograms
+    commit: 1bc3ad43c920622ab1e45df4bd8bd968335e912b
+    version: 0.1.0
+    manifest_sha256: 29e071596984f0e4930e072db58c76386a058fb40be55a70ffb8a541921feaee
+  - package: scwbRNA
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRNA
+    commit: 151dd29211b219343dce6247c5e48fc932b4c83d
+    version: 0.1.0
+    manifest_sha256: 067db0625181775721a91f2188bb9f2ca72443fc8aa06d0b453669035ebad410
+  - package: scwbRepresentation
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
+    commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+    version: 0.1.1
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+  - package: scwbTrajectory
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbTrajectory
+    commit: f5b6863afc99ca7118b63fe915b759f9e38f6d2b
+    version: 0.1.8
+    manifest_sha256: 526a945e656cd7e58e99153bd3923c547fbdc040b12c1ccc09992c45b87ca352
+  - package: scwbLatent
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+    version: 0.1.3
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+  - package: scwbReferenceMap
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+    commit: 12026fe6a9289e9e7b169e988ceecb80fa3fbafa
+    version: 0.1.0
+    manifest_sha256: b190a85b0a743af769e6625b6d94fa44f32cee477479bbda19281ee096cb0747
+  - package: scwbATAC
+    role: operation_pack
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbATAC
+    commit: 3dce524c4b54ac3b3951a1daea06eecb0793b56a
+    version: 0.1.1
+    manifest_sha256: 3a61bc277357939c02a825246c960b61e2ee2a22f5a7ceff7cff7d67287443d3
+
+activation_order:
+  - scwbStatistics
+  - scwbGenePrograms
+  - scwbRNA
+  - scwbRepresentation
+  - scwbTrajectory
+  - scwbLatent
+  - scwbATAC
+  - scwbReferenceMap
+
+build:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  definition: current_analysis/Bdev_development/workflows/06_runtime_release/01_build_candidate_sif/05_bdev_candidate_sif_with_fgsea.def
+  output_sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/containers/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_with_fgsea_20261118T020633Z/05_objects/01_scworkbench_bdev_candidate_amd64_20261118T020633Z.sif
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_with_fgsea_20261118T020633Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/containers/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_with_fgsea_20261118T020633Z
+
+acceptance:
+  require_unique_non_overwriting_sif: true
+  require_exact_component_versions: true
+  require_exact_operation_pack_manifest_hashes: true
+  require_fgsea_1_34_2: true
+  require_biocparallel_1_42_2: true
+  require_clean_eight_pack_activation: true
+  require_no_operation_collisions: true
+  require_core_sparse_typed_slice_regression: true
+  require_scwbatac_contracts: 7
+  require_python_runtime_imports: true
+  require_sif_sha256: true
+  explicit_user_acceptance_required: true
+

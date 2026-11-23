@@ -1,0 +1,51 @@
+base_config: 06_immgen_atac_trajectory_mapping.yaml
+schema_version: bdev.immgen_median_depth_downsample_test.v1
+status: active_diagnostic
+run_identity: immgen_median_depth_downsample_20261115T235830Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Test whether the full-depth ImmGen neighbor hubs persist after repeated downsampling to the median Bdev reference matrix depth.
+  real_immgen_projection: true
+  diagnostic_only: true
+  categorical_cluster_mapping: false
+  outputs_promoted_to_source: false
+  builds_sif: false
+
+inputs:
+  source_mapping_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/02_immgen_mapping_bundle
+    manifest_sha256: 1fb8773e02cb7f8a9d85a27b37823381ba902599bc442de4bd657a85bd9d7934
+    reference_matrix: Bdev_ATAC_reference_counts
+    bulk_matrix: ImmGen_ATAC_Bdev_peak_counts
+    reference_space: peakvi_space_id_1yiwac5je9ww
+  full_depth_neighbors:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/01_tables/01_immgen_peakvi_neighbor_ledger.tsv
+    sha256: dec7152114b4deba093591ddbdbf05014af388ed891ccad14d18428849772983
+  full_depth_mapping:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/04_immgen_library_l4_mapping.tsv
+    sha256: fc7a3917176c0d171c24d921d71f28a94dc0e93f267eb037aa634366e40a6246
+
+downsampling:
+  target_matrix_depth: 18952
+  replicates_per_library: 30
+  seed: 20261115
+  method: multinomial_peak_count_sampling
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/07_test_immgen_median_depth_downsampling/immgen_median_depth_downsample_20261115T235830Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/07_test_immgen_median_depth_downsampling/immgen_median_depth_downsample_20261115T235830Z
+  test_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/07_test_immgen_median_depth_downsampling/immgen_median_depth_downsample_20261115T235830Z/05_objects/01_median_depth_test_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/07_test_immgen_median_depth_downsampling/immgen_median_depth_downsample_20261115T235830Z/05_objects/02_sessions
+
+acceptance:
+  expected_libraries: 28
+  expected_pseudocells: 840
+  require_exact_target_depth: true
+  require_reference_latent_checksum: true
+  require_authenticated_model_bound_union: true
+  require_source_manifest_unchanged: true
+  implementation_unlocked: false
+  sif_built: false
+

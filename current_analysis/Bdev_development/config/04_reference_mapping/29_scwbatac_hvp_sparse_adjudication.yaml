@@ -1,0 +1,50 @@
+schema_version: bdev.scwbatac_hvp_sparse_adjudication.v1
+status: approved_development_qualification_adjudication
+adjudication_identity: scwbatac_hvp_sparse_adjudication_20261118T010500Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  external_query_use: prohibited
+  knockout_query_use: prohibited
+  implementation_unlocked: false
+
+execution:
+  run_identity: scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+  config: current_analysis/Bdev_development/config/04_reference_mapping/28_scwbatac_hvp_sparse_source_requalification.yaml
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z/03_reports/01_hvp_sparse_requalification_summary.json
+  result_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z
+  current_ledgers:
+    hvp_depth20k: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z/01_tables/01_hvp_depth20k_scores.tsv.gz
+    hvp_raw20k: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/15_requalify_scwbatac_hvp_sparse/scwbatac_hvp_sparse_source_requalification_20261118T004129Z/01_tables/03_hvp_raw20k_scores.tsv.gz
+  prior_ledgers:
+    hvp_depth20k: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/01_hvp_depth20k_scores.tsv.gz
+    hvp_raw20k: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/14_compare_hvp20k_depth_modes/hvp20k_depth_comparison_20261117T044105Z/01_tables/01_hvp_raw20k_scores.tsv.gz
+
+acceptance:
+  numerical_tolerance: 1.0e-12
+  expected_features: 191433
+  expected_selected_per_mode: 20000
+  depth_mode_require_complete_numerical_equivalence: true
+  raw_mode_score_columns:
+    - mean_accessibility
+    - detected_cells
+    - detection_pct
+    - raw_variance
+    - score
+  raw_mode_require_canonical_not_requested_sentinels: true
+  raw_mode_permit_rank_permutations_only_within_tied_scores: true
+  require_exact_selected_membership: true
+  require_scientific_state_fingerprint_unchanged: true
+  permit_source_manifest_publication_timestamp_only_change: true
+  sif_built: false
+
+rationale:
+  raw_mode_unused_depth_diagnostics: >-
+    Commit 3dce524 deliberately skips depth cross-products when depth adjustment
+    is not requested and emits the tested canonical sentinels residual_variance
+    equals raw_variance, depth_slope equals zero, and depth_r_squared equals zero.
+  tied_ranks: >-
+    Floating-point-equivalent raw scores may permute feature ranks only inside a
+    score-tied group; selected membership must remain exact.

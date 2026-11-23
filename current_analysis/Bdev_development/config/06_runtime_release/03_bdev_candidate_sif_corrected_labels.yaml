@@ -1,0 +1,15 @@
+extends: 02_bdev_candidate_sif_with_fgsea.yaml
+schema_version: bdev.candidate_sif_build.v1
+status: approved_development_build
+run_identity: bdev_candidate_sif_corrected_labels_20261118T022000Z
+supersedes_rejected_build: bdev_candidate_sif_with_fgsea_20261118T020633Z
+
+scope:
+  purpose: Build and qualify the immutable eight-pack Bdev runtime with pinned fgsea and corrected non-inherited project labels.
+
+build:
+  definition: current_analysis/Bdev_development/workflows/06_runtime_release/01_build_candidate_sif/07_bdev_candidate_sif_corrected_labels.def
+  output_sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/containers/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_corrected_labels_20261118T022000Z/05_objects/01_scworkbench_bdev_candidate_amd64_20261118T022000Z.sif
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_corrected_labels_20261118T022000Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/containers/06_runtime_release/01_build_candidate_sif/bdev_candidate_sif_corrected_labels_20261118T022000Z
+

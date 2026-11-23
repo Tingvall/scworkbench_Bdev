@@ -1,0 +1,85 @@
+schema_version: bdev.implementation_reference_mapping.v1
+status: proposed_method_selected_inactive_pending_qualified_sif
+active: false
+selected_on: 2026-11-22
+selection_authority: explicit_user_decision_after_bulk_validation
+development_selection_record: ../../Bdev_development/config/04_reference_mapping/32_qualified_20d_reference_mapping_default.yaml
+
+proposed_method:
+  method_id: gated_20d_shared_reference_mapping
+  applies_to:
+    - single_cell_multiome
+    - bulk_atac
+  operations:
+    projection: scwblatent::peakvi_project
+    latent_union: scwblatent::model_bound_latent_union
+    neighbors: scwbrepresentation::knn_neighbors
+    transfer: scwbreferencemap::reference_map_transfer
+  reference_fit: frozen_bdev_only
+  query_projection_without_refit: required
+  fixed_umap:
+    reference_reduction: umap.atac
+    query_placement: primary_30_neighbor_distance_kernel_barycenter
+    refit: prohibited
+    show_all_reference_cells: true
+    show_all_query_observations: true
+  reporting:
+    retain_all_support_calls: true
+    retain_raw_native_l4_and_rejection_reason: true
+    color_complete_gate_passes_by: accepted_native_l4
+    publish_accepted_native_l4_only_when_complete_gate_passes: true
+    complete_gate_fail_color: "#343434"
+
+default:
+  feature_axis: hvp_depth20k
+  feature_count: 20000
+  latent_dimensions: 20
+  reference_cells: 26723
+  model_artifact_id: model_ref_20261122_194532_hka11fvs
+  model_payload_sha256: 52879b6cf315f2a8d78c50cedad17d60feb96fed5b447f9765d1a10b78b0b512
+  feature_order_sha256: 8ca9dbbe27d9640394fc31bb3d272ca6ae1e1061fa1aa973d5ea0bf6d5cf18e0
+  calibration_artifact_id: model_ref_20261122_195229_ewshintf
+  qualified_bundle_manifest_sha256: 7f6e5fb2968ec86c69513be3ebd382884a23815b787215ad6326fa7fe6eea506
+  primary_k: 30
+  supported_upper: 2.02620492264996
+  borderline_upper: 2.56846898217638
+  accepted_annotation: in_domain
+  minimum_annotation_confidence: 0.51
+  trajectory: authenticated_fitted_slingshot_L4
+  trajectory_orientation: native
+
+query_classes:
+  single_cell_multiome:
+    dataset_id: 05_scmulti_flt3lko_il7ko
+    projection_without_refit: required
+    use_default_model_and_gate: required
+  bulk_atac:
+    dataset_id: 03_bulk_atac_reference
+    derived_dataset_id: 07_bdev_atac_mapping
+    projection_without_refit: required
+    use_default_model_and_gate: required
+    separate_bulk_specific_model: prohibited_by_default
+
+development_validation:
+  status: passed
+  run_identity: immgen_bulk_gated_20d_20261123T001821Z
+  query_libraries: 28
+  distance_supported: 28
+  accepted_native_l4: 4
+  withheld_native_l4: 24
+  report: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/17_map_immgen_atac_gated_20d/immgen_bulk_gated_20d_20261123T001821Z/03_reports/01_immgen_bulk_gated_20d_mapping_report.md
+  fixed_umap_figure: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/17_map_immgen_atac_gated_20d/immgen_bulk_gated_20d_20261123T001821Z/02_figures/01_immgen_bulk_gated_20d_fixed_atac_umap.png
+
+proposal_boundaries:
+  supported_queries_remain_valid_mappings_when_l4_is_withheld: true
+  withheld_l4_must_not_be_interpreted_as_accepted_trajectory_position: true
+  development_validation_is_not_a_paper_result: true
+  implementation_execution_authorized: false
+
+activation_gate:
+  implementation_runtime_accepted: false
+  exact_model_artifact_verified: required
+  exact_calibration_artifact_verified: required
+  qualified_sif_required: true
+  qualified_sif_sha256: null
+  explicit_activation_required: true

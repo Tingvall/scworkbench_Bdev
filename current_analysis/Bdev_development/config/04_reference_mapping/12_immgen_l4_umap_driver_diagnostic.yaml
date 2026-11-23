@@ -1,0 +1,60 @@
+schema_version: bdev.immgen_l4_umap_driver_diagnostic.v1
+status: active_diagnostic
+run_identity: immgen_l4_umap_drivers_20261115T233506Z
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Explain the rejected fixed-ATAC-UMAP placement by exposing the native-L4 distributions and fixed-UMAP coordinates of the Bdev neighbors that drive each ImmGen population.
+  source_bundle_mutation: prohibited
+  implementation_unlocked: false
+  builds_sif: false
+
+inputs:
+  bdev_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    atac_umap_space: umap.atac
+    expected_cells: 26723
+    sample_field: orig.ident
+    annotation_field: peaks_snn_res.1.2
+  mapping_table:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/01_tables/04_immgen_library_l4_mapping.tsv
+    sha256: fc7a3917176c0d171c24d921d71f28a94dc0e93f267eb037aa634366e40a6246
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+  neighbor_ledger:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/01_tables/01_immgen_peakvi_neighbor_ledger.tsv
+    sha256: dec7152114b4deba093591ddbdbf05014af388ed891ccad14d18428849772983
+  fixed_umap_placement:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/05_plot_immgen_atac_umap/immgen_atac_umap_20261111T032028Z/01_tables/02_immgen_approved_atac_umap_placement.tsv
+    sha256: 50497aff2ebae0a9b6b91b2b0c7a3a08386110d6db168ac15aabb84ee8864ecb
+
+diagnostic:
+  primary_k: 30
+  weight_kernel: exp_neg_squared_distance_over_kth_distance
+  top_driver_segments_per_library: 10
+  l4_density_adjust: 0.8
+  coordinate_tolerance: 1.0e-10
+  l4_tolerance: 1.0e-10
+
+runtime:
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/03_map_immgen_atac_trajectory/immgen_atac_l4_20261110T202521Z/05_objects/01_r_library
+  scworkbench_version: 0.1.2
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/06_diagnose_immgen_l4_umap_drivers/immgen_l4_umap_drivers_20261115T233506Z
+
+acceptance:
+  require_all_28_libraries: true
+  require_all_16_populations: true
+  require_exact_l4_reconstruction: true
+  require_exact_coordinate_reconstruction: true
+  require_source_manifest_unchanged: true
+  diagnostic_only: true
+

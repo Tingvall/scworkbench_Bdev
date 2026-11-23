@@ -84,9 +84,10 @@ runtime is frozen.
 Number current work by the permanent capability IDs in
 [`config/capability_registry.yaml`](config/capability_registry.yaml), followed
 by numbered qualification steps and scripts. The explicitly selected cytokine
-analysis is the stable split capability `03a` (signal generation) and `03b`
-(trajectory analysis); these labels replace the provisional `06`/`07` labels
-for current paths. Do not create active implementation dataset workflows during
+analysis uses the stable capabilities `03a` (signal generation), `03b`
+(preliminary trajectory analysis), and `03c` (depth-adjusted trajectory
+qualification); these labels replace the provisional `06`/`07` labels for
+current paths. Do not create active implementation dataset workflows during
 this stage.
 
 ## Promotion gate

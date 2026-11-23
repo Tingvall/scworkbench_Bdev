@@ -1,0 +1,94 @@
+schema_version: bdev.reference_mapping_qualification.v1
+status: completed_bounded_development_qualification
+run_identity: bdev_l4_reference_mapping_20261110T042541Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Qualify held-out-sample categorical and native-L4 transfer semantics before any bulk ATAC projection.
+  outputs_promoted_to_source: false
+  builds_sif: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    expected_cells: 26723
+  authenticated_l4:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    key: L4
+    orientation: native
+  fixture:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/01_tables/04_l4_fixture_cells.tsv
+    sha256: bcc1397ffa921b728f4342c15959f51dc07ddeb25d621a6409e49f325493c3d5
+    expected_cells: 1810
+    expected_samples: 4
+  # Axis-only source used to authenticate orig.ident; mapping geometry is the LSI space below.
+  source_axis_matrix: chromvar_data
+  fixture_axis_matrix: chromvar_axis_fixture
+  fixture_axis_features: 10
+  space: lsi
+  dimensions: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+  sample_field: orig.ident
+  annotation_field: peaks_snn_res.1.2
+
+immgen_preflight:
+  manifest: current_analysis/Bdev_development/inputs/01_bulk_marker_boundary/02_immgen_vm25_library_manifest.tsv
+  manifest_sha256: 34bebcdea2cc2e94c6e9da6febb351ecf0d73be9345e338902077c0ebb53dc71
+  geo_series: GSE100738
+  genome_build: mm10
+  selected_lineages: [B, Stem&Prog]
+  require_discovery_include: true
+  expected_populations: 16
+  expected_libraries: 28
+  processed_bigwig_use: provenance_and_visualization_only
+  model_input_requirement: raw_sra_reprocessed_to_exact_bdev_peak_universe
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/05_objects/02_r_library
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  scworkbench:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: e6289d5353fbdb1a0e14a7d3a806ce4b958f56ff
+  scwbRepresentation:
+    version: 0.1.1
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbRepresentation
+    source_commit: c49da6aea8fcb8ace7a2ee36d51dc754d1fdac78
+    manifest_sha256: c7716855de8613da874fc022874e150b7dd3e231a66e26095fa4a42ecf461a65
+  scwbReferenceMap:
+    version: 0.1.0
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbReferenceMap
+    source_commit: 12026fe6a9289e9e7b169e988ceecb80fa3fbafa
+    manifest_sha256: b190a85b0a743af769e6625b6d94fa44f32cee477479bbda19281ee096cb0747
+
+mapping:
+  fold_unit: orig.ident
+  k_values: [15, 30, 50]
+  primary_k: 30
+  neighbor_k: 50
+  backend: rann_exact
+  support_quantiles: [0.95, 0.99]
+  space_chunk_size: 512
+  query_chunk_size: 256
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z
+  execution_clone: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/05_objects/03_execution_bundle
+  mapping_fixture_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/05_objects/05_mapping_fixture_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/01_qualify_bdev_l4_reference_mapping/bdev_l4_reference_mapping_20261110T042541Z/05_objects/04_sessions
+
+acceptance:
+  require_all_samples_held_out_once: true
+  require_complete_query_accounting: true
+  require_out_of_reference_values_withheld: true
+  require_source_manifest_unchanged: true
+  require_native_l4: true
+  implementation_unlocked: false
+  sif_built: false

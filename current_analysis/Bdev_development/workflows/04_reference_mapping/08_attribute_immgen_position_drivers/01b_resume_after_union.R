@@ -1,0 +1,47 @@
+#!/usr/bin/env Rscript
+# Recovery for the completed fit/project/union from the initial diagnostic run.
+options(stringsAsFactors = FALSE, warn = 1, width = 180)
+args <- commandArgs(trailingOnly = TRUE); stopifnot(length(args) == 2L, args[[1L]] == "--config")
+suppressPackageStartupMessages({ library(yaml); library(jsonlite); library(digest); library(Matrix) })
+`%||%` <- function(x,y) if (is.null(x) || !length(x)) y else x
+read_config <- function(path) { x <- yaml::read_yaml(path); b <- x$base_config; x$base_config <- NULL; if (is.null(b)) return(x); utils::modifyList(read_config(normalizePath(file.path(dirname(path), b))), x, keep.null=TRUE) }
+sha256 <- function(path) digest::digest(path, algo="sha256", file=TRUE)
+write_tsv <- function(x,p) write.table(x,p,sep="\t",quote=TRUE,row.names=FALSE,na="NA")
+write_tsv_gz <- function(x,p) { z<-gzfile(p,"wt"); on.exit(close(z)); write.table(x,z,sep="\t",quote=TRUE,row.names=FALSE,na="NA") }
+write_json <- function(x,p) jsonlite::write_json(x,p,pretty=TRUE,auto_unbox=TRUE,digits=NA,null="null",na="null")
+cfg_path <- normalizePath(args[[2L]],mustWork=TRUE); cfg <- read_config(cfg_path); .libPaths(c(cfg$runtime$run_library,.libPaths()))
+suppressPackageStartupMessages({ library(scworkbench); library(scwbLatent) })
+manifest <- system.file("scworkbench","operation-pack.json",package="scwbLatent"); wb_operation_pack_activate(manifest,lib.loc=.libPaths())
+root<-cfg$storage$results_root; dirs<-setNames(file.path(root,c("01_tables","02_figures","03_reports","04_logs","05_objects","06_manifests")),c("tables","figures","reports","logs","objects","manifests")); invisible(lapply(dirs,dir.create,recursive=TRUE,showWarnings=FALSE))
+sink(file.path(dirs[["logs"]],"01b_resume_after_union.log"),split=TRUE); on.exit(try(sink(),silent=TRUE),add=TRUE)
+source_map_before<-sha256(file.path(cfg$inputs$source_mapping_bundle$path,"manifest.json")); source_bdev_before<-sha256(file.path(cfg$inputs$source_bundle$path,"manifest.json"))
+bundle<-wb_open_bundle(cfg$storage$diagnostic_bundle,validate=FALSE,read_only=FALSE); on.exit(try(wb_close_bundle(bundle),silent=TRUE),add=TRUE)
+has_union <- tryCatch({ wb_space(bundle,"position_driver_union"); TRUE }, error=function(e) FALSE)
+if (!has_union) {
+  workspace<-file.path(cfg$storage$sessions,paste0(cfg$run_identity,"_union")); session<-wb_session_resume(bundle,workspace)
+  prom<-wb_session_promote_current(bundle,session,outputs="union_summary",name_prefix="position_driver_union",description="Authenticated diagnostic model-bound latent union",created_by="Bdev position-driver diagnostic",fail_fast=TRUE)
+  prom$session<-wb_session_discard(prom$session)
+}
+coords<-as.data.frame(wb_space(bundle,"position_driver_union")); coords$cell_id<-rownames(coords); rownames(coords)<-NULL
+write_tsv(coords[,c("cell_id",setdiff(names(coords),"cell_id"))],file.path(dirs[["tables"]],"01_position_driver_latent_coordinates.tsv"))
+
+labels<-read.delim(cfg$inputs$provisional_rna_labels$path,check.names=FALSE,quote="\"",na.strings="NA")
+stability<-read.delim(gzfile(cfg$inputs$label_bootstrap_stability$path),check.names=FALSE,quote="\"",na.strings="NA")
+labels<-merge(labels,stability[,c("cell_id","same_as_baseline_fraction","assigned_fraction","stable_at_threshold")],by="cell_id",all.x=TRUE,sort=FALSE)
+mapping<-wb_open_bundle(cfg$inputs$source_mapping_bundle$path,validate=FALSE,read_only=TRUE); reference_cells<-rownames(wb_space(mapping,cfg$inputs$source_mapping_bundle$reference_space)); feature_ids<-wb_feature_ids(mapping,cfg$inputs$source_mapping_bundle$reference_matrix)
+reference_counts<-wb_slice(mapping,cfg$inputs$source_mapping_bundle$reference_matrix,features=feature_ids,cells=reference_cells); libraries<-read.delim(cfg$inputs$selected_libraries$path,check.names=FALSE,quote="\""); bulk_cells<-as.character(libraries$gsm); bulk_counts<-wb_slice(mapping,cfg$inputs$source_mapping_bundle$bulk_matrix,features=feature_ids,cells=bulk_cells); wb_close_bundle(mapping)
+bdev<-wb_open_bundle(cfg$inputs$source_bundle$path,validate=FALSE,read_only=TRUE); label_counts<-wb_slice(bdev,cfg$inputs$count_matrix,features=feature_ids,cells=labels$cell_id); tech_fields<-unlist(cfg$diagnostic$technical_fields,use.names=FALSE); all_bdev<-unique(c(reference_cells,labels$cell_id)); bdev_meta<-wb_meta(bdev,cells=all_bdev,cols=c(list(wb_ref_metadata_field("core:cell_id")),as.list(tech_fields))); wb_close_bundle(bdev)
+label_meta<-merge(labels,bdev_meta,by="cell_id",all.x=TRUE,sort=FALSE); label_meta$projection_role<-ifelse(label_meta$cell_id %in% reference_cells,"mapping_reference","diagnostic_projection"); write_tsv_gz(label_meta,file.path(dirs[["tables"]],"02_provisional_label_diagnostic_cells.tsv.gz"))
+ref_labels<-labels[match(reference_cells,labels$cell_id),c("cell_id","label","score_margin","same_as_baseline_fraction","stable_at_threshold")]; ref_export<-merge(data.frame(cell_id=reference_cells),bdev_meta,by="cell_id",all.x=TRUE,sort=FALSE); ref_export<-merge(ref_export,ref_labels,by="cell_id",all.x=TRUE,sort=FALSE); write_tsv_gz(ref_export,file.path(dirs[["tables"]],"03_reference_cell_technical_metadata.tsv.gz"))
+
+ledger<-read.delim(cfg$inputs$neighbor_driver_ledger$path,check.names=FALSE,quote="\"",na.strings="NA"); scale<-as.numeric(cfg$diagnostic$normalization_scale)
+norm_cols<-function(x){ totals<-Matrix::colSums(x); log1p(t(t(x)/totals)*scale) }; ref_norm<-norm_cols(reference_counts); bulk_norm<-norm_cols(bulk_counts); label_norm<-norm_cols(label_counts); ref_binary<-reference_counts>0; label_binary<-label_counts>0; bulk_binary<-bulk_counts>0; reference_prevalence<-Matrix::rowMeans(ref_binary); bulk_prevalence<-Matrix::rowMeans(bulk_binary)
+top_n<-as.integer(cfg$diagnostic$top_peaks_per_library); peak_rows<-vector("list",length(bulk_cells))
+for(i in seq_along(bulk_cells)){ gsm<-bulk_cells[[i]]; population<-ledger$population[match(gsm,ledger$query_cell_id)]; target<-labels$cell_id[labels$label==population]; if(!length(target)) next; x<-ledger[ledger$query_cell_id==gsm,,drop=FALSE]; w<-x$normalized_weight/sum(x$normalized_weight); expected<-Matrix::rowMeans(label_norm[,target,drop=FALSE]); expected_prev<-Matrix::rowMeans(label_binary[,target,drop=FALSE]); observed<-as.numeric(ref_norm[,x$cell_id,drop=FALSE]%*%w); observed_prev<-as.numeric(ref_binary[,x$cell_id,drop=FALSE]%*%w); query<-as.numeric(bulk_norm[,gsm]); alignment<-(query-expected)*(observed-expected); alignment[!is.finite(alignment)]<--Inf; rank<-head(order(alignment,decreasing=TRUE,method="radix"),top_n); parts<-do.call(rbind,strsplit(feature_ids[rank],"[:-]")); peak_rows[[i]]<-data.frame(gsm=gsm,population=population,rank=seq_along(rank),feature_id=feature_ids[rank],chromosome=parts[,1L],start=suppressWarnings(as.numeric(parts[,2L])),end=suppressWarnings(as.numeric(parts[,3L])),query_log_cp10k=query[rank],expected_label_log_cp10k=expected[rank],observed_neighbor_log_cp10k=observed[rank],expected_label_prevalence=expected_prev[rank],observed_neighbor_prevalence=observed_prev[rank],reference_prevalence=reference_prevalence[rank],immgen_bulk_prevalence=bulk_prevalence[rank],alignment_score=alignment[rank],stringsAsFactors=FALSE) }
+peak_candidates<-do.call(rbind,peak_rows); peak_candidates$width<-peak_candidates$end-peak_candidates$start; write_tsv_gz(peak_candidates,file.path(dirs[["tables"]],"04_peak_driver_candidates.tsv.gz"))
+target_summary<-as.data.frame(table(labels$label),stringsAsFactors=FALSE); names(target_summary)<-c("population","diagnostic_cells"); stable_flag<-tolower(as.character(labels$stable_at_threshold))=="true"; stable<-as.data.frame(table(factor(labels$label[stable_flag],levels=unique(labels$label))),stringsAsFactors=FALSE); names(stable)<-c("population","stable_cells"); target_summary<-merge(target_summary,stable,by="population",all.x=TRUE); target_summary$stable_cells[is.na(target_summary$stable_cells)]<-0L; write_tsv(target_summary,file.path(dirs[["tables"]],"05_label_target_coverage.tsv"))
+query_qc<-data.frame(gsm=bulk_cells,matrix_total=as.numeric(Matrix::colSums(bulk_counts)),nonzero_peaks=as.numeric(Matrix::colSums(bulk_counts>0)),stringsAsFactors=FALSE); query_qc$nonzero_fraction<-query_qc$nonzero_peaks/nrow(bulk_counts); write_tsv(query_qc,file.path(dirs[["tables"]],"06_immgen_matrix_qc.tsv"))
+axis_audit<-data.frame(feature_id=feature_ids,reference_prevalence=reference_prevalence,immgen_bulk_prevalence=bulk_prevalence,prevalence_gap=bulk_prevalence-reference_prevalence,stringsAsFactors=FALSE); write_tsv_gz(axis_audit,file.path(dirs[["tables"]],"15_peak_axis_prevalence_audit.tsv.gz"))
+stopifnot(identical(source_map_before,sha256(file.path(cfg$inputs$source_mapping_bundle$path,"manifest.json"))),identical(source_bdev_before,sha256(file.path(cfg$inputs$source_bundle$path,"manifest.json"))))
+summary<-list(schema_version="bdev.immgen_position_driver_preparation.v1",status="prepared_recovered",run_identity=cfg$run_identity,reference_cells=length(reference_cells),immgen_libraries=length(bulk_cells),label_fixture_cells=nrow(labels),label_cells_projected=sum(!labels$cell_id%in%reference_cells),label_cells_already_in_reference=sum(labels$cell_id%in%reference_cells),candidate_peaks=nrow(peak_candidates),labels_accepted=FALSE,source_manifests_unchanged=TRUE)
+write_json(summary,file.path(dirs[["reports"]],"01_preparation_summary.json")); write_json(c(summary,list(config_path=cfg_path,config_sha256=sha256(cfg_path))),file.path(dirs[["manifests"]],"01_preparation_receipt.json")); wb_close_bundle(bundle); cat("Recovered completed union and exported attribution inputs\n")

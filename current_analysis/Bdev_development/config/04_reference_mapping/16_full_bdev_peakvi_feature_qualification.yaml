@@ -1,0 +1,112 @@
+schema_version: bdev.full_peakvi_feature_qualification.v1
+status: planned_bdev_only_qualification
+run_identity: full_bdev_peakvi_hybrid20k_20261116T174018Z
+capability_id: 04_reference_mapping
+
+scope:
+  stage: Bdev_development
+  paper_analysis: false
+  purpose: Select a Bdev-only 50/50 cluster-discriminating and overall-variable peak axis, qualify PeakVI candidates on held-out Bdev cells and Bdev pseudobulks, then freeze a full-Bdev reference model.
+  external_query_use_during_design: prohibited
+  real_immgen_use: prohibited
+  source_bundle_mutation: prohibited
+  implementation_unlocked: false
+
+inputs:
+  source_bundle:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03c_parse_cytokine_depth_adjusted_trajectory/01_qualify_depth_adjusted_cytokine_trajectory/bdev_cytokine_depth_adjusted_20261106T145817Z/05_objects/03_execution_bundle
+    manifest_sha256: cc8b92e8b55bb1b12b7f818c3bc272193c2139abec81b9777d48bfe2dd022a05
+    expected_cells: 26723
+  count_matrix: ATAC_counts
+  expected_features: 191433
+  cluster_field: peaks_snn_res.1.2
+  sample_field: orig.ident
+  depth_field: nCount_ATAC
+  authenticated_l4:
+    pseudotime_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/pseudotime/payload.rds
+    pseudotime_sha256: 848e6b7d8a77c7cf429ff52c5c1e7e7913a6d2e502d40dea4d0a683b445f2b55
+    weights_path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/03b_parse_cytokine_trajectory_analysis/01_qualify_cytokine_trajectory_methods/bdev_cytokine_trajectory_20261105T153001Z/05_objects/04_sessions/parse38_cytokine_trajectory_qualification/stage/operation_pack_v2/transition_7gdx4c4n3cn8iuti/outputs/lineage_weights/payload.rds
+    weights_sha256: 7148b050f0ebb839b2e3df30aff8993d88a9c2fa7704394e2a96d0ebcee10fb7
+    key: L4
+    orientation: native
+
+feature_selection:
+  target_features: 20000
+  cluster_features: 10000
+  overall_features: 10000
+  depth_bins: 20
+  minimum_accessible_cells: 50
+  maximum_accessible_fraction: 0.80
+  feature_chunk_size: 2000
+  split_seed: 41621
+  cluster_quota_weight: sqrt_cell_count
+  stability_rule: geometric_mean_of_within_cluster_split_half_deviance
+  cluster_score: depth_bin_adjusted_one_versus_rest_binomial_deviance
+  overall_score: depth_bin_adjusted_residual_binomial_deviance
+  preserve_source_feature_order: true
+
+qualification:
+  holdout_rule: every_fifth_cell_within_cluster_in_bundle_order
+  pseudobulk_pool_size: 10
+  pseudobulks_per_cluster: 5
+  neighbor_k: 30
+  primary_candidate: hybrid20k
+  candidates:
+    - hybrid20k
+    - cluster20k
+    - overall20k
+    - full191433
+  hybrid_gate:
+    maximum_macro_accuracy_loss: 0.03
+    maximum_pseudobulk_accuracy_loss: 0.05
+    maximum_depth_correlation_excess_over_full: 0.05
+  l4_gate:
+    minimum_specificity: 0.95
+    weight_positive_threshold: 0.5
+    minimum_l4_neighbors_for_pseudotime: 5
+
+peakvi:
+  n_latent: 10
+  n_layers: 1
+  n_hidden: 64
+  dropout: 0.2
+  max_epochs: 20
+  learning_rate: 0.001
+  early_stopping: true
+  seed: 41621
+  chunk_size: 32
+  batch_key: null
+  use_gpu: false
+  pickle_execution_trust: operator_verified_source_v1
+
+runtime:
+  apptainer: /home/jtg/.local/opt/apptainer/1.5.4/bin/apptainer
+  sif: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/inputs/containers/scworkbench-generic-collaborator-amd64-20261029.sif
+  sif_sha256: 2c9aa71f69d5775166f7dd0625176a8795d00caa498500eae7c39c42c2a7695a
+  python: /opt/pyenv/bin/python
+  shared_development_library: /home/jtg/.local/lib/R/scworkbench-development
+  run_library: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z/05_objects/01_r_library
+  scworkbench:
+    version: 0.1.2
+    source_path: /home/jtg/msi_projects/scworkbench_code/scworkbench
+    source_commit: 2e7cbbdf50e615504412c5f9bbda76ceabdbd148
+  scwbLatent:
+    version: 0.1.3
+    source_path: /home/jtg/msi_projects/scworkbench_code/scwbLatent
+    source_commit: cc93bb713d9d66a32ab697a9fc2d949025d0c678
+    manifest_sha256: 5075f5b31a23b6427af97e255560b617d06b299b4ff8c826f489ee57c4984f23
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z
+  candidate_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z/05_objects/02_candidate_bundle
+  sessions: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z/05_objects/03_sessions
+  frozen_bundle: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/04_reference_mapping/10_qualify_full_bdev_peakvi/full_bdev_peakvi_hybrid20k_20261116T174018Z/05_objects/04_frozen_full_bdev_peakvi
+
+acceptance:
+  require_exact_50_50_axis: true
+  require_all_source_cells_in_frozen_fit: true
+  require_source_manifest_unchanged: true
+  require_external_query_absence: true
+  require_native_l4: true
+  sif_built: false

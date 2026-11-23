@@ -1,0 +1,37 @@
+schema_version: bdev.parse38_comma_separated_export.v1
+status: completed_derived_export
+run_identity: parse38_comma_separated_20261118T180640Z
+capability_id: 03a_parse_cytokine_signal_generation
+
+scope:
+  purpose: Export the frozen Parse38 collection with one row per set and comma-separated genes.
+  stage: Bdev_development
+  paper_analysis: false
+  modifies_parent_run: false
+
+inputs:
+  gene_sets:
+    path: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/01_recreate_all_cytokine_genesets/parse38_standalone_reconstruction_20261103T052911Z/01_tables/05_passing_gene_sets.gmt
+    sha256: 22f041528a1e882c0bec7bd920b7638646b20589020669bf0f42b59880e0bdb7
+    expected_sets: 38
+    expected_memberships: 934
+
+workflow:
+  path: current_analysis/Bdev_development/workflows/03a_parse_cytokine_signal_generation/02_export_comma_separated_gene_sets/01_export_comma_separated_gene_sets.py
+  sha256: 582e53a1477155297d06c966a347f4a248a8f658e14b95f3a40cbcddd6d6caf7
+
+storage:
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/03a_parse_cytokine_signal_generation/02_export_comma_separated_gene_sets/parse38_comma_separated_20261118T180640Z
+
+output:
+  table: 01_tables/01_parse38_gene_sets_comma_separated.tsv
+  format: tsv
+  gene_delimiter: comma
+  preserve_set_order: true
+  preserve_gene_order: true
+
+validated_result:
+  selected_gene_sets: 38
+  selected_memberships: 934
+  table_sha256: 079a04ea9a3697f3ac4ca6194f5ac91707e72ae95c2cae183e8691a820cb2ada
+  manifest_sha256: 1ce39f4044f6b24ee7b107512a5dcf1f82c96d506b8bfbc25324d4e6c3a43597

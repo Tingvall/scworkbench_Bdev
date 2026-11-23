@@ -1,0 +1,94 @@
+schema_version: bdev.flt3lko_il7ko_mapping_fixture.v1
+status: bounded_development_fixture_qualified
+capability_id: 05_trajectory_group_contrasts
+input_manifest: ../../inputs/05_trajectory_group_contrasts/01_flt3lko_il7ko_inputs.yaml
+
+scope:
+  stage: Bdev_development
+  purpose: Qualify exact-axis KO projection, calibrated mapping support, and native-L4 transfer before defining group occupancy contrasts.
+  paper_analysis: false
+  biological_conclusions: prohibited
+  implementation_unlocked: false
+
+fixture:
+  stratify_by: library_id
+  libraries:
+    - FLT3LKO_BM_WT
+    - FLT3LKO_BM_KO
+    - IL7KO_BM_WT
+    - IL7KO_BM_KO
+  cells_per_library: 100
+  selection_order: lexicographic_cell_id
+  expected_cells: 400
+
+peak_axis:
+  candidate: hvp_depth20k
+  canonical_identity: current_Bdev_mm10_feature_id
+  expected_input_features: 20000
+  lift_to_query_genome: GRCm39
+  require_unique_forward_mapping: true
+  require_standard_chromosome: true
+  require_unique_mapped_interval: true
+  require_exact_reciprocal_recovery: true
+  unavailable_selected_feature_policy: explicit_structural_zero_with_mask
+  maximum_unavailable_fraction: 0.0025
+  output_feature_order: exact_frozen_model_order
+
+projection:
+  fit_reference: false
+  refit_model: false
+  model_artifact_id: model_ref_20261117_051703_wi5ql81y
+  expected_latent_dimensions: 10
+  pickle_execution_trust: operator_verified_source_v1
+  use_gpu: false
+
+mapping:
+  calibration_source: retained_Bdev_only_reference_calibration
+  k_values: [15, 30, 50]
+  primary_k: 30
+  support_calls: [supported, borderline, out_of_reference]
+  trajectory_key: L4
+  trajectory_orientation: native
+  withhold_l4_for_out_of_reference: true
+  force_non_l4_queries: false
+
+acceptance:
+  require_all_four_libraries: true
+  require_exact_fixture_cell_axis: true
+  require_exact_model_feature_axis: true
+  require_no_model_refit: true
+  require_source_manifest_unchanged: true
+  require_archived_inputs_unchanged: true
+  require_complete_query_accounting: true
+  require_support_call_for_every_query: true
+  require_out_of_reference_l4_withheld: true
+  no_minimum_supported_fraction_for_development_fixture: true
+
+storage:
+  intermediate_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/01_qualify_flt3lko_il7ko_mapping_fixture
+  results_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/01_qualify_flt3lko_il7ko_mapping_fixture
+
+completed_development_evidence:
+  input_audit_run: flt3lko_il7ko_mapping_fixture_20261117T174035Z
+  quantification_run: flt3lko_il7ko_mapping_fixture_20261117T175427Z
+  projection_and_transfer_run: flt3lko_il7ko_mapping_fixture_20261117T175427Z
+  quantified_matrix: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/intermediate_objects/05_trajectory_group_contrasts/01_qualify_flt3lko_il7ko_mapping_fixture/flt3lko_il7ko_mapping_fixture_20261117T175427Z/05_objects/01_ATAC_hvp_depth20k_counts
+  dimensions: [20000, 400]
+  exact_lifted_features: 19967
+  structural_zero_masked_features: 33
+  quantification_audit_sha256: c6a4562653e536ad15015e5acca2f8f31ac02cb61ca1a8a9f1e90ecf4f1f4319
+  projection_subfixture_cells: 28
+  projection_subfixture_cells_per_library: 7
+  projection_transformation: transfer_without_refit
+  model_payload_sha256_before_and_after: 024d11e3efb4822c31cd75c5371d6320860026f46dadd9ff80d680712df134a8
+  projection_audit_sha256: 1143fda529c38aedacdfb57c33ad3ae820f9ffdbd9121fa08f03b577bac79a83
+  support_calls:
+    supported: 28
+    borderline: 0
+    out_of_reference: 0
+  finite_accepted_native_l4: 18
+  supported_threshold: 2.48994143907288
+  out_of_reference_threshold: 2.93105332005195
+  support_transfer_audit_sha256: f16f3f70d856a03174672c9bf3976358847c5ef0574d3483f4c7b42d27ac6740
+  result_root: /mnt/sata2/jtg_storage/msi_projects/scworkbench_Bdev/current_analysis/Bdev_development/results/05_trajectory_group_contrasts/01_qualify_flt3lko_il7ko_mapping_fixture/flt3lko_il7ko_mapping_fixture_20261117T175427Z
+  genotype_contrast_performed: false
